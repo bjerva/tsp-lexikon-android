@@ -13,8 +13,7 @@ import android.view.Menu;
 
 public class SignListing extends Activity {
 	//private final String jsonURL = "https://teckensprak.zanmato.se/signs.json";
-	private final String jsonURL = "http://130.237.171.46/signs.json?changed_at=2012-03-28";
-    public static ProgressDialog pbarDialog;
+	private final String jsonURL = "http://130.237.171.46/signs.json?changed_at=2012-03-27";
     private SignModel[] signs;
     
     @Override
@@ -23,34 +22,20 @@ public class SignListing extends Activity {
         
         setContentView(R.layout.activity_sign_listing);
         
-        pbarDialog = new ProgressDialog(this);
+        //Show loading spinner
+        ProgressDialog pbarDialog = new ProgressDialog(this);
         pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pbarDialog.setMessage("Loading signs...");
         pbarDialog.setCancelable(false);
         pbarDialog.show();
         
-        JSONArray json;
+        //Load all sign meta data
+        loadSigns();
         
-		try {
-			json = new JSONParser().execute(jsonURL).get();
-			signs = new SignModel[json.length()];
-			
-			for(int i=0; i<json.length(); ++i){
-	        	Log.i("JSON:", (String) json.getString(i));
-	        	signs[i] = new SignModel(json.getJSONObject(i));
-	        }
-			pbarDialog.hide();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	    //Hide loading spinner
+		pbarDialog.hide();
 		
-		for(SignModel sign: signs){
-			Log.i("SL", sign.toString());
-		}
+		// for(SignModel sign: signs) Log.i("SL", sign.toString());
     }
 
     @Override
@@ -58,6 +43,19 @@ public class SignListing extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_sign_listing, menu);
         return true;
+    }
+    
+    private void loadSigns(){
+		try {
+			//Load sign meta data
+			JSONArray json = new JSONParser().execute(jsonURL).get();
+			
+			//Input all meta data in SignModel array
+			signs = new SignModel[json.length()];
+			for(int i=0; i<json.length(); ++i) signs[i] = new SignModel(json.getJSONObject(i));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
     
 }
