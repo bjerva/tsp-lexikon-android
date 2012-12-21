@@ -1,5 +1,6 @@
 package com.bjerva.tsplex;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,10 +14,12 @@ public class SignModel {
 	public final String video_url;
 	public final String updated;
 	public final String description;
+	
+	public final Example[] examples;
 	/*
 	public final String[] snapshots;
 	public final String[] versions;
-	public final String[] examples;
+	
 	public final String[] tags;
 	public final String[] words;*/
 
@@ -30,12 +33,22 @@ public class SignModel {
 		this.video_url 	 = (String) signInfo.get("video_url");
 		this.updated 	 = (String) signInfo.get("updated_at");
 		this.description = (String) signInfo.get("description");
+		
+		this.examples 	 = getExamples((JSONArray) signInfo.get("examples"));
 		/*
 		this.snapshots 	 = (String[]) signInfo.get("snapshots");
 		this.versions	 = (String[]) signInfo.get("versions");
-		this.examples 	 = (String[]) signInfo.get("examples");
+		
 		this.tags 		 = (String[]) signInfo.get("tags");
 		this.words 		 = (String[]) signInfo.get("words");*/
+	}
+	
+	private Example[] getExamples(JSONArray tempExamples) throws JSONException{
+		Example[] examples = new Example[tempExamples.length()];
+		for(int i=0; i<tempExamples.length(); ++i){
+			examples[i] = new Example(tempExamples.getJSONObject(i));
+		}
+		return examples;
 	}
 	
 	public String toString(){
@@ -46,11 +59,25 @@ public class SignModel {
 		str += "\nURL:\t"+this.video_url;
 		str += "\nUpdated:\t"+this.updated;
 		str += "\nDescription:\t"+this.description;
+		str += "\nExamples:";
+		for(Example ex: examples){
+			str += "\nID:\t"+ex.id;
+			str += "\nURL:\t"+ex.video_url;
+			str += "\nDescription:\t"+ex.description;
+		}
 		return str;		
 	}
 	
 	private class Example{
+		public final String video_url;
+		public final String description;
+		public final String id;
 		
+		public Example(JSONObject signInfo) throws JSONException{
+			this.id 		 = (String) signInfo.get("id");
+			this.video_url 	 = (String) signInfo.get("video_url");
+			this.description = (String) signInfo.get("description");
+		}
 	}
 	
 	private class Tag{
