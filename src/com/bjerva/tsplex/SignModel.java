@@ -16,12 +16,12 @@ public class SignModel {
 	public final String description;
 	
 	public final Example[] examples;
+	public final Tag[] tags;
+	public final Word[] words;
 	/*
 	public final String[] snapshots;
 	public final String[] versions;
-	
-	public final String[] tags;
-	public final String[] words;*/
+	*/
 
 	public SignModel(JSONObject signInfo) throws JSONException{
 		this.deleted 	 = (Boolean) signInfo.get("deleted");
@@ -35,12 +35,12 @@ public class SignModel {
 		this.description = (String) signInfo.get("description");
 		
 		this.examples 	 = getExamples((JSONArray) signInfo.get("examples"));
+		this.tags 		 = getTags((JSONArray) signInfo.get("tags"));
+		this.words 		 = getWords((JSONArray) signInfo.get("words"));
 		/*
 		this.snapshots 	 = (String[]) signInfo.get("snapshots");
 		this.versions	 = (String[]) signInfo.get("versions");
-		
-		this.tags 		 = (String[]) signInfo.get("tags");
-		this.words 		 = (String[]) signInfo.get("words");*/
+		*/
 	}
 	
 	private Example[] getExamples(JSONArray tempExamples) throws JSONException{
@@ -49,6 +49,22 @@ public class SignModel {
 			examples[i] = new Example(tempExamples.getJSONObject(i));
 		}
 		return examples;
+	}
+	
+	private Tag[] getTags(JSONArray tempTags) throws JSONException{
+		Tag[] tags = new Tag[tempTags.length()];
+		for(int i=0; i<tempTags.length(); ++i){
+			tags[i] = new Tag(tempTags.getJSONObject(i));
+		}
+		return tags;
+	}
+	
+	private Word[] getWords(JSONArray tempWords) throws JSONException{
+		Word[] words = new Word[tempWords.length()];
+		for(int i=0; i<tempWords.length(); ++i){
+			words[i] = new Word(tempWords.getJSONObject(i));
+		}
+		return words;
 	}
 	
 	public String toString(){
@@ -64,6 +80,16 @@ public class SignModel {
 			str += "\nID:\t"+ex.id;
 			str += "\nURL:\t"+ex.video_url;
 			str += "\nDescription:\t"+ex.description;
+		}
+		str += "\nTags:";
+		for(Tag ex: tags){
+			str += "\nID:\t"+ex.id;
+			str += "\nTag:\t"+ex.tag;
+		}
+		str += "\nWords:";
+		for(Word ex: words){
+			str += "\nID:\t"+ex.id;
+			str += "\nTag:\t"+ex.word;
 		}
 		return str;		
 	}
@@ -81,10 +107,22 @@ public class SignModel {
 	}
 	
 	private class Tag{
+		public final String tag;
+		public final int id;
 		
+		public Tag(JSONObject signInfo) throws JSONException{
+			this.tag	= (String) signInfo.get("tag");
+			this.id  	= (Integer) signInfo.get("id");
+		}
 	}
 	
 	private class Word{
+		public final String word;
+		public final int id;
 		
+		public Word(JSONObject signInfo) throws JSONException{
+			this.word	= (String) signInfo.get("word");
+			this.id  	= (Integer) signInfo.get("id");
+		}
 	}
 }
