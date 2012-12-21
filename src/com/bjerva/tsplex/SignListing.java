@@ -15,6 +15,7 @@ public class SignListing extends Activity {
 	//private final String jsonURL = "https://teckensprak.zanmato.se/signs.json";
 	private final String jsonURL = "http://130.237.171.46/signs.json?changed_at=2012-03-28";
     public static ProgressDialog pbarDialog;
+    private SignModel[] signs;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +30,14 @@ public class SignListing extends Activity {
         pbarDialog.show();
         
         JSONArray json;
+        
 		try {
 			json = new JSONParser().execute(jsonURL).get();
+			signs = new SignModel[json.length()];
+			
 			for(int i=0; i<json.length(); ++i){
 	        	Log.i("JSON:", (String) json.getString(i));
-	        	Thread.sleep(250);
+	        	signs[i] = new SignModel(json.getJSONObject(i));
 	        }
 			pbarDialog.hide();
 		} catch (InterruptedException e) {
@@ -42,6 +46,10 @@ public class SignListing extends Activity {
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+		
+		for(SignModel sign: signs){
+			Log.i("SL", sign.toString());
 		}
     }
 
