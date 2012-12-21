@@ -22,9 +22,8 @@ public class JSONParser extends AsyncTask<String, Void, JSONArray>{
     static InputStream is = null;
     static JSONArray jArray = null;
     static String json = "";
- 	
+
     protected JSONArray doInBackground(String... url) {
-    	
         // Making HTTP request
         try {
         	
@@ -33,7 +32,6 @@ public class JSONParser extends AsyncTask<String, Void, JSONArray>{
         	
             // defaultHttpClient
             HttpResponse httpResponse = client.execute(httpGet);
-             
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();           
  
@@ -48,6 +46,8 @@ public class JSONParser extends AsyncTask<String, Void, JSONArray>{
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "iso-8859-1"), 8);
+            
+            
             StringBuilder sb = new StringBuilder();
             String line = null;
             
@@ -62,12 +62,9 @@ public class JSONParser extends AsyncTask<String, Void, JSONArray>{
         }
         
         return jArray;
- 
     }
     
     protected void onPostExecute(){
     	Log.i("Async", "Downloaded all signs");
     }
-
-
 }
