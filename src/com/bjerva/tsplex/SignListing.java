@@ -1,17 +1,13 @@
 package com.bjerva.tsplex;
 
-import java.util.concurrent.ExecutionException;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
-public class SignListing extends Activity {
+public class SignListing extends FragmentActivity {
 	//private final String jsonURL = "https://teckensprak.zanmato.se/signs.json";
 	private final String jsonURL = "http://130.237.171.46/signs.json?changed_at=2012-03-27";
     private SignModel[] signs;
