@@ -11,7 +11,7 @@ import android.view.Menu;
 public class MainActivity extends FragmentActivity {
 	//private final String jsonURL = "https://teckensprak.zanmato.se/signs.json";
 	private final String jsonURL = "http://130.237.171.46/signs.json?changed_at=2012-03-27";
-	private SignModel[] signs;
+	public SignModel[] signs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

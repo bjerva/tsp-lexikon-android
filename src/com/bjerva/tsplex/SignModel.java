@@ -94,7 +94,7 @@ public class SignModel {
 		return str;		
 	}
 	
-	private class Example{
+	class Example{
 		public final String video_url;
 		public final String description;
 		public final String id;
@@ -106,7 +106,7 @@ public class SignModel {
 		}
 	}
 	
-	private class Tag{
+	class Tag{
 		public final String tag;
 		public final int id;
 		
@@ -116,7 +116,7 @@ public class SignModel {
 		}
 	}
 	
-	private class Word{
+	class Word{
 		public final String word;
 		public final int id;
 		
