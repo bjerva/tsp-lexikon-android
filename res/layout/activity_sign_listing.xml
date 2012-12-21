@@ -2,9 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignListing" >
+    tools:context=".SignListing"
+    android:baselineAligned="false" >
 
-    <Fragment
+    <LinearLayout
         android:id="@+id/fragment_container"
         android:layout_weight="1"
         android:layout_width="0dp"
