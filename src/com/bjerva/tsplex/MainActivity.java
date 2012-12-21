@@ -11,6 +11,7 @@ public class MainActivity extends FragmentActivity {
 	//private final String jsonURL = "https://teckensprak.zanmato.se/signs.json";
 	private final String jsonURL = "http://130.237.171.46/signs.json?changed_at=2012-03-27";
 	public SignModel[] signs;
+	int currentSign = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,11 +19,7 @@ public class MainActivity extends FragmentActivity {
 
 		setContentView(R.layout.activity_sign_listing);
 
-		if (savedInstanceState == null){
-			SignListFragment newFragment = new SignListFragment();
-			getSupportFragmentManager().beginTransaction().add(
-					R.id.fragment_container, newFragment).commit();
-		}
+		
 
 		//Show loading spinner
 		ProgressDialog pbarDialog = new ProgressDialog(this);
@@ -38,6 +35,11 @@ public class MainActivity extends FragmentActivity {
 		pbarDialog.hide();
 
 		// for(SignModel sign: signs) Log.i("SL", sign.toString());
+		if (savedInstanceState == null){
+			SignListFragment newFragment = new SignListFragment();
+			getSupportFragmentManager().beginTransaction().add(
+					R.id.fragment_container, newFragment).commit();
+		}
 	}
 
 	@Override
@@ -60,4 +62,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	SignModel getCurrentSign(){
+		return signs[currentSign];
+	}
 }

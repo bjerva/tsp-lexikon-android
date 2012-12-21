@@ -26,7 +26,7 @@ public class SignListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		MainActivity ma = (MainActivity) getActivity();
+		final MainActivity ma = (MainActivity) getActivity();
 		
 		ArrayList<String> adapterItems = new ArrayList<String>();
 		for(SignModel sign: ma.signs){
@@ -40,6 +40,8 @@ public class SignListFragment extends ListFragment {
 		//Set listener
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+				ma.currentSign = position;
+				
 				//Create detail fragment
 				SignDetailFragment newFragment = new SignDetailFragment();
 				
