@@ -4,6 +4,7 @@ import org.json.JSONArray;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
@@ -19,9 +20,9 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_sign_listing);
 
 		if (savedInstanceState == null){
-			//Fragment newFragment = new SignListFragment();
-			//getSupportFragmentManager().beginTransaction().add(
-			//		R.id.fragment_container, newFragment).commit();
+			Fragment newFragment = new SignListFragment();
+			getSupportFragmentManager().beginTransaction().add(
+					R.id.fragment_container, newFragment).commit();
 		}
 
 		//Show loading spinner
