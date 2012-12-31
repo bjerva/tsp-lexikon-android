@@ -16,7 +16,7 @@ import org.json.JSONArray;
 
 import android.os.AsyncTask;
 import android.util.Log;
- 
+
 public class JSONParser extends AsyncTask<String, Void, JSONArray>{
  
     static InputStream is = null;
@@ -26,7 +26,6 @@ public class JSONParser extends AsyncTask<String, Void, JSONArray>{
     protected JSONArray doInBackground(String... url) {
         // Making HTTP request
         try {
-        	
         	HttpClient client = new DefaultHttpClient();
         	HttpGet httpGet = new HttpGet(url[0]);
         	
