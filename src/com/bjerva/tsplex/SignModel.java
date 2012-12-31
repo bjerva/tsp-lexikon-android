@@ -22,6 +22,23 @@ public class SignModel {
 	public final String[] snapshots;
 	public final String[] versions;
 	*/
+	
+	public SignModel(){
+		this.deleted 	 = false;
+		this.unusual 	 = false;
+		
+		this.ref_id 	 = 0;
+		this.id 		 = 0;
+		
+		this.video_url 	 = "";
+		this.updated 	 = "";
+		this.description = "";
+		
+		this.examples 	 = null;
+		this.tags 		 = null;
+		this.words 		 = new Word[1];
+		this.words[0] = new Word();
+	}
 
 	public SignModel(JSONObject signInfo) throws JSONException{
 		this.deleted 	 = (Boolean) signInfo.get("deleted");
@@ -119,6 +136,11 @@ public class SignModel {
 	class Word{
 		public final String word;
 		public final int id;
+		
+		public Word(){
+			this.word = "Temp";
+			this.id = 0;
+		}
 		
 		public Word(JSONObject signInfo) throws JSONException{
 			this.word	= (String) signInfo.get("word");
