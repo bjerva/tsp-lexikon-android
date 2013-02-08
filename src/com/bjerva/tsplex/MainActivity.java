@@ -21,6 +21,7 @@ import org.json.JSONException;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,6 +29,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.db4o.Db4oEmbedded;
@@ -75,6 +77,12 @@ public class MainActivity extends FragmentActivity {
 			getSupportFragmentManager().beginTransaction().add(
 					R.id.fragment_container, listFragment).commit();
 		}
+	}
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+	    super.onConfigurationChanged(newConfig);
+	    LinearLayout linLay = (LinearLayout) findViewById(R.id.detailLayout);
+	    linLay.setOrientation(LinearLayout.HORIZONTAL);
 	}
 	
 	@Override
