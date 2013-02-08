@@ -59,7 +59,7 @@ public class SignDetailFragment extends Fragment {
 		
 		myVideoView.setVideoURI(Uri.parse(fileName));
 		
-		//Uri video = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.testfil);	
+		//Uri video = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.testfil2);	
 		//myVideoView.setVideoURI(video);
 		
 		myVideoView.setMediaController(new MediaController(ma));

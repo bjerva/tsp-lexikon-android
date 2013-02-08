@@ -29,7 +29,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.db4o.Db4oEmbedded;
@@ -78,13 +80,27 @@ public class MainActivity extends FragmentActivity {
 					R.id.fragment_container, listFragment).commit();
 		}
 	}
-	
+
 	public void onConfigurationChanged(Configuration newConfig) {
-	    super.onConfigurationChanged(newConfig);
-	    LinearLayout linLay = (LinearLayout) findViewById(R.id.detailLayout);
-	    linLay.setOrientation(LinearLayout.HORIZONTAL);
+		super.onConfigurationChanged(newConfig);
+		
+		ListView metaList = (ListView) findViewById(R.id.metaList);
+		if(metaList != null){
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+			if(newConfig.orientation == 1){
+				Log.i("Here", "Herehere1");
+				params.addRule(RelativeLayout.BELOW, R.id.myVideoView);
+			} else if (newConfig.orientation == 2) {
+				Log.i("Here", "Herehere2");
+				params.addRule(RelativeLayout.RIGHT_OF, R.id.myVideoView);
+			}
+			metaList.setLayoutParams(params);
+		} else {
+			Log.i("MA", "metaList is null");
+		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 	    super.onDestroy();

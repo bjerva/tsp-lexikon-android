@@ -84,7 +84,7 @@ public class SignListFragment extends ListFragment {
 				}
 			}
 		});
-
+		
 		inputSearch = (EditText) getActivity().findViewById(R.id.inputSearch);
 		inputSearch.addTextChangedListener(new TextWatcher() {
 			@Override
