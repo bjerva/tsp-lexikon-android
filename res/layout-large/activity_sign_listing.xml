@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignListing"
+    android:orientation="horizontal"
+    android:baselineAligned="false" >
+
+    <fragment class="com.bjerva.tsplex.SignListFragment"
+            android:id="@+id/list_frag"
+            android:layout_width="@dimen/list_width"
+            android:layout_height="match_parent"/>
+    
+    <fragment class="com.bjerva.tsplex.SignDetailFragment"
+            android:id="@+id/details_frag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    
+</LinearLayout>

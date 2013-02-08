@@ -63,19 +63,25 @@ public class SignListFragment extends ListFragment {
 				ma.currentSign = tmpSigns.get(position);//Integer.valueOf(String.valueOf(id));
 
 				//Hide keyboard
-				InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+				InputMethodManager imm = (InputMethodManager)ma.getSystemService(
 						Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(inputSearch.getWindowToken(), 0);
 
-				//Create detail fragment
-				SignDetailFragment newFragment = new SignDetailFragment();
+				SignDetailFragment detFrag = (SignDetailFragment) ma.getSupportFragmentManager()
+	                    .findFragmentById(R.id.details_frag);
+				if(detFrag == null){
+					//Create detail fragment
+					SignDetailFragment newFragment = new SignDetailFragment();
 
-				//Add to container
-				FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-				transaction.setCustomAnimations(R.anim.slide_fragment_in_on_replace, R.anim.slide_fragment_out_on_replace);
-				transaction.replace(R.id.fragment_container, newFragment);
-				transaction.addToBackStack(null);
-				transaction.commit();
+					//Add to container
+					FragmentTransaction transaction = ma.getSupportFragmentManager().beginTransaction();
+					transaction.setCustomAnimations(R.anim.slide_fragment_in_on_replace, R.anim.slide_fragment_out_on_replace);
+					transaction.replace(R.id.fragment_container, newFragment);
+					transaction.addToBackStack(null);
+					transaction.commit();
+				} else {
+					detFrag.startUpHelper(ma.currentSign);
+				}
 			}
 		});
 

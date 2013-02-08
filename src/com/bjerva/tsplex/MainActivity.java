@@ -40,6 +40,7 @@ public class MainActivity extends FragmentActivity {
 	private String jsonURL = "http://130.237.171.46/signs.json";
 	private final String FILENAME = "signUpdates.txt";
 	private SignListFragment listFragment;
+	//private SignDetailFragment detFragment;
 	private ProgressDialog pbarDialog;
 	private String dbName;
 	private ObjectContainer db;
@@ -67,9 +68,13 @@ public class MainActivity extends FragmentActivity {
 		//Load local json
 		new LoadHelper(this).execute();
 		
-		listFragment = new SignListFragment();
-		getSupportFragmentManager().beginTransaction().add(
-				R.id.fragment_container, listFragment).commit();
+		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.list_frag);
+		if (listFrag == null) {
+			listFragment = new SignListFragment();
+			getSupportFragmentManager().beginTransaction().add(
+					R.id.fragment_container, listFragment).commit();
+		}
 	}
 	
 	@Override
@@ -103,12 +108,20 @@ public class MainActivity extends FragmentActivity {
 	}
 
     void errorPlayingVideo() {
-        super.onBackPressed();   
+    	SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.list_frag);
+    	if(listFrag == null){
+    		super.onBackPressed();   
+    	}
         Toast.makeText(this, "Video could not be played.", Toast.LENGTH_LONG).show();
     }
     
     void networkError() {
-    	super.onBackPressed();   
+    	SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.list_frag);
+    	if(listFrag == null){
+    		super.onBackPressed();   
+    	} 
         Toast.makeText(this, "No internet connection found!", Toast.LENGTH_LONG).show();
     }
 	
@@ -315,8 +328,15 @@ public class MainActivity extends FragmentActivity {
 	    	try{
 	    		listFragment.loadSigns();
 	    	} catch (NullPointerException e){
-	    		((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
-	    		Log.w("NullPointer @ ServerLoad", "No ListFragment found.");
+	    		
+	    		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+	                    .findFragmentById(R.id.list_frag);
+	    		
+	    		if (listFrag == null) {
+	    			((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
+	    		} else {
+	    			listFrag.loadSigns();
+	    		}
 	    	}
 	    	pbarDialog.dismiss();
 	    	Log.i("AsyncDBLoad", "Loaded signs from DB");

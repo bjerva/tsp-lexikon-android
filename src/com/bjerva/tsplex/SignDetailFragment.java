@@ -1,6 +1,7 @@
 package com.bjerva.tsplex;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
@@ -20,12 +21,12 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.bjerva.tsplex.GsonSign.Example;
+import com.bjerva.tsplex.GsonSign.Word;
 
 public class SignDetailFragment extends Fragment {
 
 	private View myView;
 	private VideoView myVideoView;
-	private GsonSign currSign;
 	private MainActivity ma;
 
 	@Override
@@ -42,24 +43,38 @@ public class SignDetailFragment extends Fragment {
 
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
 		
-		currSign = ma.getCurrentSign();
+		GsonSign currSign = ma.getCurrentSign();
 		if(currSign == null){
 			Log.w("NULL SIGN", "NULL SIGN");
 		} else {
-			startUpHelper();
+			startUpHelper(currSign);
 		}
 	}
 	
-	private void startUpHelper(){
+	void startUpHelper(final GsonSign currSign){
 		String fileName = currSign.video_url.substring(0, currSign.video_url.length()-3)+"3gp";
 		Log.i("SignDetail", fileName);
 		//String uriPath = "http://130.237.171.78/"+fileName;//T01811.3gp
 		//String uriPath = "http://130.237.171.46/system/videos/"+fileName;
+		
 		myVideoView.setVideoURI(Uri.parse(fileName));
+		
+		//Uri video = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.testfil);	
+		//myVideoView.setVideoURI(video);
+		
 		myVideoView.setMediaController(new MediaController(ma));
 		myVideoView.requestFocus();
 
 		ArrayList<String> adapterItems = new ArrayList<String>();
+		
+		if (currSign.words != null) {
+			List<Word> words = currSign.words;
+			String word = words.get(0).word;
+			for(int j=1; j<words.size(); ++j){
+				word += ", "+words.get(j).word;
+			}
+			adapterItems.add(word);
+		}
 
 		if(currSign.description != null){
 			adapterItems.add(currSign.description);
