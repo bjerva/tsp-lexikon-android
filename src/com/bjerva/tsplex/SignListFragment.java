@@ -67,9 +67,9 @@ public class SignListFragment extends ListFragment {
 						Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(inputSearch.getWindowToken(), 0);
 
-				SignDetailFragment detFrag = (SignDetailFragment) ma.getSupportFragmentManager()
-	                    .findFragmentById(R.id.details_frag);
-				if(detFrag == null){
+				//SignDetailFragment detFrag = ((LinearLayout) ma.getSupportFragmentManager()
+	             //       .findFragmentById(R.id.details_container));
+				if(ma.detFragment == null){
 					//Create detail fragment
 					SignDetailFragment newFragment = new SignDetailFragment();
 
@@ -80,7 +80,7 @@ public class SignListFragment extends ListFragment {
 					transaction.addToBackStack(null);
 					transaction.commit();
 				} else {
-					detFrag.startUpHelper(ma.currentSign);
+					ma.detFragment.startUpHelper(ma.currentSign);
 				}
 			}
 		});

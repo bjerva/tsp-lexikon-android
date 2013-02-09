@@ -11,17 +11,12 @@ import java.util.Comparator;
 
 import org.json.JSONException;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -31,6 +26,7 @@ public class MainActivity extends FragmentActivity {
 	//private String jsonURL = "http://130.237.171.46/signs.json";
 	//private final String FILENAME = "signUpdates.txt";
 	private SignListFragment listFragment;
+	SignDetailFragment detFragment;
 	
 	private ProgressDialog pbarDialog;
 	//private String dbName;
@@ -65,9 +61,14 @@ public class MainActivity extends FragmentActivity {
 			listFragment = new SignListFragment();
 			getSupportFragmentManager().beginTransaction().add(
 					R.id.fragment_container, listFragment).commit();
+		} else {
+			detFragment = new SignDetailFragment();
+			getSupportFragmentManager().beginTransaction().add(
+					R.id.details_container, detFragment).commit();
 		}
 	}
 
+	/*
 	@SuppressLint("NewApi") 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -94,6 +95,7 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			Log.i("MA", "metaList is null");
 		}
+		detFragment = new SignDetailFragment();
 		
 		/*
 		RelativeLayout rl = (RelativeLayout) findViewById(R.id.detailLayout);
@@ -119,7 +121,7 @@ public class MainActivity extends FragmentActivity {
 	    transaction.commit();
 	    return true;
 	    */
-	}
+	//}
 
 	@Override
 	protected void onDestroy() {
