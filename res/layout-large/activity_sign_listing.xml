@@ -11,8 +11,8 @@
             android:layout_width="@dimen/list_width"
             android:layout_height="match_parent"/>
     
-    <fragment class="com.bjerva.tsplex.SignDetailFragment"
-            android:id="@+id/details_frag"
+    <LinearLayout
+            android:id="@+id/details_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     

@@ -11,12 +11,17 @@ import java.util.Comparator;
 
 import org.json.JSONException;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -41,17 +46,6 @@ public class MainActivity extends FragmentActivity {
 
 		setContentView(R.layout.activity_sign_listing);
 		
-		//dbName = this.getDir("data", 0) + "/" + "signs.db4o";
-		//db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), dbName);
-		/*
-		final ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		final NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		if (mWifi.isConnected()) {
-			updateSigns();
-		} else {
-			Toast.makeText(this, "Hittade ingen WiFi-uppkoppling. Teckenlistan uppdateras inte.", Toast.LENGTH_LONG).show();
-		}
-		*/
 		//Load local json
 		new LoadHelper(this).execute();
 		
@@ -68,7 +62,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	/*
+	
 	@SuppressLint("NewApi") 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -95,7 +89,14 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			Log.i("MA", "metaList is null");
 		}
-		detFragment = new SignDetailFragment();
+		
+		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.list_frag);
+		if (listFrag != null) {
+			detFragment = new SignDetailFragment();
+			getSupportFragmentManager().beginTransaction().replace(
+					R.id.details_container, detFragment).commit();
+		}
 		
 		/*
 		RelativeLayout rl = (RelativeLayout) findViewById(R.id.detailLayout);
@@ -121,7 +122,7 @@ public class MainActivity extends FragmentActivity {
 	    transaction.commit();
 	    return true;
 	    */
-	//}
+	}
 
 	@Override
 	protected void onDestroy() {

@@ -67,8 +67,6 @@ public class SignListFragment extends ListFragment {
 						Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(inputSearch.getWindowToken(), 0);
 
-				//SignDetailFragment detFrag = ((LinearLayout) ma.getSupportFragmentManager()
-	             //       .findFragmentById(R.id.details_container));
 				if(ma.detFragment == null){
 					//Create detail fragment
 					SignDetailFragment newFragment = new SignDetailFragment();
