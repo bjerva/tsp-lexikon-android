@@ -42,6 +42,7 @@ public class SignDetailFragment extends Fragment {
 		ma = (MainActivity) getActivity();
 
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
+		//myVideoView.setDimensions(640, 480);
 		
 		GsonSign currSign = ma.getCurrentSign();
 		if(currSign == null){
@@ -107,15 +108,15 @@ public class SignDetailFragment extends Fragment {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				if(position==0){
+				if(position<=1){
 					Log.i("VideoView", "Play sign");
 					loadFilm(currSign.video_url);
-				} else if(position < 1+currSign.examples.size()){
-					Log.i("VideoView", "Play example: "+currSign.examples.get(position-1).video_url);
-					loadFilm(currSign.examples.get(position-1).video_url);
-				} else if(position < 1+currSign.versions.size()+currSign.examples.size()){
-					Log.i("VideoView", "Play variant: "+currSign.versions.get(position-currSign.examples.size()-1));
-					loadFilm(currSign.versions.get(position-currSign.examples.size()-1).video_url);
+				} else if(position < 2+currSign.examples.size()){
+					Log.i("VideoView", "Play example: "+currSign.examples.get(position-2).video_url);
+					loadFilm(currSign.examples.get(position-2).video_url);
+				} else if(position < 2+currSign.versions.size()+currSign.examples.size()){
+					Log.i("VideoView", "Play variant: "+currSign.versions.get(position-currSign.examples.size()-2));
+					loadFilm(currSign.versions.get(position-currSign.examples.size()-2).video_url);
 				} else {
 					Log.i("VideoView", "I do naaaathing");
 				}
@@ -149,6 +150,7 @@ public class SignDetailFragment extends Fragment {
 		final String fileName = url.substring(0, url.length()-3)+"3gp";
 		Log.i("SignDetail", url);
 		Log.i("Loading new film", fileName);
+		myVideoView.setMediaController(new MediaController(ma));
 		myVideoView.setVideoURI(Uri.parse(fileName));
 		myVideoView.requestFocus();
 		myVideoView.start();

@@ -1,29 +1,19 @@
 package com.bjerva.tsplex;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -34,20 +24,17 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
-import com.db4o.Db4oEmbedded;
-import com.db4o.ObjectContainer;
-import com.db4o.ObjectSet;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends FragmentActivity {
-	private String jsonURL = "http://130.237.171.46/signs.json";
-	private final String FILENAME = "signUpdates.txt";
+	//private String jsonURL = "http://130.237.171.46/signs.json";
+	//private final String FILENAME = "signUpdates.txt";
 	private SignListFragment listFragment;
-	//private SignDetailFragment detFragment;
+	
 	private ProgressDialog pbarDialog;
-	private String dbName;
-	private ObjectContainer db;
+	//private String dbName;
+	//private ObjectContainer db;
 	
 	ArrayList<GsonSign> gsonSigns = null;
 	GsonSign currentSign = null;
@@ -58,9 +45,9 @@ public class MainActivity extends FragmentActivity {
 
 		setContentView(R.layout.activity_sign_listing);
 		
-		dbName = this.getDir("data", 0) + "/" + "signs.db4o";
-		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), dbName);
-		
+		//dbName = this.getDir("data", 0) + "/" + "signs.db4o";
+		//db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), dbName);
+		/*
 		final ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 		final NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		if (mWifi.isConnected()) {
@@ -68,7 +55,7 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			Toast.makeText(this, "Hittade ingen WiFi-uppkoppling. Teckenlistan uppdateras inte.", Toast.LENGTH_LONG).show();
 		}
-		
+		*/
 		//Load local json
 		new LoadHelper(this).execute();
 		
@@ -81,30 +68,63 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	@SuppressLint("NewApi") 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		
 		ListView metaList = (ListView) findViewById(R.id.metaList);
 		if(metaList != null){
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+			RelativeLayout.LayoutParams params;
 			if(newConfig.orientation == 1){
 				Log.i("Here", "Herehere1");
+				params = new RelativeLayout.LayoutParams(
+							LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				params.addRule(RelativeLayout.BELOW, R.id.myVideoView);
 			} else if (newConfig.orientation == 2) {
 				Log.i("Here", "Herehere2");
+				params = new RelativeLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 				params.addRule(RelativeLayout.RIGHT_OF, R.id.myVideoView);
+			} else {
+				Log.e("MA", "Should not be here...");
+				params = new RelativeLayout.LayoutParams(
+						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			}
 			metaList.setLayoutParams(params);
 		} else {
 			Log.i("MA", "metaList is null");
 		}
+		
+		/*
+		RelativeLayout rl = (RelativeLayout) findViewById(R.id.detailLayout);
+		if(rl != null){
+			Log.e("MA", "RL");
+			rl.requestLayout();
+			rl.forceLayout();
+		}
+		if(video != null){
+			Log.e("MA", "VID");
+			video.requestLayout();
+			video.forceLayout();
+		}
+		*/
+		
+		/*
+		FragmentManager fragmentManager = getSupportFragmentManager();
+	    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+	    Fragment newFragment = new SignDetailFragment();
+	    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+	    transaction.replace(R.id., newFragment);
+	    transaction.addToBackStack(null);
+	    transaction.commit();
+	    return true;
+	    */
 	}
 
 	@Override
 	protected void onDestroy() {
 	    super.onDestroy();
-	    db.close();
+	   // db.close();
 	}
 
 	@Override
@@ -146,9 +166,9 @@ public class MainActivity extends FragmentActivity {
     	if(listFrag == null){
     		super.onBackPressed();   
     	} 
-        Toast.makeText(this, "No internet connection found!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Connection problem. No internet connection found / video not found on server.", Toast.LENGTH_LONG).show();
     }
-	
+	/*
 	private void loadData(){
 		Log.i("SyncDBLoad", "Loading");
 		final ObjectSet<GsonSign> dbList = db.queryByExample(new GsonSign());
@@ -167,11 +187,12 @@ public class MainActivity extends FragmentActivity {
 		Log.i("New JSON-url", jsonURL);
 		
 		//Load sign info from backend
-		new JSONParser(this).execute(jsonURL);
+	//	new JSONParser(this).execute(jsonURL);
 		
 		saveRetrievalDate();
 	}
-	
+	*/
+    /*
 	private void saveRetrievalDate(){
 		//Write retrieval date to file
 		final Calendar c = Calendar.getInstance();
@@ -218,10 +239,10 @@ public class MainActivity extends FragmentActivity {
 		
 		return oldDate;
 	}
-	
+	*/
 	private void loadGSONfromString() throws IOException, JSONException{
 		Log.i("Load Local JSON", "Loading...");
-		final InputStream is = getAssets().open("signs.json");
+		final InputStream is = getAssets().open("signs2.json");
 		final Reader reader = new InputStreamReader(is);
 		
 		final Gson gson = new Gson();
@@ -231,7 +252,7 @@ public class MainActivity extends FragmentActivity {
 		is.close();
 		Log.i("Load Local GSON", "Loaded!");
 	}
-	
+	/*
 	private class JSONParser extends AsyncTask<String, Void, Void>{
 		 
 	    InputStream is = null;
@@ -300,10 +321,12 @@ public class MainActivity extends FragmentActivity {
 	    		((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
 	    		Log.w("NullPointer @ ServerLoad", "No ListFragment found.");
 	    	}
-	    	*/
+	    	//
 	    	Log.i("AsyncServ", "Downloaded all signs");
 	    }
 	}
+	
+	*/
 	
 	private class LoadHelper extends AsyncTask<String, Void, Void>{
 		
@@ -318,7 +341,7 @@ public class MainActivity extends FragmentActivity {
 			Log.i("AsyncFileLoad", "Loading");
 			try {
 				loadGSONfromString();
-				loadData();
+				//loadData();
 			} catch (IOException e) {
 			} catch (JSONException e) {}
 			Log.i("AsyncFileLoad", "Loaded");
