@@ -32,6 +32,9 @@ class GsonSign {
 	class Version {
 		@SerializedName("video_url")
 		String video_url;
+		
+		@SerializedName("description")
+		String description;
 	}
 	
 	class Word {

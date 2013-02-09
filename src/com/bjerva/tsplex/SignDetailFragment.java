@@ -1,8 +1,12 @@
 package com.bjerva.tsplex;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import android.app.Activity;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -18,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MediaController;
+import android.widget.SimpleAdapter;
 import android.widget.VideoView;
 
 import com.bjerva.tsplex.GsonSign.Example;
@@ -28,6 +33,9 @@ public class SignDetailFragment extends Fragment {
 	private View myView;
 	private VideoView myVideoView;
 	private MainActivity ma;
+	
+	public final static String ITEM_TITLE = "title";
+	public final static String ITEM_CAPTION = "caption";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +74,8 @@ public class SignDetailFragment extends Fragment {
 		myVideoView.setMediaController(new MediaController(ma));
 		myVideoView.requestFocus();
 
-		ArrayList<String> adapterItems = new ArrayList<String>();
+		//ArrayList<String> adapterItems = new ArrayList<String>();
+		SeparatedListAdapter adapter = new SeparatedListAdapter(ma);
 		
 		if (currSign.words != null) {
 			List<Word> words = currSign.words;
@@ -74,35 +83,65 @@ public class SignDetailFragment extends Fragment {
 			for(int j=1; j<words.size(); ++j){
 				word += ", "+words.get(j).word;
 			}
-			adapterItems.add(word);
+			
+			adapter.addSection("Ord", new ArrayAdapter<String>(ma,
+					R.layout.list_item, new String[] { word }));
+			//adapterItems.add(word);
 		}
 
 		if(currSign.description != null){
-			adapterItems.add(currSign.description);
+			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
+					R.layout.list_item, new String[] { currSign.description }));
+			//adapterItems.add(currSign.description);
 		} else {
-			adapterItems.add("Tecknet har ingen beskrivning");
+			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
+					R.layout.list_item, new String[] { "Tecknet har ingen beskrivning" }));
+			//adapterItems.add("Tecknet har ingen beskrivning");
 		}
 
-		for(Example example: currSign.examples){
-			adapterItems.add(example.description);
+		if(currSign.examples.size() > 0){
+			String[] tmpEx = new String[currSign.examples.size()];
+			for(int i=0; i<currSign.examples.size(); i++){
+				tmpEx[i] = currSign.examples.get(i).description;
+			}
+			adapter.addSection("Exempel", new ArrayAdapter<String>(ma,
+					R.layout.list_item, tmpEx));
+		}
+		
+		if(currSign.versions.size() > 0){
+			String[] tmpVer = new String[currSign.versions.size()];
+			for(int i=0; i<currSign.versions.size(); ++i){
+				tmpVer[i] = currSign.versions.get(i).description;
+			}
+			adapter.addSection("Varianter", new ArrayAdapter<String>(ma,
+					R.layout.list_item, tmpVer));
 		}
 
-		for(int i=0; i<currSign.versions.size(); ++i){
-			adapterItems.add("Alternativ version "+(i+1));
+		if(currSign.tags.size() > 0){
+			String[] tmpTags = new String[currSign.tags.size()];
+			for(int i=0; i<currSign.tags.size(); ++i){
+				tmpTags[i] = currSign.tags.get(i).tag;
+			}
+			adapter.addSection("Kategori", new ArrayAdapter<String>(ma,
+					R.layout.list_item, tmpTags));
 		}
-
+		
 		if(currSign.unusual) {
-			adapterItems.add("Tecknet Šr ovanligt");
-		}
-
-		for(int i=0; i<currSign.tags.size(); ++i){
-			adapterItems.add(currSign.tags.get(i).tag);
+			adapter.addSection("Ovanligt", new ArrayAdapter<String>(ma,
+					R.layout.list_item, new String[] { "Tecknet Šr ovanligt" }));
 		}
 
 		//Create and set adapter
 		final ListView listView = (ListView) myView.findViewById(R.id.metaList);
-		final ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(ma, android.R.layout.simple_list_item_1, adapterItems);
-		listView.setAdapter(mAdapter);
+		//final ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(ma, android.R.layout.simple_list_item_1, adapterItems);
+		//listView.setAdapter(mAdapter);
+		
+				
+		// create our list and custom adapter
+		
+		
+		listView.setAdapter(adapter);
+	
 
 		//Set listener
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -154,6 +193,13 @@ public class SignDetailFragment extends Fragment {
 		myVideoView.setVideoURI(Uri.parse(fileName));
 		myVideoView.requestFocus();
 		myVideoView.start();
+	}
+	
+	public Map<String,?> createItem(String title, String caption) {
+		Map<String,String> item = new HashMap<String,String>();
+		item.put(ITEM_TITLE, title);
+		item.put(ITEM_CAPTION, caption);
+		return item;
 	}
 	
 	/*
