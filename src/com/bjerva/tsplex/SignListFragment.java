@@ -7,22 +7,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 
 public class SignListFragment extends ListFragment {
 
 	private View myView;
-	private EditText inputSearch;
 	private MainActivity ma;
-	private SignAdapter mAdapter;
+	SignAdapter mAdapter;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +34,11 @@ public class SignListFragment extends ListFragment {
 		if(ma.gsonSigns != null){
 			loadSigns();
 		}
+	}
+	
+	public void onResume(){
+		super.onResume();
+		ma.getSupportActionBar().show();
 	}
 	
 	void loadSigns(){
@@ -63,11 +64,13 @@ public class SignListFragment extends ListFragment {
 				ma.currentSign = tmpSigns.get(position);//Integer.valueOf(String.valueOf(id));
 
 				//Hide keyboard
-				InputMethodManager imm = (InputMethodManager)ma.getSystemService(
-						Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(inputSearch.getWindowToken(), 0);
-
+				if(ma.search != null){
+					InputMethodManager imm = (InputMethodManager) ma.getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(ma.search.getWindowToken(), 0);
+				}
+				
 				if(ma.detFragment == null){
+					ma.getSupportActionBar().hide();
 					//Create detail fragment
 					SignDetailFragment newFragment = new SignDetailFragment();
 
@@ -82,17 +85,17 @@ public class SignListFragment extends ListFragment {
 				}
 			}
 		});
-		
-		inputSearch = (EditText) getActivity().findViewById(R.id.inputSearch);
+        
+		/*
 		inputSearch.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-				mAdapter.getFilter().filter(cs);
+				
 			}
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 			@Override
 			public void afterTextChanged(Editable arg0) {}
-		});
+		});*/
 	}
 }

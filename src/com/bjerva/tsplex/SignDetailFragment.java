@@ -1,15 +1,13 @@
 package com.bjerva.tsplex;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import android.app.Activity;
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,10 +20,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MediaController;
-import android.widget.SimpleAdapter;
 import android.widget.VideoView;
 
-import com.bjerva.tsplex.GsonSign.Example;
 import com.bjerva.tsplex.GsonSign.Word;
 
 public class SignDetailFragment extends Fragment {
@@ -33,9 +29,6 @@ public class SignDetailFragment extends Fragment {
 	private View myView;
 	private VideoView myVideoView;
 	private MainActivity ma;
-	
-	public final static String ITEM_TITLE = "title";
-	public final static String ITEM_CAPTION = "caption";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +43,6 @@ public class SignDetailFragment extends Fragment {
 		ma = (MainActivity) getActivity();
 
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
-		//myVideoView.setDimensions(640, 480);
 		
 		GsonSign currSign = ma.getCurrentSign();
 		if(currSign == null){
@@ -95,7 +87,7 @@ public class SignDetailFragment extends Fragment {
 			//adapterItems.add(currSign.description);
 		} else {
 			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
-					R.layout.list_item, new String[] { "Tecknet har ingen beskrivning" }));
+					R.layout.list_item, new String[] { "Tecknet har ingen beskrivning i lexikonet" }));
 			//adapterItems.add("Tecknet har ingen beskrivning");
 		}
 
@@ -106,7 +98,7 @@ public class SignDetailFragment extends Fragment {
 			}
 			adapter.addSection("Exempel", new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpEx));
-		}
+		} 
 		
 		if(currSign.versions.size() > 0){
 			String[] tmpVer = new String[currSign.versions.size()];
@@ -115,7 +107,7 @@ public class SignDetailFragment extends Fragment {
 			}
 			adapter.addSection("Varianter", new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpVer));
-		}
+		} 
 
 		if(currSign.tags.size() > 0){
 			String[] tmpTags = new String[currSign.tags.size()];
@@ -136,26 +128,24 @@ public class SignDetailFragment extends Fragment {
 		//final ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(ma, android.R.layout.simple_list_item_1, adapterItems);
 		//listView.setAdapter(mAdapter);
 		
-				
-		// create our list and custom adapter
-		
-		
 		listView.setAdapter(adapter);
 	
-
 		//Set listener
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				if(position<=1){
+				if(position<=3){
 					Log.i("VideoView", "Play sign");
 					loadFilm(currSign.video_url);
-				} else if(position < 2+currSign.examples.size()){
-					Log.i("VideoView", "Play example: "+currSign.examples.get(position-2).video_url);
-					loadFilm(currSign.examples.get(position-2).video_url);
-				} else if(position < 2+currSign.versions.size()+currSign.examples.size()){
-					Log.i("VideoView", "Play variant: "+currSign.versions.get(position-currSign.examples.size()-2));
-					loadFilm(currSign.versions.get(position-currSign.examples.size()-2).video_url);
+				} else if(position < 5+currSign.examples.size()){
+					Log.i("VideoView", "Play example: "+currSign.examples.get(position-5).video_url);
+					loadFilm(currSign.examples.get(position-5).video_url);
+				} else if(currSign.examples.size() > 0 && position < 6+currSign.versions.size()+currSign.examples.size()){
+					Log.i("VideoView", "Play variant: "+currSign.versions.get(position-currSign.examples.size()-6));
+					loadFilm(currSign.versions.get(position-currSign.examples.size()-6).video_url);
+				} else if(position < 5+currSign.versions.size()+currSign.examples.size()){
+					Log.i("VideoView", "Play variant: "+currSign.versions.get(position-currSign.examples.size()-5));
+					loadFilm(currSign.versions.get(position-currSign.examples.size()-5).video_url);
 				} else {
 					Log.i("VideoView", "I do naaaathing");
 				}
@@ -182,6 +172,14 @@ public class SignDetailFragment extends Fragment {
             }
         });
 		
+		
+		ConnectivityManager connectivityManager = (ConnectivityManager) ma.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		if(activeNetworkInfo == null){
+			ma.hideLoader();
+			ma.networkError();
+		}
+
 		myVideoView.start();
 	}
 	
@@ -193,13 +191,6 @@ public class SignDetailFragment extends Fragment {
 		myVideoView.setVideoURI(Uri.parse(fileName));
 		myVideoView.requestFocus();
 		myVideoView.start();
-	}
-	
-	public Map<String,?> createItem(String title, String caption) {
-		Map<String,String> item = new HashMap<String,String>();
-		item.put(ITEM_TITLE, title);
-		item.put(ITEM_CAPTION, caption);
-		return item;
 	}
 	
 	/*

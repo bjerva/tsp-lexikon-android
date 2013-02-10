@@ -2,27 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
     android:focusable="true"
-    android:focusableInTouchMode="true">
-    
-    <EditText android:id="@+id/inputSearch"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/alphabetic_header"
+        style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/Search"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:inputType="textNoSuggestions" />
-            
-    <ListView 
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textIsSelectable="false"
+        android:textSize="20sp" />
+
+    <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
         android:cacheColorHint="@android:color/transparent"
-        android:fastScrollEnabled="true" />
+        android:fastScrollEnabled="true"
+        android:paddingLeft="9dp"
+        android:paddingRight="9dp" />
 
 </LinearLayout>

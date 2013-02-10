@@ -26,6 +26,7 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 	private List<GsonSign> originalItems;
 	private List<GsonSign> filteredItems;
 	private SignFilter filter;
+	private TextView tv;
 
 	public SignAdapter(Context context, int resource, List<GsonSign> items) {
 		super(context, resource, items);
@@ -36,6 +37,8 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 			filteredItems.add(items.get(i));
 			originalItems.add(items.get(i));
 		}
+		
+		tv = (TextView) ((MainActivity) context).findViewById(R.id.alphabetic_header);
 	}
 
 	@Override
@@ -51,6 +54,7 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 			if (v != null) {
 				List<Word> words = sMod.words;
 				String word = words.get(0).word;
+				tv.setText(word.substring(0, 1));
 				for(int j=1; j<words.size(); ++j){
 					word += ", "+words.get(j).word;
 				}
