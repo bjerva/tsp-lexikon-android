@@ -101,7 +101,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			//Handset
 			Class<? extends Fragment> c = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass();
-			Log.e("ORIENTATION", c.getName());
 			if(c.equals(SignDetailFragment.class)){
 				showLoader();
 				detFragment = new SignDetailFragment();
@@ -121,12 +120,10 @@ public class MainActivity extends SherlockFragmentActivity {
 		if(metaList != null){
 			RelativeLayout.LayoutParams params;
 			if(newConfig.orientation == 1){
-				Log.i("Here", "Herehere1");
 				params = new RelativeLayout.LayoutParams(
 						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				params.addRule(RelativeLayout.BELOW, R.id.myVideoView);
 			} else if (newConfig.orientation == 2) {
-				Log.i("Here", "Herehere2");
 				params = new RelativeLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 				params.addRule(RelativeLayout.RIGHT_OF, R.id.myVideoView);
