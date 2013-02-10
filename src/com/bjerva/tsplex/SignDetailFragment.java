@@ -1,6 +1,8 @@
 package com.bjerva.tsplex;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -180,7 +182,7 @@ public class SignDetailFragment extends Fragment {
 			ma.networkError();
 		}
 
-		myVideoView.start();
+		playNormal();
 	}
 	
 	private void loadFilm(String url){
@@ -190,6 +192,29 @@ public class SignDetailFragment extends Fragment {
 		myVideoView.setMediaController(new MediaController(ma));
 		myVideoView.setVideoURI(Uri.parse(fileName));
 		myVideoView.requestFocus();
+		myVideoView.start();
+	}
+/*
+	private void playSlowMo(){
+		Timer timer = new Timer();
+		timer.schedule( new TimerTask() {
+
+			@Override
+			public void run() {
+				myVideoView.start();
+			}
+		}, 0, 200);
+
+		timer.schedule( new TimerTask() {
+			@Override
+			public void run() {
+				myVideoView.pause();
+			}
+		}, 100, 200);
+	}
+	*/
+
+	private void playNormal(){
 		myVideoView.start();
 	}
 	
