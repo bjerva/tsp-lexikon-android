@@ -55,18 +55,12 @@ public class SignDetailFragment extends Fragment {
 	void startUpHelper(final GsonSign currSign){
 		String fileName = currSign.video_url.substring(0, currSign.video_url.length()-3)+"3gp";
 		Log.i("SignDetail", fileName);
-		//String uriPath = "http://130.237.171.78/"+fileName;//T01811.3gp
-		//String uriPath = "http://130.237.171.46/system/videos/"+fileName;
 		
 		myVideoView.setVideoURI(Uri.parse(fileName));
-		
-		//Uri video = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.testfil2);	
-		//myVideoView.setVideoURI(video);
 		
 		myVideoView.setMediaController(new MediaController(ma));
 		myVideoView.requestFocus();
 
-		//ArrayList<String> adapterItems = new ArrayList<String>();
 		SeparatedListAdapter adapter = new SeparatedListAdapter(ma);
 		
 		if (currSign.words != null) {
@@ -78,17 +72,14 @@ public class SignDetailFragment extends Fragment {
 			
 			adapter.addSection("Ord", new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { word }));
-			//adapterItems.add(word);
 		}
 
 		if(currSign.description != null){
 			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { currSign.description }));
-			//adapterItems.add(currSign.description);
 		} else {
 			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { "Tecknet har ingen beskrivning i lexikonet" }));
-			//adapterItems.add("Tecknet har ingen beskrivning");
 		}
 
 		if(currSign.examples.size() > 0){
@@ -125,8 +116,6 @@ public class SignDetailFragment extends Fragment {
 
 		//Create and set adapter
 		final ListView listView = (ListView) myView.findViewById(R.id.metaList);
-		//final ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(ma, android.R.layout.simple_list_item_1, adapterItems);
-		//listView.setAdapter(mAdapter);
 		
 		listView.setAdapter(adapter);
 	
