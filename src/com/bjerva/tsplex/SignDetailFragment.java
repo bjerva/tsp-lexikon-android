@@ -208,9 +208,6 @@ public class SignDetailFragment extends Fragment {
 	/*
 	public class FTPRequest extends AsyncTask<String, Void, String>{
 		 
-		String mhost = "130.237.171.46";
-		String muser = "ftp";
-		String mpass = "bjerva@ling.su.se";
 
 	    protected String doInBackground(String... fileinfo) {
 			FTPClient client = new FTPClient();
