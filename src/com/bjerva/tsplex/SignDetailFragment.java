@@ -1,8 +1,6 @@
 package com.bjerva.tsplex;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.Context;
 import android.media.MediaPlayer;

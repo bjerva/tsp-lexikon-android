@@ -73,7 +73,7 @@ public class MainActivity extends SherlockFragmentActivity {
 					R.id.details_container, detFragment).commit();
 		}
 	}
-	
+
 	public void onBackPressed(){
 		for(int i=getSupportFragmentManager().getBackStackEntryCount(); i>1; i--){
 			getSupportFragmentManager().popBackStack();
@@ -109,8 +109,6 @@ public class MainActivity extends SherlockFragmentActivity {
 				transaction.replace(R.id.fragment_container, detFragment);
 				transaction.addToBackStack(null);
 				transaction.commit();
-				//getSupportFragmentManager().beginTransaction().replace(
-				//		R.id.fragment_container, detFragment).commit();
 				hideLoader();
 			}
 
@@ -136,31 +134,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			Log.i("MA", "metaList is null");
 		}
-
-		/*
-		RelativeLayout rl = (RelativeLayout) findViewById(R.id.detailLayout);
-		if(rl != null){
-			Log.e("MA", "RL");
-			rl.requestLayout();
-			rl.forceLayout();
-		}
-		if(video != null){
-			Log.e("MA", "VID");
-			video.requestLayout();
-			video.forceLayout();
-		}
-		 */
-
-		/*
-		FragmentManager fragmentManager = getSupportFragmentManager();
-	    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-	    Fragment newFragment = new SignDetailFragment();
-	    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-	    transaction.replace(R.id., newFragment);
-	    transaction.addToBackStack(null);
-	    transaction.commit();
-	    return true;
-		 */
 	}
 
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
@@ -236,7 +209,91 @@ public class MainActivity extends SherlockFragmentActivity {
 		} 
 		Toast.makeText(this, "Connection problem. No internet connection found / video not found on server.", Toast.LENGTH_LONG).show();
 	}
-	/*
+
+	private void loadGSONfromString() throws IOException, JSONException{
+		Log.i("Load Local JSON", "Loading...");
+		final InputStream is = getAssets().open("signs2.json");
+		final Reader reader = new InputStreamReader(is);
+
+		final Gson gson = new Gson();
+		final Type collectionType = new TypeToken<ArrayList<GsonSign>>(){}.getType();
+		gsonSigns = gson.fromJson(reader, collectionType);
+
+		is.close();
+		Log.i("Load Local GSON", "Loaded!");
+	}
+
+
+	private class LoadHelper extends AsyncTask<String, Void, Void>{
+
+		final ProgressDialog pbarDialog;
+
+		public LoadHelper(MainActivity activity) {
+			this.pbarDialog = new ProgressDialog(activity);
+		}
+
+		@Override
+		protected Void doInBackground(String... url) {
+			Log.i("AsyncFileLoad", "Loading");
+			try {
+				loadGSONfromString();
+				//loadData();
+			} catch (IOException e) {
+			} catch (JSONException e) {}
+			Log.i("AsyncFileLoad", "Loaded");
+
+			Collections.sort(gsonSigns, new CustomComparator());
+			if(gsonSigns.size()>100){
+				for(int i=0; i<16; ++i){
+					gsonSigns.add(gsonSigns.remove(0));
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPreExecute(){
+			//Show loading spinner
+			Log.i("AsyncDBLoad", "Loading Local signs");
+			//pbarDialog = new ProgressDialog(MainActivity.this);
+			pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			pbarDialog.setMessage("Laddar sparad teckeninfo...");
+			pbarDialog.setCancelable(false);
+			pbarDialog.show();
+
+			super.onPreExecute();
+		}
+
+		@Override
+		protected void onPostExecute(Void result){
+			//Hide loading spinner
+			super.onPostExecute(result);
+			try{
+				listFragment.loadSigns();
+			} catch (NullPointerException e){
+
+				SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+						.findFragmentById(R.id.list_frag);
+
+				if (listFrag == null) {
+					((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
+				} else {
+					listFrag.loadSigns();
+				}
+			}
+			pbarDialog.dismiss();
+			Log.i("AsyncDBLoad", "Loaded signs from DB");
+		}
+	}
+
+
+	private class CustomComparator implements Comparator<GsonSign>  {
+		@Override
+		public int compare(GsonSign o1, GsonSign o2) {
+			return o1.words.get(0).word.compareToIgnoreCase(o2.words.get(0).word);
+		}
+
+		/*
 	private void loadData(){
 		Log.i("SyncDBLoad", "Loading");
 		final ObjectSet<GsonSign> dbList = db.queryByExample(new GsonSign());
@@ -259,8 +316,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		saveRetrievalDate();
 	}
-	 */
-	/*
+		 */
+		/*
 	private void saveRetrievalDate(){
 		//Write retrieval date to file
 		final Calendar c = Calendar.getInstance();
@@ -307,20 +364,9 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		return oldDate;
 	}
-	 */
-	private void loadGSONfromString() throws IOException, JSONException{
-		Log.i("Load Local JSON", "Loading...");
-		final InputStream is = getAssets().open("signs2.json");
-		final Reader reader = new InputStreamReader(is);
+		 */
 
-		final Gson gson = new Gson();
-		final Type collectionType = new TypeToken<ArrayList<GsonSign>>(){}.getType();
-		gsonSigns = gson.fromJson(reader, collectionType);
-
-		is.close();
-		Log.i("Load Local GSON", "Loaded!");
-	}
-	/*
+		/*
 	private class JSONParser extends AsyncTask<String, Void, Void>{
 
 	    InputStream is = null;
@@ -394,75 +440,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	    }
 	}
 
-	 */
+		 */
 
-	private class LoadHelper extends AsyncTask<String, Void, Void>{
-
-		final ProgressDialog pbarDialog;
-
-		public LoadHelper(MainActivity activity) {
-			this.pbarDialog = new ProgressDialog(activity);
-		}
-
-		@Override
-		protected Void doInBackground(String... url) {
-			Log.i("AsyncFileLoad", "Loading");
-			try {
-				loadGSONfromString();
-				//loadData();
-			} catch (IOException e) {
-			} catch (JSONException e) {}
-			Log.i("AsyncFileLoad", "Loaded");
-
-			Collections.sort(gsonSigns, new CustomComparator());
-			if(gsonSigns.size()>100){
-				for(int i=0; i<16; ++i){
-					gsonSigns.add(gsonSigns.remove(0));
-				}
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPreExecute(){
-			//Show loading spinner
-			Log.i("AsyncDBLoad", "Loading Local signs");
-			//pbarDialog = new ProgressDialog(MainActivity.this);
-			pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			pbarDialog.setMessage("Laddar sparad teckeninfo...");
-			pbarDialog.setCancelable(false);
-			pbarDialog.show();
-
-			super.onPreExecute();
-		}
-
-		@Override
-		protected void onPostExecute(Void result){
-			//Hide loading spinner
-			super.onPostExecute(result);
-			try{
-				listFragment.loadSigns();
-			} catch (NullPointerException e){
-
-				SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-						.findFragmentById(R.id.list_frag);
-
-				if (listFrag == null) {
-					((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
-				} else {
-					listFrag.loadSigns();
-				}
-			}
-			pbarDialog.dismiss();
-			Log.i("AsyncDBLoad", "Loaded signs from DB");
-		}
-	}
-
-
-	private class CustomComparator implements Comparator<GsonSign>  {
-		@Override
-		public int compare(GsonSign o1, GsonSign o2) {
-			return o1.words.get(0).word.compareToIgnoreCase(o2.words.get(0).word);
-		}
 	}
 }

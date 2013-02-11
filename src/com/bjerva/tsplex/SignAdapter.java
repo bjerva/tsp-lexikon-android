@@ -20,7 +20,6 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 
 	public SignAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
-		// TODO Auto-generated constructor stub
 	}
 
 	private List<GsonSign> originalItems;
@@ -96,11 +95,8 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 					if(word.toString().toLowerCase(swedishLocale).contains(constraint))
 						tempFiltered.add(sign);
 				}
-				//synchronized(this)
-				//{
 				result.count = tempFiltered.size();
 				result.values = tempFiltered;
-				//}
 			}
 			else
 			{
