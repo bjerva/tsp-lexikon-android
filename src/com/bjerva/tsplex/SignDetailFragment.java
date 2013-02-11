@@ -207,7 +207,7 @@ public class SignDetailFragment extends Fragment {
 	
 	/*
 	public class FTPRequest extends AsyncTask<String, Void, String>{
-		 
+		
 
 	    protected String doInBackground(String... fileinfo) {
 			FTPClient client = new FTPClient();
