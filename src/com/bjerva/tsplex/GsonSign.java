@@ -34,44 +34,68 @@ class GsonSign {
 		return description;
 	}
 
-	List<Example> examples;
-	List<Version> versions;
-	List<Word> words;
-	List<Tag> tags;
+	private List<Example> examples;
+	private List<Version> versions;
+	private List<Word> words;
+	private List<Tag> tags;
 	
 	@SerializedName("unusual")
-	boolean unusual;
+	private boolean unusual;
 	
 	@SerializedName("video_url")
-	String video_url;
+	private String video_url;
 	
 	@SerializedName("description")
-	String description;
+	private String description;
 	
 	class Example {
 		@SerializedName("video_url")
-		String video_url;
+		private String video_url;
 		
+		public String getVideo_url() {
+			return video_url;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
 		@SerializedName("description")
-		String description;
+		private String description;
 	}
 	
 	class Version {
 		@SerializedName("video_url")
-		String video_url;
+		private String video_url;
 		
+		public String getVideo_url() {
+			return video_url;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
 		@SerializedName("description")
-		String description;
+		private String description;
 	}
 	
 	class Word {
 		@SerializedName("word")
-		String word;
+		private String word;
+
+		public String getWord() {
+			return word;
+		}
 	}
 	
 	class Tag {
 		@SerializedName("tag")
-		String tag;
+		private String tag;
+
+		public String getTag() {
+			return tag;
+		}
 	}
 }
 

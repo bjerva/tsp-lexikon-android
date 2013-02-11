@@ -36,28 +36,11 @@ import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private SignListFragment listFragment;
-	SignDetailFragment detFragment;
-
-	public SignDetailFragment getDetFragment() {
-		return detFragment;
-	}
-
-	public ProgressDialog getPbarDialog() {
-		return pbarDialog;
-	}
-
-	public EditText getSearch() {
-		return search;
-	}
-
-	public ArrayList<GsonSign> getGsonSigns() {
-		return gsonSigns;
-	}
-
+	private SignDetailFragment detFragment;
 
 	private ProgressDialog pbarDialog;
 
-	EditText search;
+	private EditText search;
 
 	ArrayList<GsonSign> gsonSigns = null;
 	GsonSign currentSign = null;
@@ -294,12 +277,29 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 
+
+	public SignDetailFragment getDetFragment() {
+		return detFragment;
+	}
+
+	public ProgressDialog getPbarDialog() {
+		return pbarDialog;
+	}
+
+	public EditText getSearch() {
+		return search;
+	}
+
+	public ArrayList<GsonSign> getGsonSigns() {
+		return gsonSigns;
+	}
+
 	private class CustomComparator implements Comparator<GsonSign>  {
 		@Override
 		public int compare(GsonSign o1, GsonSign o2) {
-			return o1.words.get(0).word.compareToIgnoreCase(o2.words.get(0).word);
+			return o1.getWords().get(0).getWord().compareToIgnoreCase(o2.getWords().get(0).getWord());
 		}
-
+	}	
 		/*
 	private void loadData(){
 		Log.i("SyncDBLoad", "Loading");
@@ -448,6 +448,4 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 		 */
-
-	}
 }

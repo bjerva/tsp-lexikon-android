@@ -63,12 +63,12 @@ public class SignListFragment extends ListFragment {
 				ma.currentSign = tmpSigns.get(position);//Integer.valueOf(String.valueOf(id));
 
 				//Hide keyboard
-				if(ma.search != null){
+				if(ma.getSearch() != null){
 					InputMethodManager imm = (InputMethodManager) ma.getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(ma.search.getWindowToken(), 0);
+					imm.hideSoftInputFromWindow(ma.getSearch().getWindowToken(), 0);
 				}
 				
-				if(ma.detFragment == null){
+				if(ma.getDetFragment() == null){
 					ma.getSupportActionBar().hide();
 					//Create detail fragment
 					SignDetailFragment newFragment = new SignDetailFragment();
@@ -80,7 +80,7 @@ public class SignListFragment extends ListFragment {
 					transaction.addToBackStack(null);
 					transaction.commit();
 				} else {
-					ma.detFragment.startUpHelper(ma.currentSign);
+					ma.getDetFragment().startUpHelper(ma.currentSign);
 				}
 			}
 		});

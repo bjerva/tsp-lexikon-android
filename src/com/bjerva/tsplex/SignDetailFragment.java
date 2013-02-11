@@ -53,7 +53,7 @@ public class SignDetailFragment extends Fragment {
 	}
 	
 	void startUpHelper(final GsonSign currSign){
-		String fileName = currSign.video_url.substring(0, currSign.video_url.length()-3)+"3gp";
+		String fileName = currSign.getVideo_url().substring(0, currSign.getVideo_url().length()-3)+"3gp";
 		Log.i("SignDetail", fileName);
 		
 		myVideoView.setVideoURI(Uri.parse(fileName));
@@ -63,53 +63,53 @@ public class SignDetailFragment extends Fragment {
 
 		SeparatedListAdapter adapter = new SeparatedListAdapter(ma);
 		
-		if (currSign.words != null) {
-			List<Word> words = currSign.words;
-			String word = words.get(0).word;
+		if (currSign.getWords() != null) {
+			List<Word> words = currSign.getWords();
+			String word = words.get(0).getWord();
 			for(int j=1; j<words.size(); ++j){
-				word += ", "+words.get(j).word;
+				word += ", "+words.get(j).getWord();
 			}
 			
 			adapter.addSection("Ord", new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { word }));
 		}
 
-		if(currSign.description != null){
+		if(currSign.getDescription() != null){
 			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
-					R.layout.list_item, new String[] { currSign.description }));
+					R.layout.list_item, new String[] { currSign.getDescription() }));
 		} else {
 			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { "Tecknet har ingen beskrivning i lexikonet" }));
 		}
 
-		if(currSign.examples.size() > 0){
-			String[] tmpEx = new String[currSign.examples.size()];
-			for(int i=0; i<currSign.examples.size(); i++){
-				tmpEx[i] = currSign.examples.get(i).description;
+		if(currSign.getExamples().size() > 0){
+			String[] tmpEx = new String[currSign.getExamples().size()];
+			for(int i=0; i<currSign.getExamples().size(); i++){
+				tmpEx[i] = currSign.getExamples().get(i).getDescription();
 			}
 			adapter.addSection("Exempel", new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpEx));
 		} 
 		
-		if(currSign.versions.size() > 0){
-			String[] tmpVer = new String[currSign.versions.size()];
-			for(int i=0; i<currSign.versions.size(); ++i){
-				tmpVer[i] = currSign.versions.get(i).description;
+		if(currSign.getVersions().size() > 0){
+			String[] tmpVer = new String[currSign.getVersions().size()];
+			for(int i=0; i<currSign.getVersions().size(); ++i){
+				tmpVer[i] = currSign.getVersions().get(i).getDescription();
 			}
 			adapter.addSection("Varianter", new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpVer));
 		} 
 		
-		if(currSign.tags.size() > 0){
-			String[] tmpTags = new String[currSign.tags.size()];
-			for(int i=0; i<currSign.tags.size(); ++i){
-				tmpTags[i] = currSign.tags.get(i).tag;
+		if(currSign.getTags().size() > 0){
+			String[] tmpTags = new String[currSign.getTags().size()];
+			for(int i=0; i<currSign.getTags().size(); ++i){
+				tmpTags[i] = currSign.getTags().get(i).getTag();
 			}
 			adapter.addSection("Kategori", new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpTags));
 		}
 		
-		if(currSign.unusual) {
+		if(currSign.isUnusual()) {
 			adapter.addSection("Ovanligt", new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { "Tecknet är ovanligt" }));
 		}
@@ -125,16 +125,16 @@ public class SignDetailFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				if(position<=3){
 					Log.i("VideoView", "Play sign");
-					loadFilm(currSign.video_url);
-				} else if(position < 5+currSign.examples.size()){
-					Log.i("VideoView", "Play example: "+currSign.examples.get(position-5).video_url);
-					loadFilm(currSign.examples.get(position-5).video_url);
-				} else if(currSign.examples.size() > 0 && position < 6+currSign.versions.size()+currSign.examples.size()){
-					Log.i("VideoView", "Play variant: "+currSign.versions.get(position-currSign.examples.size()-6));
-					loadFilm(currSign.versions.get(position-currSign.examples.size()-6).video_url);
-				} else if(position < 5+currSign.versions.size()+currSign.examples.size()){
-					Log.i("VideoView", "Play variant: "+currSign.versions.get(position-currSign.examples.size()-5));
-					loadFilm(currSign.versions.get(position-currSign.examples.size()-5).video_url);
+					loadFilm(currSign.getVideo_url());
+				} else if(position < 5+currSign.getExamples().size()){
+					Log.i("VideoView", "Play example: "+currSign.getExamples().get(position-5).getVideo_url());
+					loadFilm(currSign.getExamples().get(position-5).getVideo_url());
+				} else if(currSign.getExamples().size() > 0 && position < 6+currSign.getVersions().size()+currSign.getExamples().size()){
+					Log.i("VideoView", "Play variant: "+currSign.getVersions().get(position-currSign.getExamples().size()-6));
+					loadFilm(currSign.getVersions().get(position-currSign.getExamples().size()-6).getVideo_url());
+				} else if(position < 5+currSign.getVersions().size()+currSign.getExamples().size()){
+					Log.i("VideoView", "Play variant: "+currSign.getVersions().get(position-currSign.getExamples().size()-5));
+					loadFilm(currSign.getVersions().get(position-currSign.getExamples().size()-5).getVideo_url());
 				} else {
 					Log.i("VideoView", "I do naaaathing");
 				}

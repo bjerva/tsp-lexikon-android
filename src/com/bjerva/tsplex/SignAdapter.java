@@ -51,11 +51,11 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 		final GsonSign sMod = filteredItems.get(position);
 		if (sMod != null) {
 			if (v != null) {
-				List<Word> words = sMod.words;
-				String word = words.get(0).word;
+				List<Word> words = sMod.getWords();
+				String word = words.get(0).getWord();
 				tv.setText(word.substring(0, 1));
 				for(int j=1; j<words.size(); ++j){
-					word += ", "+words.get(j).word;
+					word += ", "+words.get(j).getWord();
 				}
 				v.setText(word);
 			}
@@ -90,8 +90,8 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 					GsonSign sign = originalItems.get(i);
 					List<Word> words;
 					String word = null;
-					words = sign.words;
-					word = words.get(0).word;
+					words = sign.getWords();
+					word = words.get(0).getWord();
 					if(word.toString().toLowerCase(swedishLocale).contains(constraint))
 						tempFiltered.add(sign);
 				}
