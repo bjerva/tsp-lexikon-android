@@ -38,6 +38,23 @@ public class MainActivity extends SherlockFragmentActivity {
 	private SignListFragment listFragment;
 	SignDetailFragment detFragment;
 
+	public SignDetailFragment getDetFragment() {
+		return detFragment;
+	}
+
+	public ProgressDialog getPbarDialog() {
+		return pbarDialog;
+	}
+
+	public EditText getSearch() {
+		return search;
+	}
+
+	public ArrayList<GsonSign> getGsonSigns() {
+		return gsonSigns;
+	}
+
+
 	private ProgressDialog pbarDialog;
 
 	EditText search;
