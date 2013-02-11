@@ -6,7 +6,6 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 class GsonSign {
-
 	List<Example> examples;
 	List<Version> versions;
 	List<Word> words;

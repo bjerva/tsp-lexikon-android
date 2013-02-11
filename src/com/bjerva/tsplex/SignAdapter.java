@@ -126,5 +126,4 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 			notifyDataSetInvalidated();
 		}
 	}
-
 }

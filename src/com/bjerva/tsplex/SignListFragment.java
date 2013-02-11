@@ -43,7 +43,6 @@ public class SignListFragment extends ListFragment {
 	
 	void loadSigns(){
 		//Create and set adapter
-		
 		final List<GsonSign> tmpSigns = new ArrayList<GsonSign>();
 		for(int i = 0, l = ma.gsonSigns.size(); i < l; i++){
 			GsonSign currSign = ma.gsonSigns.get(i);
@@ -85,17 +84,5 @@ public class SignListFragment extends ListFragment {
 				}
 			}
 		});
-        
-		/*
-		inputSearch.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-				
-			}
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
-			@Override
-			public void afterTextChanged(Editable arg0) {}
-		});*/
 	}
 }

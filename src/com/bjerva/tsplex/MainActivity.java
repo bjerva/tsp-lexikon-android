@@ -82,7 +82,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
 
-
 		if (listFrag != null) {
 			//Tablet
 			showLoader();
@@ -174,7 +173,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		//Show spinner
 		pbarDialog = new ProgressDialog(this);
 		pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		pbarDialog.setMessage("HŠmtar tecken...");
+		pbarDialog.setMessage("HÃ¤mtar tecken...");
 		pbarDialog.setCancelable(false);
 		pbarDialog.show();
 	}
@@ -408,7 +407,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	    	Log.i("AsyncServ", "Downloading signs");
 	    	//pbarDialog = new ProgressDialog(MainActivity.this);
 	    	pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	    	pbarDialog.setMessage("HŠmtar teckeninfo frŒn server...");
+	    	pbarDialog.setMessage("Hï¿½mtar teckeninfo frï¿½n server...");
 	    	pbarDialog.setCancelable(false);
 	    	pbarDialog.show();
 	    	super.onPreExecute();

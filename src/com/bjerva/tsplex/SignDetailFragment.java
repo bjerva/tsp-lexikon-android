@@ -99,7 +99,7 @@ public class SignDetailFragment extends Fragment {
 			adapter.addSection("Varianter", new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpVer));
 		} 
-
+		
 		if(currSign.tags.size() > 0){
 			String[] tmpTags = new String[currSign.tags.size()];
 			for(int i=0; i<currSign.tags.size(); ++i){
@@ -111,7 +111,7 @@ public class SignDetailFragment extends Fragment {
 		
 		if(currSign.unusual) {
 			adapter.addSection("Ovanligt", new ArrayAdapter<String>(ma,
-					R.layout.list_item, new String[] { "Tecknet Šr ovanligt" }));
+					R.layout.list_item, new String[] { "Tecknet Ã¤r ovanligt" }));
 		}
 
 		//Create and set adapter
@@ -251,11 +251,9 @@ public class SignDetailFragment extends Fragment {
 			Log.v("FTP", "Done");  
 	        return "Done";
 	    }
-	    
 	    protected void onPostExecute(){
 	    	Log.i("Async", "Finished FTP request");
 	    }
 	}
 	*/
-
 }

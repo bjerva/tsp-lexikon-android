@@ -98,7 +98,6 @@ public class SeparatedListAdapter extends BaseAdapter {
 		}
 		return null;
 	}
-
 	@Override
 	public long getItemId(int position) {
 		return position;
