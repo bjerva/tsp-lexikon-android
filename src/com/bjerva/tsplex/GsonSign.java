@@ -6,6 +6,34 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 class GsonSign {
+	public List<Example> getExamples() {
+		return examples;
+	}
+
+	public List<Version> getVersions() {
+		return versions;
+	}
+
+	public List<Word> getWords() {
+		return words;
+	}
+
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public boolean isUnusual() {
+		return unusual;
+	}
+
+	public String getVideo_url() {
+		return video_url;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
 	List<Example> examples;
 	List<Version> versions;
 	List<Word> words;
