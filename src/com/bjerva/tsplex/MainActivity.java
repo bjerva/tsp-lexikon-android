@@ -35,19 +35,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends SherlockFragmentActivity {
-	//private String jsonURL = "http://130.237.171.46/signs.json";
-	//private final String FILENAME = "signUpdates.txt";
 	private SignListFragment listFragment;
 	SignDetailFragment detFragment;
-
-	//SearchView searchView;
 
 	private ProgressDialog pbarDialog;
 
 	EditText search;
-
-	//private String dbName;
-	//private ObjectContainer db;
 
 	ArrayList<GsonSign> gsonSigns = null;
 	GsonSign currentSign = null;
@@ -97,7 +90,6 @@ public class MainActivity extends SherlockFragmentActivity {
 			getSupportFragmentManager().beginTransaction().replace(
 					R.id.details_container, detFragment).commit();
 			hideLoader();
-
 		} else {
 			//Handset
 			Class<? extends Fragment> c = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass();
@@ -111,7 +103,6 @@ public class MainActivity extends SherlockFragmentActivity {
 				transaction.commit();
 				hideLoader();
 			}
-
 		}
 
 		ListView metaList = (ListView) findViewById(R.id.metaList);
