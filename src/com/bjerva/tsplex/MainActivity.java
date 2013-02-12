@@ -67,6 +67,43 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 	}
 
+/*
+ * public long insertRecord(SQLiteDatabase db, Serializable myObject) { 
+		try { 
+			db.beginTransaction(); 
+			ContentValues values = new ContentValues(); 
+			values.put("MyColumn", SignSQLiteHelper.getSerializedObject(myObject)); 
+			long id = db.insert("MyTable", null, values); 
+			if (id>=0) db.setTransactionSuccessful(); 
+			return id; 
+		} catch (Exception e) { 
+			Logger.e(loggerTag, e.getMessage(), e); 
+			// ignore this and roll back the transaction 
+		} finally { 
+			try { 
+				db.endTransaction(); 
+			} catch (Exception e) { 
+				return -1; 
+			} 
+		} 
+		return -1; 
+	} 
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public void onBackPressed(){
 		for(int i=getSupportFragmentManager().getBackStackEntryCount(); i>1; i--){
 			getSupportFragmentManager().popBackStack();
@@ -300,7 +337,7 @@ public class MainActivity extends SherlockFragmentActivity {
 			return o1.getWords().get(0).getWord().compareToIgnoreCase(o2.getWords().get(0).getWord());
 		}
 	}	
-		/*
+	/*
 	private void loadData(){
 		Log.i("SyncDBLoad", "Loading");
 		final ObjectSet<GsonSign> dbList = db.queryByExample(new GsonSign());
@@ -323,8 +360,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		saveRetrievalDate();
 	}
-		 */
-		/*
+	 */
+	/*
 	private void saveRetrievalDate(){
 		//Write retrieval date to file
 		final Calendar c = Calendar.getInstance();
@@ -371,9 +408,9 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		return oldDate;
 	}
-		 */
+	 */
 
-		/*
+	/*
 	private class JSONParser extends AsyncTask<String, Void, Void>{
 
 	    InputStream is = null;
@@ -447,5 +484,5 @@ public class MainActivity extends SherlockFragmentActivity {
 	    }
 	}
 
-		 */
+	 */
 }
