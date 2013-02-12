@@ -42,8 +42,10 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	private EditText search;
 
-	ArrayList<GsonSign> gsonSigns = null;
+	//ArrayList<GsonSign> gsonSigns = null;
+	ArrayList<SimpleGson> gsonSignsLite = null;
 	GsonSign currentSign = null;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,29 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 	}
 
+/*
+ * public long insertRecord(SQLiteDatabase db, Serializable myObject) { 
+		try { 
+			db.beginTransaction(); 
+			ContentValues values = new ContentValues(); 
+			values.put("MyColumn", SignSQLiteHelper.getSerializedObject(myObject)); 
+			long id = db.insert("MyTable", null, values); 
+			if (id>=0) db.setTransactionSuccessful(); 
+			return id; 
+		} catch (Exception e) { 
+			Logger.e(loggerTag, e.getMessage(), e); 
+			// ignore this and roll back the transaction 
+		} finally { 
+			try { 
+				db.endTransaction(); 
+			} catch (Exception e) { 
+				return -1; 
+			} 
+		} 
+		return -1; 
+	} 
+*/
+	
 	public void onBackPressed(){
 		for(int i=getSupportFragmentManager().getBackStackEntryCount(); i>1; i--){
 			getSupportFragmentManager().popBackStack();
@@ -200,6 +225,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		Toast.makeText(this, "Connection problem. No internet connection found / video not found on server.", Toast.LENGTH_LONG).show();
 	}
 
+	/*
 	private void loadGSONfromString() throws IOException, JSONException{
 		Log.i("Load Local JSON", "Loading...");
 		final InputStream is = getAssets().open("signs2.json");
@@ -207,10 +233,38 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		final Gson gson = new Gson();
 		final Type collectionType = new TypeToken<ArrayList<GsonSign>>(){}.getType();
-		gsonSigns = gson.fromJson(reader, collectionType);
+		//gsonSigns = gson.fromJson(reader, collectionType);
 
 		is.close();
 		Log.i("Load Local GSON", "Loaded!");
+	}
+	*/
+	
+	private void loadGSONfromStringLite() throws IOException, JSONException{
+		Log.i("Load Local JSON", "Loading...");
+		final InputStream is = getAssets().open("words2.json");
+		final Reader reader = new InputStreamReader(is);
+
+		final Gson gson = new Gson();
+		final Type collectionType = new TypeToken<ArrayList<SimpleGson>>(){}.getType();
+		gsonSignsLite = gson.fromJson(reader, collectionType);
+
+		is.close();
+		Log.i("Load Local GSON", "Loaded!");
+	}
+	
+	void loadSingleJson(int id){
+		Log.i("Load Single GSON", "Loading...");
+		InputStream is;
+		try {
+			is = getAssets().open("split_json/"+String.valueOf(id)+".json");
+			final Reader reader = new InputStreamReader(is);
+			final Gson gson = new Gson();
+			currentSign = gson.fromJson(reader, GsonSign.class);
+		} catch (IOException e) {
+			Log.e("Single GSON", "Error loading single gson");
+		}
+		Log.i("Load Single GSON", "Loaded!");
 	}
 
 
@@ -226,16 +280,17 @@ public class MainActivity extends SherlockFragmentActivity {
 		protected Void doInBackground(String... url) {
 			Log.i("AsyncFileLoad", "Loading");
 			try {
-				loadGSONfromString();
+				//loadGSONfromString();
+				loadGSONfromStringLite();
 				//loadData();
 			} catch (IOException e) {
 			} catch (JSONException e) {}
 			Log.i("AsyncFileLoad", "Loaded");
 
-			Collections.sort(gsonSigns, new CustomComparator());
-			if(gsonSigns.size()>100){
+			Collections.sort(gsonSignsLite, new CustomComparator());
+			if(gsonSignsLite.size()>100){
 				for(int i=0; i<16; ++i){
-					gsonSigns.add(gsonSigns.remove(0));
+					gsonSignsLite.add(gsonSignsLite.remove(0));
 				}
 			}
 			return null;
@@ -290,17 +345,17 @@ public class MainActivity extends SherlockFragmentActivity {
 		return search;
 	}
 
-	public ArrayList<GsonSign> getGsonSigns() {
-		return gsonSigns;
+	public ArrayList<SimpleGson> getGsonSigns() {
+		return gsonSignsLite;
 	}
 
-	private class CustomComparator implements Comparator<GsonSign>  {
+	private class CustomComparator implements Comparator<SimpleGson>  {
 		@Override
-		public int compare(GsonSign o1, GsonSign o2) {
-			return o1.getWords().get(0).getWord().compareToIgnoreCase(o2.getWords().get(0).getWord());
+		public int compare(SimpleGson o1, SimpleGson o2) {
+			return o1.getWord().compareToIgnoreCase(o2.getWord());
 		}
 	}	
-		/*
+	/*
 	private void loadData(){
 		Log.i("SyncDBLoad", "Loading");
 		final ObjectSet<GsonSign> dbList = db.queryByExample(new GsonSign());
@@ -323,8 +378,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		saveRetrievalDate();
 	}
-		 */
-		/*
+	 */
+	/*
 	private void saveRetrievalDate(){
 		//Write retrieval date to file
 		final Calendar c = Calendar.getInstance();
@@ -371,9 +426,9 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		return oldDate;
 	}
-		 */
+	 */
 
-		/*
+	/*
 	private class JSONParser extends AsyncTask<String, Void, Void>{
 
 	    InputStream is = null;
@@ -447,5 +502,5 @@ public class MainActivity extends SherlockFragmentActivity {
 	    }
 	}
 
-		 */
+	 */
 }

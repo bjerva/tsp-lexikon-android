@@ -14,23 +14,21 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.bjerva.tsplex.GsonSign.Word;
-
-public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
+public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 
 	public SignAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
 	}
 
-	private List<GsonSign> originalItems;
-	private List<GsonSign> filteredItems;
+	private List<SimpleGson> originalItems;
+	private List<SimpleGson> filteredItems;
 	private SignFilter filter;
 	private TextView tv;
 
-	public SignAdapter(Context context, int resource, List<GsonSign> items) {
+	public SignAdapter(Context context, int resource, List<SimpleGson> items) {
 		super(context, resource, items);
-		this.originalItems = new ArrayList<GsonSign>();
-		this.filteredItems = new ArrayList<GsonSign>();
+		this.originalItems = new ArrayList<SimpleGson>();
+		this.filteredItems = new ArrayList<SimpleGson>();
 		
 		for(int i = 0, l = items.size(); i < l; i++){
 			filteredItems.add(items.get(i));
@@ -48,23 +46,18 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 			v = (TextView) vi.inflate(android.R.layout.simple_list_item_1, null);
 		}
 
-		final GsonSign sMod = filteredItems.get(position);
+		final SimpleGson sMod = filteredItems.get(position);
 		if (sMod != null) {
 			if (v != null) {
-				List<Word> words = sMod.getWords();
-				String word = words.get(0).getWord();
+				String word = sMod.getWord();
 				tv.setText(word.substring(0, 1));
-				for(int j=1; j<words.size(); ++j){
-					word += ", "+words.get(j).getWord();
-				}
 				v.setText(word);
 			}
 		}
 
 		return v;
 	}
-
-
+	
 	@Override
 	public Filter getFilter() {
 		if (filter == null){
@@ -83,15 +76,12 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 			final FilterResults result = new FilterResults();
 			if(constraint != null && constraint.toString().length() > 0)
 			{
-				ArrayList<GsonSign> tempFiltered = new ArrayList<GsonSign>();
+				ArrayList<SimpleGson> tempFiltered = new ArrayList<SimpleGson>();
 
 				for(int i = 0, l = originalItems.size(); i < l; i++)
 				{
-					GsonSign sign = originalItems.get(i);
-					List<Word> words;
-					String word = null;
-					words = sign.getWords();
-					word = words.get(0).getWord();
+					SimpleGson sign = originalItems.get(i);
+					String word = sign.getWord();
 					if(word.toString().toLowerCase(swedishLocale).contains(constraint))
 						tempFiltered.add(sign);
 				}
@@ -115,7 +105,7 @@ public class SignAdapter extends ArrayAdapter<GsonSign> implements Filterable{
 		protected void publishResults(CharSequence constraint, 
 				FilterResults results) {
 			
-			filteredItems = (ArrayList<GsonSign>) results.values;
+			filteredItems = (ArrayList<SimpleGson>) results.values;
 			notifyDataSetChanged();
 			clear();
 			Log.i("SignAdapter", "Filter count: "+filteredItems.size());
