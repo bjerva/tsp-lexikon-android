@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-class GsonSign implements java.io.Serializable{
+class GsonSign{
 	public List<Example> getExamples() {
 		return examples;
 	}

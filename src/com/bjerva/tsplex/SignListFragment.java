@@ -20,6 +20,12 @@ public class SignListFragment extends ListFragment {
 	private MainActivity ma;
 	SignAdapter mAdapter;
 	
+	private int index = -1;
+    private int top = 0;
+    private String oldSearch = "";
+    
+    //TODO: Spara gamla sökningen
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -31,7 +37,7 @@ public class SignListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		ma = (MainActivity) getActivity();
-		if(ma.gsonSigns != null){
+		if(ma.gsonSignsLite != null){
 			loadSigns();
 		}
 	}
@@ -39,13 +45,37 @@ public class SignListFragment extends ListFragment {
 	public void onResume(){
 		super.onResume();
 		ma.getSupportActionBar().show();
+		if(index!=-1){
+			this.getListView().setSelectionFromTop(index, top);
+		}
+		if(mAdapter != null){
+			mAdapter.getFilter().filter(oldSearch);
+		}
 	}
-	
+
+	public void onPause(){
+		super.onPause();
+		try{
+			index = this.getListView().getFirstVisiblePosition();
+			View v = this.getListView().getChildAt(0);
+			top = (v == null) ? 0 : v.getTop();
+		} catch(Throwable t) {
+			t.printStackTrace();
+		}
+		
+		try{
+			oldSearch = ma.getSearch().getText().toString();
+		} catch(Throwable t) {
+			oldSearch = "";
+			t.printStackTrace();
+		}
+	}
+
 	void loadSigns(){
 		//Create and set adapter
-		final List<GsonSign> tmpSigns = new ArrayList<GsonSign>();
-		for(int i = 0, l = ma.gsonSigns.size(); i < l; i++){
-			GsonSign currSign = ma.gsonSigns.get(i);
+		final List<SimpleGson> tmpSigns = new ArrayList<SimpleGson>();
+		for(int i = 0, l = ma.gsonSignsLite.size(); i < l; i++){
+			SimpleGson currSign = ma.gsonSignsLite.get(i);
 			tmpSigns.add(currSign);
 		}
 		
@@ -60,7 +90,7 @@ public class SignListFragment extends ListFragment {
 				ma.showLoader();
 				
 				//Update position
-				ma.currentSign = tmpSigns.get(position);//Integer.valueOf(String.valueOf(id));
+				ma.loadSingleJson(tmpSigns.get(position).getId());//Integer.valueOf(String.valueOf(id));
 
 				//Hide keyboard
 				if(ma.getSearch() != null){

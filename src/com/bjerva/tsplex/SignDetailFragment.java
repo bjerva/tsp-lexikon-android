@@ -52,6 +52,7 @@ public class SignDetailFragment extends Fragment {
 		}
 	}
 	
+	
 	void startUpHelper(final GsonSign currSign){
 		String fileName = currSign.getVideo_url().substring(0, currSign.getVideo_url().length()-3)+"3gp";
 		Log.i("SignDetail", fileName);
@@ -181,6 +182,11 @@ public class SignDetailFragment extends Fragment {
 		myVideoView.requestFocus();
 		myVideoView.start();
 	}
+	
+	
+	
+	
+	
 /*
 	private void playSlowMo(){
 		Timer timer = new Timer();
