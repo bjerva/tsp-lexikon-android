@@ -2,7 +2,9 @@ tsp-lexikon-android
 ===================
 
 Android app for the Swedish Sign Language dictionary.
+
 Available on Google Play: https://play.google.com/store/apps/details?id=com.bjerva.tsplex
+
 All contributions are welcome.
 
 Copyright (C) 2013, Johannes Bjerva
