@@ -71,16 +71,16 @@ public class SignDetailFragment extends Fragment {
 				word += ", "+words.get(j).getWord();
 			}
 			
-			adapter.addSection("Ord", new ArrayAdapter<String>(ma,
+			adapter.addSection(getString(R.string.word), new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { word }));
 		}
 
 		if(currSign.getDescription() != null){
-			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
+			adapter.addSection(getString(R.string.desc), new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { currSign.getDescription() }));
 		} else {
-			adapter.addSection("Beskrivning", new ArrayAdapter<String>(ma,
-					R.layout.list_item, new String[] { "Tecknet har ingen beskrivning i lexikonet" }));
+			adapter.addSection(getString(R.string.desc), new ArrayAdapter<String>(ma,
+					R.layout.list_item, new String[] { getString(R.string.no_desc) }));
 		}
 
 		if(currSign.getExamples().size() > 0){
@@ -88,7 +88,7 @@ public class SignDetailFragment extends Fragment {
 			for(int i=0; i<currSign.getExamples().size(); i++){
 				tmpEx[i] = currSign.getExamples().get(i).getDescription();
 			}
-			adapter.addSection("Exempel", new ArrayAdapter<String>(ma,
+			adapter.addSection(getString(R.string.example), new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpEx));
 		} 
 		
@@ -97,7 +97,7 @@ public class SignDetailFragment extends Fragment {
 			for(int i=0; i<currSign.getVersions().size(); ++i){
 				tmpVer[i] = currSign.getVersions().get(i).getDescription();
 			}
-			adapter.addSection("Varianter", new ArrayAdapter<String>(ma,
+			adapter.addSection(getString(R.string.ver), new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpVer));
 		} 
 		
@@ -106,13 +106,13 @@ public class SignDetailFragment extends Fragment {
 			for(int i=0; i<currSign.getTags().size(); ++i){
 				tmpTags[i] = currSign.getTags().get(i).getTag();
 			}
-			adapter.addSection("Kategori", new ArrayAdapter<String>(ma,
+			adapter.addSection(getString(R.string.cat), new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpTags));
 		}
 		
 		if(currSign.isUnusual()) {
-			adapter.addSection("Ovanligt", new ArrayAdapter<String>(ma,
-					R.layout.list_item, new String[] { "Tecknet är ovanligt" }));
+			adapter.addSection(getString(R.string.unusual), new ArrayAdapter<String>(ma,
+					R.layout.list_item, new String[] { getString(R.string.is_unusual) }));
 		}
 
 		//Create and set adapter

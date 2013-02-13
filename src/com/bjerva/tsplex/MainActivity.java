@@ -198,7 +198,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		//Show spinner
 		pbarDialog = new ProgressDialog(this);
 		pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		pbarDialog.setMessage("Hämtar tecken...");
+		pbarDialog.setMessage(getString(R.string.sign_load));
 		pbarDialog.setCancelable(false);
 		pbarDialog.show();
 	}
@@ -213,7 +213,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		if(listFrag == null){
 			super.onBackPressed();   
 		}
-		Toast.makeText(this, "Video could not be played.", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, getString(R.string.play_error), Toast.LENGTH_LONG).show();
 	}
 
 	void networkError() {
@@ -222,7 +222,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		if(listFrag == null){
 			super.onBackPressed();   
 		} 
-		Toast.makeText(this, "Connection problem. No internet connection found / video not found on server.", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, getString(R.string.conn_error), Toast.LENGTH_LONG).show();
 	}
 
 	/*
@@ -302,7 +302,7 @@ public class MainActivity extends SherlockFragmentActivity {
 			Log.i("AsyncDBLoad", "Loading Local signs");
 			//pbarDialog = new ProgressDialog(MainActivity.this);
 			pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			pbarDialog.setMessage("Laddar sparad teckeninfo...");
+			pbarDialog.setMessage(getString(R.string.list_load));
 			pbarDialog.setCancelable(false);
 			pbarDialog.show();
 
