@@ -61,8 +61,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private ProgressDialog pbarDialog;
 
 	private EditText search;
-
-	//ArrayList<GsonSign> gsonSigns = null;
+	
 	ArrayList<SimpleGson> gsonSignsLite = null;
 	GsonSign currentSign = null;
 	
@@ -88,29 +87,6 @@ public class MainActivity extends SherlockFragmentActivity {
 					R.id.details_container, detFragment).commit();
 		}
 	}
-
-/*
- * public long insertRecord(SQLiteDatabase db, Serializable myObject) { 
-		try { 
-			db.beginTransaction(); 
-			ContentValues values = new ContentValues(); 
-			values.put("MyColumn", SignSQLiteHelper.getSerializedObject(myObject)); 
-			long id = db.insert("MyTable", null, values); 
-			if (id>=0) db.setTransactionSuccessful(); 
-			return id; 
-		} catch (Exception e) { 
-			Logger.e(loggerTag, e.getMessage(), e); 
-			// ignore this and roll back the transaction 
-		} finally { 
-			try { 
-				db.endTransaction(); 
-			} catch (Exception e) { 
-				return -1; 
-			} 
-		} 
-		return -1; 
-	} 
-*/
 	
 	public void onBackPressed(){
 		for(int i=getSupportFragmentManager().getBackStackEntryCount(); i>1; i--){

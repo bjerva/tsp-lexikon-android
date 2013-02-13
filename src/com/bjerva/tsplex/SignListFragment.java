@@ -22,6 +22,7 @@ package com.bjerva.tsplex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -31,8 +32,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 public class SignListFragment extends ListFragment {
 
@@ -93,7 +97,11 @@ public class SignListFragment extends ListFragment {
 
 	void loadSigns(){
 		//Create and set adapter
+		final TextView tv = (TextView) ma.findViewById(R.id.alphabetic_header);
+		tv.setText("A");
 		final List<SimpleGson> tmpSigns = new ArrayList<SimpleGson>();
+		final Locale swedishLocale = new Locale("sv", "SE");
+		
 		for(int i = 0, l = ma.gsonSignsLite.size(); i < l; i++){
 			SimpleGson currSign = ma.gsonSignsLite.get(i);
 			tmpSigns.add(currSign);
@@ -102,6 +110,20 @@ public class SignListFragment extends ListFragment {
 		mAdapter = new SignAdapter(ma, android.R.layout.simple_list_item_1, tmpSigns);
 		
 		getListView().setAdapter(mAdapter);
+		
+		//Set scroll listener
+		getListView().setOnScrollListener(new OnScrollListener(){
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if(firstVisibleItem>0){
+					String word = ((SimpleGson) view.getItemAtPosition(firstVisibleItem)).getWord();
+					tv.setText(word.substring(0, 1).toUpperCase(swedishLocale));
+				}
+			}
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+		});
 
 		//Set listener
 		getListView().setOnItemClickListener(new OnItemClickListener() {
@@ -110,7 +132,7 @@ public class SignListFragment extends ListFragment {
 				ma.showLoader();
 				
 				//Update position
-				ma.loadSingleJson(tmpSigns.get(position).getId());//Integer.valueOf(String.valueOf(id));
+				ma.loadSingleJson(tmpSigns.get(position).getId());
 
 				//Hide keyboard
 				if(ma.getSearch() != null){

@@ -43,7 +43,6 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 	private List<SimpleGson> originalItems;
 	private List<SimpleGson> filteredItems;
 	private SignFilter filter;
-	private TextView tv;
 
 	public SignAdapter(Context context, int resource, List<SimpleGson> items) {
 		super(context, resource, items);
@@ -54,8 +53,6 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			filteredItems.add(items.get(i));
 			originalItems.add(items.get(i));
 		}
-		
-		tv = (TextView) ((MainActivity) context).findViewById(R.id.alphabetic_header);
 	}
 
 	@Override
@@ -66,12 +63,10 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			v = (TextView) vi.inflate(android.R.layout.simple_list_item_1, null);
 		}
 
-		final SimpleGson sMod = filteredItems.get(position);
-		if (sMod != null) {
-			if (v != null) {
-				String word = sMod.getWord();
-				tv.setText(word.substring(0, 1));
-				v.setText(word);
+		if(v != null){
+			final SimpleGson sMod = filteredItems.get(position);
+			if (sMod != null) {
+				v.setText(sMod.getWord());
 			}
 		}
 
