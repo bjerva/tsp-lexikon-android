@@ -310,19 +310,19 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 	}
 
-	public SignDetailFragment getDetFragment() {
+	SignDetailFragment getDetFragment() {
 		return detFragment;
 	}
 
-	public ProgressDialog getPbarDialog() {
+	ProgressDialog getPbarDialog() {
 		return pbarDialog;
 	}
 
-	public EditText getSearch() {
+	EditText getSearch() {
 		return search;
 	}
 
-	public ArrayList<SimpleGson> getGsonSignsLite() {
+	ArrayList<SimpleGson> getGsonSignsLite() {
 		return gsonSignsLite;
 	}
 
