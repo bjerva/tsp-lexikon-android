@@ -42,8 +42,8 @@ public class SignListFragment extends ListFragment {
 
 	private View myView;
 	private MainActivity ma;
-	SignAdapter mAdapter;
-	
+	private SignAdapter mAdapter;
+
 	private int index = -1;
     private int top = 0;
     private String oldSearch = "";
@@ -61,7 +61,7 @@ public class SignListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		ma = (MainActivity) getActivity();
-		if(ma.gsonSignsLite != null){
+		if(ma.getGsonSignsLite() != null){
 			loadSigns();
 		}
 	}
@@ -102,8 +102,8 @@ public class SignListFragment extends ListFragment {
 		final List<SimpleGson> tmpSigns = new ArrayList<SimpleGson>();
 		final Locale swedishLocale = new Locale("sv", "SE");
 		
-		for(int i = 0, l = ma.gsonSignsLite.size(); i < l; i++){
-			SimpleGson currSign = ma.gsonSignsLite.get(i);
+		for(int i = 0, l = ma.getGsonSignsLite().size(); i < l; i++){
+			SimpleGson currSign = ma.getGsonSignsLite().get(i);
 			tmpSigns.add(currSign);
 		}
 		
@@ -152,9 +152,13 @@ public class SignListFragment extends ListFragment {
 					transaction.addToBackStack(null);
 					transaction.commit();
 				} else {
-					ma.getDetFragment().startUpHelper(ma.currentSign);
+					ma.getDetFragment().startUpHelper(ma.getCurrentSign());
 				}
 			}
 		});
+	}
+	
+	public SignAdapter getmAdapter() {
+		return mAdapter;
 	}
 }

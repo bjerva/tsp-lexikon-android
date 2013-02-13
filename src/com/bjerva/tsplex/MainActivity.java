@@ -59,13 +59,11 @@ public class MainActivity extends SherlockFragmentActivity {
 	private SignDetailFragment detFragment;
 
 	private ProgressDialog pbarDialog;
-
 	private EditText search;
 	
-	ArrayList<SimpleGson> gsonSignsLite = null;
-	GsonSign currentSign = null;
+	private ArrayList<SimpleGson> gsonSignsLite = null;
+	private GsonSign currentSign = null;
 	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(new Bundle()); //XXX: Simple ugly fix.
@@ -175,7 +173,7 @@ public class MainActivity extends SherlockFragmentActivity {
 					if(listFrag == null){
 						listFrag = listFragment;
 					}
-					listFrag.mAdapter.getFilter().filter(cs);
+					listFrag.getmAdapter().getFilter().filter(cs);
 				}
 
 			});
@@ -221,21 +219,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		Toast.makeText(this, getString(R.string.conn_error), Toast.LENGTH_LONG).show();
 	}
 
-	/*
-	private void loadGSONfromString() throws IOException, JSONException{
-		Log.i("Load Local JSON", "Loading...");
-		final InputStream is = getAssets().open("signs2.json");
-		final Reader reader = new InputStreamReader(is);
-
-		final Gson gson = new Gson();
-		final Type collectionType = new TypeToken<ArrayList<GsonSign>>(){}.getType();
-		//gsonSigns = gson.fromJson(reader, collectionType);
-
-		is.close();
-		Log.i("Load Local GSON", "Loaded!");
-	}
-	*/
-	
 	private void loadGSONfromStringLite() throws IOException, JSONException{
 		Log.i("Load Local JSON", "Loading...");
 		final InputStream is = getAssets().open("words2.json");
@@ -327,8 +310,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 	}
 
-
-
 	public SignDetailFragment getDetFragment() {
 		return detFragment;
 	}
@@ -341,7 +322,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		return search;
 	}
 
-	public ArrayList<SimpleGson> getGsonSigns() {
+	public ArrayList<SimpleGson> getGsonSignsLite() {
 		return gsonSignsLite;
 	}
 
