@@ -30,27 +30,20 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.ProgressDialog;
 import org.json.JSONException;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.ProgressDialog;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,7 +52,6 @@ public class MainActivity extends Activity {
 	private SignDetailFragment detFragment;
 
 	private ProgressDialog pbarDialog;
-	private EditText search;
 	
 	private ArrayList<SimpleGson> gsonSignsLite = null;
 	private GsonSign currentSign = null;
@@ -69,6 +61,26 @@ public class MainActivity extends Activity {
 		super.onCreate(new Bundle()); //XXX: Simple ugly fix.
 
 		setContentView(R.layout.activity_sign_listing);
+		
+		int screenSize = getResources().getConfiguration().screenLayout &
+		        Configuration.SCREENLAYOUT_SIZE_MASK;
+
+		switch(screenSize) {
+			case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+				break;
+		    case Configuration.SCREENLAYOUT_SIZE_LARGE:
+		        break;
+		    case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+		    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		        Toast.makeText(this, "Normal screen",Toast.LENGTH_LONG).show();
+		        break;
+		    case Configuration.SCREENLAYOUT_SIZE_SMALL:
+		    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		        Toast.makeText(this, "Small screen",Toast.LENGTH_LONG).show();
+		        break;
+		    default:
+		    	break;
+		}
 
 		//Load local json
 		new LoadHelper(this).execute();
@@ -91,7 +103,7 @@ public class MainActivity extends Activity {
 				.findFragmentById(R.id.list_frag);
 		if(listFrag == null){
 			detFragment = null;
-			getSupportActionBar().show();
+			//getSupportActionBar().show();
 		}
 		super.onBackPressed();
 	}
@@ -99,6 +111,18 @@ public class MainActivity extends Activity {
 	@SuppressLint("NewApi") 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+		
+		int screenSize = getResources().getConfiguration().screenLayout &
+		        Configuration.SCREENLAYOUT_SIZE_MASK;
+
+		switch(screenSize) {
+			case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+		        return;
+		    case Configuration.SCREENLAYOUT_SIZE_SMALL:
+		    	return;
+		    default:
+		    	break;
+		}
 
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
@@ -110,12 +134,11 @@ public class MainActivity extends Activity {
 			getSupportFragmentManager().beginTransaction().replace(
 					R.id.details_container, detFragment).commit();
 			hideLoader();
-		} else {
+		} /*else {
 			//Handset
 			Class<? extends Fragment> c = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass();
 			if(c.equals(SignDetailFragment.class)){
 				showLoader();
-				
 				detFragment = new SignDetailFragment();
 				//Add to container
 				getSupportFragmentManager().popBackStack();
@@ -125,7 +148,7 @@ public class MainActivity extends Activity {
 				transaction.commit();
 				hideLoader();
 			}
-		}
+		}*/
 
 		ListView metaList = (ListView) findViewById(R.id.metaList);
 		if(metaList != null){
@@ -148,46 +171,7 @@ public class MainActivity extends Activity {
 			Log.i("MA", "metaList is null");
 		}
 	}
-
-	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-		getSupportActionBar().setHomeButtonEnabled(false);
-		menu.add(0, 1, 1, R.string.search).setIcon(R.drawable.ic_action_search).setActionView(R.layout.search_view).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-		Log.i("OPTIONS", ""+item.getItemId());
-		InputMethodManager imm;
-		switch (item.getItemId()) {
-		case 1:
-			search = (EditText) item.getActionView();
-			search.requestFocus();
-			search.addTextChangedListener(new TextWatcher() {
-				public void afterTextChanged(Editable s) {
-				}
-
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				}
-
-				public void onTextChanged(CharSequence cs, int start, int before, int count) {
-					SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-							.findFragmentById(R.id.list_frag);
-					if(listFrag == null){
-						listFrag = listFragment;
-					}
-					listFrag.getmAdapter().getFilter().filter(cs);
-				}
-
-			});
-			search.setText("");
-			imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-		}
-		return true;
-	}       
-
+	 
 	GsonSign getCurrentSign(){
 		return currentSign;
 	}
@@ -330,9 +314,6 @@ public class MainActivity extends Activity {
 		return pbarDialog;
 	}
 
-	EditText getSearch() {
-		return search;
-	}
 
 	ArrayList<SimpleGson> getGsonSignsLite() {
 		return gsonSignsLite;
@@ -368,6 +349,7 @@ public class MainActivity extends Activity {
 		saveRetrievalDate();
 	}
 	 */
+	
 	/*
 	private void saveRetrievalDate(){
 		//Write retrieval date to file

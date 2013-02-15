@@ -26,11 +26,12 @@ import java.util.Locale;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.ListFragment;
-import org.holoeverywhere.widget.TextView;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +39,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 public class SignListFragment extends ListFragment {
 
 	private View myView;
 	private MainActivity ma;
 	private SignAdapter mAdapter;
+
+	private EditText search;
+	private TextView tv;
 
 	private int index = -1;
     private int top = 0;
@@ -55,6 +64,7 @@ public class SignListFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.sign_list_fragment, container, false);
+		setHasOptionsMenu(true);
 		return myView;
 	}
 	
@@ -83,13 +93,13 @@ public class SignListFragment extends ListFragment {
 			index = this.getListView().getFirstVisiblePosition();
 			View v = this.getListView().getChildAt(0);
 			top = (v == null) ? 0 : v.getTop();
-		} catch(Throwable t) {
+		} catch(Exception e) {
 			Log.w("OldListPosErr", "Error when fetching old listpos");
 		}
 		
 		try{
-			oldSearch = ma.getSearch().getText().toString();
-		} catch(Throwable t) {
+			oldSearch = search.getText().toString();
+		} catch(Exception e) {
 			oldSearch = "";
 			Log.w("OldSearchErr", "Error when fetching old search");
 		}
@@ -97,7 +107,7 @@ public class SignListFragment extends ListFragment {
 
 	void loadSigns(){
 		//Create and set adapter
-		final TextView tv = (TextView) ma.findViewById(R.id.alphabetic_header);
+		tv = (TextView) ma.findViewById(R.id.alphabetic_header);
 		tv.setText("A");
 		final List<SimpleGson> tmpSigns = new ArrayList<SimpleGson>();
 		final Locale swedishLocale = new Locale("sv", "SE");
@@ -136,13 +146,13 @@ public class SignListFragment extends ListFragment {
 				ma.loadSingleJson(tmpSigns.get(position).getId());
 
 				//Hide keyboard
-				if(ma.getSearch() != null){
+				if(search != null){
 					InputMethodManager imm = (InputMethodManager) ma.getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(ma.getSearch().getWindowToken(), 0);
+					imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
 				}
 				
 				if(ma.getDetFragment() == null){
-					ma.getSupportActionBar().hide();
+					//ma.getSupportActionBar().hide();
 					//Create detail fragment
 					SignDetailFragment newFragment = new SignDetailFragment();
 
@@ -163,4 +173,46 @@ public class SignListFragment extends ListFragment {
 	public SignAdapter getmAdapter() {
 		return mAdapter;
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, MenuInflater inflater) {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setHomeButtonEnabled(false);
+		menu.add(0, 1, 1, R.string.search).setIcon(R.drawable.ic_action_search).setActionView(R.layout.search_view).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		final Locale swedishLocale = new Locale("sv", "SE");
+		Log.i("OPTIONS", ""+item.getItemId());
+		InputMethodManager imm;
+		switch (item.getItemId()) {
+		case 1:
+			search = (EditText) item.getActionView();
+			search.requestFocus();
+			search.addTextChangedListener(new TextWatcher() {
+				public void afterTextChanged(Editable s) {
+					try {
+						String word = ((SimpleGson) getListView().getItemAtPosition(0)).getWord();
+						tv.setText(word.substring(0, 1).toUpperCase(swedishLocale));
+					} catch (IndexOutOfBoundsException e){
+						Log.w("IndexErr", "IndexErr after change text");
+					}
+				}
+
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				}
+
+				public void onTextChanged(CharSequence cs, int start, int before, int count) {
+					mAdapter.getFilter().filter(cs);
+				}
+
+			});
+			search.setText("");
+			imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		}
+		return true;
+	}       
 }

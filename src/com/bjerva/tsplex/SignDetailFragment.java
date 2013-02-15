@@ -22,10 +22,8 @@ package com.bjerva.tsplex;
 
 import java.util.List;
 
-import org.holoeverywhere.ArrayAdapter;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
-import org.holoeverywhere.widget.ListView;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -40,6 +38,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -80,11 +80,14 @@ public class SignDetailFragment extends Fragment {
 	
 	public void onResume(){
 		super.onResume();
+		/*
 		SignListFragment listFrag = (SignListFragment) ma.getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
+		
 		if (listFrag == null) {
 			ma.getSupportActionBar().hide();
 		}
+		*/
 	}
 	
 	void startUpHelper(final GsonSign currSign){
