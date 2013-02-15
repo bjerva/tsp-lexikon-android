@@ -15,9 +15,10 @@ if __name__ == '__main__':
 		strbuf = ''
 		for word in entry['words']:
 			strbuf += word['word']+', '
+		cat = entry['category']
 		strbuf = strbuf[:-2]
 		#Add a dict with word and id to l
-		l.append({'word':strbuf, 'id':entry['id']})
+		l.append({'word':strbuf, 'id':entry['id'], 'cat':entry['category']})
 
 	#Dump the list as a json array
 	json.dump(l, outfile)

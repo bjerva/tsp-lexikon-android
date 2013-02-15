@@ -22,6 +22,11 @@ package com.bjerva.tsplex;
 
 import java.util.List;
 
+import org.holoeverywhere.ArrayAdapter;
+import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.widget.ListView;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
@@ -30,15 +35,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -50,6 +51,10 @@ public class SignDetailFragment extends Fragment {
 	private VideoView myVideoView;
 	private MainActivity ma;
 
+	VideoView getVideoView(){
+		return myVideoView;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -63,6 +68,7 @@ public class SignDetailFragment extends Fragment {
 		ma = (MainActivity) getActivity();
 
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
+		myVideoView.setZOrderOnTop(true);
 		
 		GsonSign currSign = ma.getCurrentSign();
 		if(currSign == null){
@@ -72,6 +78,14 @@ public class SignDetailFragment extends Fragment {
 		}
 	}
 	
+	public void onResume(){
+		super.onResume();
+		SignListFragment listFrag = (SignListFragment) ma.getSupportFragmentManager()
+				.findFragmentById(R.id.list_frag);
+		if (listFrag == null) {
+			ma.getSupportActionBar().hide();
+		}
+	}
 	
 	void startUpHelper(final GsonSign currSign){
 		String fileName = currSign.getVideo_url().substring(0, currSign.getVideo_url().length()-3)+"3gp";
@@ -139,7 +153,7 @@ public class SignDetailFragment extends Fragment {
 		final ListView listView = (ListView) myView.findViewById(R.id.metaList);
 		
 		listView.setAdapter(adapter);
-	
+		
 		//Set listener
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override

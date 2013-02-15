@@ -29,10 +29,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.ProgressDialog;
 import org.json.JSONException;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -49,12 +50,11 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class MainActivity extends SherlockFragmentActivity {
+public class MainActivity extends Activity {
 	private SignListFragment listFragment;
 	private SignDetailFragment detFragment;
 
@@ -87,10 +87,12 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 	
 	public void onBackPressed(){
-		for(int i=getSupportFragmentManager().getBackStackEntryCount(); i>1; i--){
-			getSupportFragmentManager().popBackStack();
+		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.list_frag);
+		if(listFrag == null){
+			detFragment = null;
+			getSupportActionBar().show();
 		}
-		detFragment = null;
 		super.onBackPressed();
 	}
 
@@ -100,7 +102,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
-
+		
 		if (listFrag != null) {
 			//Tablet
 			showLoader();
@@ -115,6 +117,7 @@ public class MainActivity extends SherlockFragmentActivity {
 				showLoader();
 				detFragment = new SignDetailFragment();
 				//Add to container
+				getSupportFragmentManager().popBackStack();
 				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 				transaction.replace(R.id.fragment_container, detFragment);
 				transaction.addToBackStack(null);
@@ -143,6 +146,8 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			Log.i("MA", "metaList is null");
 		}
+
+		hideLoader();
 	}
 
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
@@ -198,23 +203,27 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	void hideLoader(){
+		pbarDialog.hide();
 		pbarDialog.dismiss();
 	}
 
 	void errorPlayingVideo() {
+		
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
 		if(listFrag == null){
-			super.onBackPressed();   
+			//super.onBackPressed();   
 		}
+		
 		Toast.makeText(this, getString(R.string.play_error), Toast.LENGTH_LONG).show();
 	}
 
 	void networkError() {
+		
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
 		if(listFrag == null){
-			super.onBackPressed();   
+			//super.onBackPressed();   
 		} 
 		Toast.makeText(this, getString(R.string.conn_error), Toast.LENGTH_LONG).show();
 	}

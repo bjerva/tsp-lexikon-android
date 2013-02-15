@@ -24,19 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.ListFragment;
+import org.holoeverywhere.widget.TextView;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
 
 public class SignListFragment extends ListFragment {
 
@@ -68,7 +69,6 @@ public class SignListFragment extends ListFragment {
 	
 	public void onResume(){
 		super.onResume();
-		ma.getSupportActionBar().show();
 		if(index!=-1){
 			this.getListView().setSelectionFromTop(index, top);
 		}
@@ -84,14 +84,14 @@ public class SignListFragment extends ListFragment {
 			View v = this.getListView().getChildAt(0);
 			top = (v == null) ? 0 : v.getTop();
 		} catch(Throwable t) {
-			t.printStackTrace();
+			Log.w("OldListPosErr", "Error when fetching old listpos");
 		}
 		
 		try{
 			oldSearch = ma.getSearch().getText().toString();
 		} catch(Throwable t) {
 			oldSearch = "";
-			t.printStackTrace();
+			Log.w("OldSearchErr", "Error when fetching old search");
 		}
 	}
 
@@ -121,6 +121,7 @@ public class SignListFragment extends ListFragment {
 					tv.setText(word.substring(0, 1).toUpperCase(swedishLocale));
 				}
 			}
+			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}
 		});
@@ -128,7 +129,7 @@ public class SignListFragment extends ListFragment {
 		//Set listener
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+			public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id){
 				ma.showLoader();
 				
 				//Update position
@@ -155,6 +156,7 @@ public class SignListFragment extends ListFragment {
 					ma.getDetFragment().startUpHelper(ma.getCurrentSign());
 				}
 			}
+
 		});
 	}
 	
