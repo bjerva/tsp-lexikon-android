@@ -23,18 +23,25 @@ package com.bjerva.tsplex;
 import com.google.gson.annotations.SerializedName;
 
 class SimpleGson {
-	
-	public int getId() {
+
+	int getId() {
 		return id;
 	}
 
-	public String getWord() {
+	String getWord() {
 		return word;
+	}
+
+	String getTag() {
+		return tag;
 	}
 
 	@SerializedName("id")
 	private int id;
-	
+
 	@SerializedName("word")
 	private String word;
+
+	@SerializedName("tag")
+	private String tag;
 }

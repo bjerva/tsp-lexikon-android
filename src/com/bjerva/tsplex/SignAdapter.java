@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import org.holoeverywhere.ArrayAdapter;
 import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.widget.LinearLayout;
 import org.holoeverywhere.widget.TextView;
 
 import android.content.Context;
@@ -58,20 +59,24 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView v = (TextView) convertView;
-		if (v == null) {
+		LinearLayout ll = (LinearLayout) convertView;
+		
+		if (ll == null) {
 			LayoutInflater vi = LayoutInflater.from(getContext());
-			v = (TextView) vi.inflate(android.R.layout.simple_list_item_1, null);
+			ll = (LinearLayout) vi.inflate(R.layout.list_complex, null);
 		}
 
-		if(v != null){
+		if(ll != null){
+			TextView v1 = (TextView) ll.findViewById(R.id.list_complex_title);
+			TextView v2 = (TextView) ll.findViewById(R.id.list_complex_caption);
 			final SimpleGson sMod = filteredItems.get(position);
 			if (sMod != null) {
-				v.setText(sMod.getWord());
+				v1.setText(sMod.getWord());
+				v2.setText(sMod.getTag());
 			}
 		}
 
-		return v;
+		return ll;
 	}
 	
 	@Override
@@ -94,7 +99,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			{
 				ArrayList<SimpleGson> tempFiltered = new ArrayList<SimpleGson>();
 
-				for(int i = 0, l = originalItems.size(); i < l; i++)
+				for(int i=0, l=originalItems.size(); i<l; i++)
 				{
 					SimpleGson sign = originalItems.get(i);
 					String word = sign.getWord();

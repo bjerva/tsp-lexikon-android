@@ -115,6 +115,7 @@ public class MainActivity extends Activity {
 			Class<? extends Fragment> c = getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass();
 			if(c.equals(SignDetailFragment.class)){
 				showLoader();
+				
 				detFragment = new SignDetailFragment();
 				//Add to container
 				getSupportFragmentManager().popBackStack();
@@ -146,8 +147,6 @@ public class MainActivity extends Activity {
 		} else {
 			Log.i("MA", "metaList is null");
 		}
-
-		hideLoader();
 	}
 
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
@@ -194,7 +193,12 @@ public class MainActivity extends Activity {
 	}
 
 	void showLoader(){
-		//Show spinner
+		//Remove old spinner if exists
+		if(pbarDialog != null){
+			hideLoader();
+		}
+		
+		//Show loading spinner
 		pbarDialog = new ProgressDialog(this);
 		pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		pbarDialog.setMessage(getString(R.string.sign_load));
@@ -203,7 +207,6 @@ public class MainActivity extends Activity {
 	}
 
 	void hideLoader(){
-		pbarDialog.hide();
 		pbarDialog.dismiss();
 	}
 
