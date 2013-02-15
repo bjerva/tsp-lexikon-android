@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent_white">#B0FFFFFF</color>
-    <color name="cell_separator">#60000000</color>
+    <color name="cell_separator">#90000000</color>
     <color name="cell_text">#FF000000</color>
 </resources>
-
-
-<!-- 
-A la Carte Android
-
-Fonter
-Roboto - Androids standard font
-
-Rubrik
-11px	Regular	#ff8833
-
-Listor
-11px	Thin 		#fff
-
-Löptext
-10px 	Light 		#333333
-
-Tab-bar
-			#fff
- -->

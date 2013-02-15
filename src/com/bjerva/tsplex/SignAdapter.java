@@ -50,7 +50,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 		super(context, resource, items);
 		this.originalItems = new ArrayList<SimpleGson>();
 		this.filteredItems = new ArrayList<SimpleGson>();
-		
+
 		for(int i = 0, l = items.size(); i < l; i++){
 			filteredItems.add(items.get(i));
 			originalItems.add(items.get(i));
@@ -59,26 +59,29 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		SignInfoViewHolder viewHolder;
 		LinearLayout ll = (LinearLayout) convertView;
-		
+
 		if (ll == null) {
-			LayoutInflater vi = LayoutInflater.from(getContext());
-			ll = (LinearLayout) vi.inflate(R.layout.list_complex, null);
+			final LayoutInflater vi = LayoutInflater.from(getContext());
+			ll = (LinearLayout) vi.inflate(R.layout.list_complex, null, false);
+			viewHolder = new SignInfoViewHolder();
+			viewHolder.title = (TextView) ll.findViewById(R.id.list_complex_title);
+			viewHolder.caption = (TextView) ll.findViewById(R.id.list_complex_caption);
+			ll.setTag(viewHolder);
+		} else {
+			viewHolder = (SignInfoViewHolder) ll.getTag();
 		}
 
-		if(ll != null){
-			TextView v1 = (TextView) ll.findViewById(R.id.list_complex_title);
-			TextView v2 = (TextView) ll.findViewById(R.id.list_complex_caption);
-			final SimpleGson sMod = filteredItems.get(position);
-			if (sMod != null) {
-				v1.setText(sMod.getWord());
-				v2.setText(sMod.getTag());
-			}
+		final SimpleGson sMod = filteredItems.get(position);
+		if (sMod != null) {
+			viewHolder.title.setText(sMod.getWord());
+			viewHolder.caption.setText(sMod.getTag());
 		}
 
 		return ll;
 	}
-	
+
 	@Override
 	public Filter getFilter() {
 		if (filter == null){
@@ -125,16 +128,21 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 		@Override
 		protected void publishResults(CharSequence constraint, 
 				FilterResults results) {
-			
+
 			filteredItems = (ArrayList<SimpleGson>) results.values;
 			notifyDataSetChanged();
 			clear();
 			Log.i("SignAdapter", "Filter count: "+filteredItems.size());
-			
+
 			for(int i = 0, l = filteredItems.size(); i < l; i++)
 				add(filteredItems.get(i));
-			
+
 			notifyDataSetInvalidated();
 		}
+	}
+
+	static class SignInfoViewHolder {
+		TextView title;
+		TextView caption;
 	}
 }
