@@ -36,11 +36,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.bjerva.tsplex.GsonSign.Word;
@@ -50,11 +52,13 @@ public class SignDetailFragment extends Fragment {
 	private View myView;
 	private VideoView myVideoView;
 	private MainActivity ma;
+	private String lastPlayed = "";
+	private boolean wasDisconnected = false;
 
 	VideoView getVideoView(){
 		return myVideoView;
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -69,7 +73,7 @@ public class SignDetailFragment extends Fragment {
 
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
 		myVideoView.setZOrderOnTop(true);
-		
+
 		GsonSign currSign = ma.getCurrentSign();
 		if(currSign == null){
 			Log.w("NULL SIGN", "NULL SIGN");
@@ -77,37 +81,38 @@ public class SignDetailFragment extends Fragment {
 			startUpHelper(currSign);
 		}
 	}
-	
+
 	public void onResume(){
 		super.onResume();
 		/*
 		SignListFragment listFrag = (SignListFragment) ma.getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
-		
+
 		if (listFrag == null) {
 			ma.getSupportActionBar().hide();
 		}
-		*/
+		 */
 	}
-	
+
 	void startUpHelper(final GsonSign currSign){
 		String fileName = currSign.getVideo_url().substring(0, currSign.getVideo_url().length()-3)+"3gp";
 		Log.i("SignDetail", fileName);
-		
+
 		myVideoView.setVideoURI(Uri.parse(fileName));
-		
+		lastPlayed = fileName;
+
 		myVideoView.setMediaController(new MediaController(ma));
 		myVideoView.requestFocus();
 
 		SeparatedListAdapter adapter = new SeparatedListAdapter(ma);
-		
+
 		if (currSign.getWords() != null) {
 			List<Word> words = currSign.getWords();
 			String word = words.get(0).getWord();
 			for(int j=1; j<words.size(); ++j){
 				word += ", "+words.get(j).getWord();
 			}
-			
+
 			adapter.addSection(getString(R.string.word), new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { word }));
 		}
@@ -128,7 +133,7 @@ public class SignDetailFragment extends Fragment {
 			adapter.addSection(getString(R.string.example), new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpEx));
 		} 
-		
+
 		if(currSign.getVersions().size() > 0){
 			String[] tmpVer = new String[currSign.getVersions().size()];
 			for(int i=0; i<currSign.getVersions().size(); ++i){
@@ -137,7 +142,7 @@ public class SignDetailFragment extends Fragment {
 			adapter.addSection(getString(R.string.ver), new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpVer));
 		} 
-		
+
 		if(currSign.getTags().size() > 0){
 			String[] tmpTags = new String[currSign.getTags().size()];
 			for(int i=0; i<currSign.getTags().size(); ++i){
@@ -146,7 +151,7 @@ public class SignDetailFragment extends Fragment {
 			adapter.addSection(getString(R.string.cat), new ArrayAdapter<String>(ma,
 					R.layout.list_item, tmpTags));
 		}
-		
+
 		if(currSign.isUnusual()) {
 			adapter.addSection(getString(R.string.unusual), new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { getString(R.string.is_unusual) }));
@@ -154,25 +159,50 @@ public class SignDetailFragment extends Fragment {
 
 		//Create and set adapter
 		final ListView listView = (ListView) myView.findViewById(R.id.metaList);
-		
+
 		listView.setAdapter(adapter);
-		
+
 		//Set listener
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+				final String url;
 				if(position<=3){
 					Log.i("VideoView", "Play sign");
-					loadFilm(currSign.getVideo_url());
+					url = currSign.getVideo_url();
+					if(url.equals(lastPlayed)){
+						replay();
+					} else {
+						loadFilm(url);
+						lastPlayed = url;
+					}
 				} else if(position < 5+currSign.getExamples().size()){
-					Log.i("VideoView", "Play example: "+currSign.getExamples().get(position-5).getVideo_url());
-					loadFilm(currSign.getExamples().get(position-5).getVideo_url());
+					url = currSign.getExamples().get(position-5).getVideo_url();
+					Log.i("VideoView", "Play example: "+url);
+					if(url.equals(lastPlayed)){
+						replay();
+					} else {
+						loadFilm(url);
+						lastPlayed = url;
+					}
 				} else if(currSign.getExamples().size() > 0 && position < 6+currSign.getVersions().size()+currSign.getExamples().size()){
-					Log.i("VideoView", "Play variant: "+currSign.getVersions().get(position-currSign.getExamples().size()-6));
-					loadFilm(currSign.getVersions().get(position-currSign.getExamples().size()-6).getVideo_url());
+					url = currSign.getVersions().get(position-currSign.getExamples().size()-6).getVideo_url();
+					Log.i("VideoView", "Play variant: "+url);
+					if(url.equals(lastPlayed)){
+						replay();
+					} else {
+						loadFilm(url);
+						lastPlayed = url;
+					}
 				} else if(position < 5+currSign.getVersions().size()+currSign.getExamples().size()){
-					Log.i("VideoView", "Play variant: "+currSign.getVersions().get(position-currSign.getExamples().size()-5));
-					loadFilm(currSign.getVersions().get(position-currSign.getExamples().size()-5).getVideo_url());
+					url = currSign.getVersions().get(position-currSign.getExamples().size()-5).getVideo_url();
+					Log.i("VideoView", "Play variant: "+url);
+					if(url.equals(lastPlayed)){
+						replay();
+					} else {
+						loadFilm(url);
+						lastPlayed = url;
+					}
 				} else {
 					Log.i("VideoView", "I do naaaathing");
 				}
@@ -183,6 +213,7 @@ public class SignDetailFragment extends Fragment {
 			@Override
 			public boolean onError(MediaPlayer mp, int arg1, int arg2){
 				ma.hideLoader();
+				freshLayout(listView);
 				if(arg2 == -1004){
 					ma.networkError();
 				} else {
@@ -191,40 +222,63 @@ public class SignDetailFragment extends Fragment {
 				return true;
 			}
 		});
-		
+
 		myVideoView.setOnPreparedListener(new OnPreparedListener() {
-            @Override
+			@Override
 			public void onPrepared(MediaPlayer mp) {
-                ma.hideLoader();
-            }
-        });
-		
-		
+				ma.hideLoader();
+			}
+		});
+
+
 		ConnectivityManager connectivityManager = (ConnectivityManager) ma.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if(activeNetworkInfo == null){
+			//TODO: Maybe check for handset
+			wasDisconnected = true;
 			ma.hideLoader();
 			ma.networkError();
+			freshLayout(listView);
 		}
-
 		playNormal();
 	}
 	
+	private void freshLayout(ListView listView){
+		RelativeLayout.LayoutParams newParams = 
+				new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		newParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		listView.setLayoutParams(newParams);
+		myView.requestLayout();
+	}
+
 	private void loadFilm(String url){
+		checkConnection();
 		final String fileName = url.substring(0, url.length()-3)+"3gp";
 		Log.i("SignDetail", url);
 		Log.i("Loading new film", fileName);
 		myVideoView.setMediaController(new MediaController(ma));
 		myVideoView.setVideoURI(Uri.parse(fileName));
 		myVideoView.requestFocus();
+		checkConnection();
 		myVideoView.start();
 	}
 	
+	private void replay(){
+		checkConnection();
+		myVideoView.seekTo(1);
+		myVideoView.start();
+	}
 	
-	
-	
-	
-/*
+	private void checkConnection(){
+		ConnectivityManager connectivityManager = (ConnectivityManager) ma.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		if(activeNetworkInfo == null){
+			wasDisconnected = true;
+		} else if(wasDisconnected) {
+			myView.requestLayout();
+		}
+	}
+	/*
 	private void playSlowMo(){
 		Timer timer = new Timer();
 		timer.schedule( new TimerTask() {
@@ -242,20 +296,20 @@ public class SignDetailFragment extends Fragment {
 			}
 		}, 100, 200);
 	}
-	*/
+	 */
 
 	private void playNormal(){
 		myVideoView.start();
 	}
-	
+
 	/*
 	public class FTPRequest extends AsyncTask<String, Void, String>{
-		
+
 
 	    protected String doInBackground(String... fileinfo) {
 			FTPClient client = new FTPClient();
 			BufferedOutputStream fos = null;
-			
+
 			try {
 				client.connect(mhost);
 				client.login(muser, mpass);
@@ -267,7 +321,7 @@ public class SignDetailFragment extends Fragment {
 						//new FileOutputStream(fileinfo[1]));
 				//fos.write(buffer)
 				client.retrieveFile("droid/"+fileinfo[1], fos);
-				
+
 				for(FTPFile file: client.listFiles()){
 					Log.w("Files", file.toString());
 				}
@@ -295,5 +349,5 @@ public class SignDetailFragment extends Fragment {
 	    	Log.i("Async", "Finished FTP request");
 	    }
 	}
-	*/
+	 */
 }

@@ -193,12 +193,6 @@ public class SignListFragment extends ListFragment {
 			search.requestFocus();
 			search.addTextChangedListener(new TextWatcher() {
 				public void afterTextChanged(Editable s) {
-					try {
-						String word = ((SimpleGson) getListView().getItemAtPosition(0)).getWord();
-						tv.setText(word.substring(0, 1).toUpperCase(swedishLocale));
-					} catch (IndexOutOfBoundsException e){
-						Log.w("IndexErr", "IndexErr after change text");
-					}
 				}
 
 				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -206,6 +200,12 @@ public class SignListFragment extends ListFragment {
 
 				public void onTextChanged(CharSequence cs, int start, int before, int count) {
 					mAdapter.getFilter().filter(cs);
+					try {
+						String word = ((SimpleGson) getListView().getItemAtPosition(0)).getWord();
+						tv.setText(word.substring(0, 1).toUpperCase(swedishLocale));
+					} catch (IndexOutOfBoundsException e){
+						Log.w("IndexErr", "IndexErr after change text");
+					}
 				}
 
 			});

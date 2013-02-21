@@ -7,5 +7,5 @@
     android:inputType="textNoSuggestions"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:textColor="@android:color/black"
-    android:textColorHint="@android:color/black" />
+    android:textColor="@android:color/white"
+    android:textColorHint="@android:color/white" />

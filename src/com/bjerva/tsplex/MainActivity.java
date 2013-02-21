@@ -72,11 +72,9 @@ public class MainActivity extends Activity {
 		        break;
 		    case Configuration.SCREENLAYOUT_SIZE_NORMAL:
 		    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		        Toast.makeText(this, "Normal screen",Toast.LENGTH_LONG).show();
 		        break;
 		    case Configuration.SCREENLAYOUT_SIZE_SMALL:
 		    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		        Toast.makeText(this, "Small screen",Toast.LENGTH_LONG).show();
 		        break;
 		    default:
 		    	break;
@@ -195,23 +193,24 @@ public class MainActivity extends Activity {
 	}
 
 	void errorPlayingVideo() {
-		
+		/*
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
 		if(listFrag == null){
-			//super.onBackPressed();   
+			super.onBackPressed();   
 		}
-		
+		*/
 		Toast.makeText(this, getString(R.string.play_error), Toast.LENGTH_LONG).show();
 	}
 
 	void networkError() {
-		
+		/*
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
 		if(listFrag == null){
-			//super.onBackPressed();   
+			super.onBackPressed(); 
 		} 
+		*/
 		Toast.makeText(this, getString(R.string.conn_error), Toast.LENGTH_LONG).show();
 	}
 
