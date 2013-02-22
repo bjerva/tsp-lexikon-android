@@ -36,13 +36,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.bjerva.tsplex.GsonSign.Word;
@@ -54,6 +52,7 @@ public class SignDetailFragment extends Fragment {
 	private MainActivity ma;
 	private String lastPlayed = "";
 	private boolean wasDisconnected = false;
+	private boolean firstErr;
 
 	VideoView getVideoView(){
 		return myVideoView;
@@ -63,6 +62,7 @@ public class SignDetailFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.sign_detail_fragment, container, false);
+		firstErr = true;
 		return myView;
 	}
 
@@ -167,6 +167,7 @@ public class SignDetailFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				final String url;
+				firstErr = true;
 				if(position<=3){
 					Log.i("VideoView", "Play sign");
 					url = currSign.getVideo_url();
@@ -212,8 +213,16 @@ public class SignDetailFragment extends Fragment {
 		myVideoView.setOnErrorListener(new OnErrorListener(){
 			@Override
 			public boolean onError(MediaPlayer mp, int arg1, int arg2){
+				if (firstErr){
+					firstErr = false;
+					String fileName = lastPlayed.substring(0, lastPlayed.length()-3)+"mp4";
+					fileName = "http://130.237.171.46/system/videos/"+fileName.substring(22);
+					Log.i("SignDetail", fileName);
+					myVideoView.setVideoURI(Uri.parse(fileName));
+					playNormal();
+					return true;
+				}
 				ma.hideLoader();
-				freshLayout(listView);
 				if(arg2 == -1004){
 					ma.networkError();
 				} else {
@@ -230,7 +239,6 @@ public class SignDetailFragment extends Fragment {
 			}
 		});
 
-
 		ConnectivityManager connectivityManager = (ConnectivityManager) ma.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if(activeNetworkInfo == null){
@@ -238,17 +246,8 @@ public class SignDetailFragment extends Fragment {
 			wasDisconnected = true;
 			ma.hideLoader();
 			ma.networkError();
-			freshLayout(listView);
 		}
 		playNormal();
-	}
-	
-	private void freshLayout(ListView listView){
-		RelativeLayout.LayoutParams newParams = 
-				new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		newParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		listView.setLayoutParams(newParams);
-		myView.requestLayout();
 	}
 
 	private void loadFilm(String url){
@@ -264,7 +263,7 @@ public class SignDetailFragment extends Fragment {
 	}
 	
 	private void replay(){
-		checkConnection();
+		//checkConnection();
 		myVideoView.seekTo(1);
 		myVideoView.start();
 	}
@@ -275,7 +274,7 @@ public class SignDetailFragment extends Fragment {
 		if(activeNetworkInfo == null){
 			wasDisconnected = true;
 		} else if(wasDisconnected) {
-			myView.requestLayout();
+			//myView.requestLayout();
 		}
 	}
 	/*

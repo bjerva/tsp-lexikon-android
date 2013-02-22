@@ -105,8 +105,9 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 				{
 					SimpleGson sign = originalItems.get(i);
 					String word = sign.getWord();
-					if(word.toString().toLowerCase(swedishLocale).startsWith(constraint.toString()));
+					if(word.toString().toLowerCase(swedishLocale).startsWith(constraint.toString())){
 						tempFiltered.add(sign);
+					}
 				}
 				result.count = tempFiltered.size();
 				result.values = tempFiltered;
