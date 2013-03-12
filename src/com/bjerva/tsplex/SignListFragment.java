@@ -56,9 +56,8 @@ public class SignListFragment extends ListFragment {
 
 	private int index = -1;
     private int top = 0;
-    private String oldSearch = "";
     
-    //TODO: Spara gamla sökningen
+    private String oldSearch = "";
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

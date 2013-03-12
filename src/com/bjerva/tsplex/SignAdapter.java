@@ -49,8 +49,8 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 		super(context, resource, items);
 		this.originalItems = new ArrayList<SimpleGson>();
 		this.filteredItems = new ArrayList<SimpleGson>();
-
-		for(int i = 0, l = items.size(); i < l; i++){
+		int size = items.size();
+		for(int i = 0, l = size; i < l; i++){
 			filteredItems.add(items.get(i));
 			originalItems.add(items.get(i));
 		}
@@ -100,8 +100,8 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			if(constraint != null && constraint.toString().length() > 0)
 			{
 				ArrayList<SimpleGson> tempFiltered = new ArrayList<SimpleGson>();
-
-				for(int i=0, l=originalItems.size(); i<l; i++)
+				int size = originalItems.size();
+				for(int i=0, l=size; i<l; i++)
 				{
 					SimpleGson sign = originalItems.get(i);
 					String word = sign.getWord();
@@ -133,8 +133,8 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			notifyDataSetChanged();
 			clear();
 			Log.i("SignAdapter", "Filter count: "+filteredItems.size());
-
-			for(int i = 0, l = filteredItems.size(); i < l; i++)
+			int size = filteredItems.size();
+			for(int i = 0, l = size; i < l; i++)
 				add(filteredItems.get(i));
 
 			notifyDataSetInvalidated();
