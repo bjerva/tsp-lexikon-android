@@ -6,8 +6,8 @@
     android:orientation="horizontal"
     android:baselineAligned="false" >
 
-    <fragment class="com.bjerva.tsplex.SignListFragment"
-            android:id="@+id/list_frag"
+    <ViewPager
+            android:id="@+id/pager"
             android:layout_width="@dimen/list_width"
             android:layout_height="match_parent"/>
     

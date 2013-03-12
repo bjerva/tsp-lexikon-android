@@ -58,10 +58,16 @@ public class SignListFragment extends ListFragment {
     private int top = 0;
     
     private String oldSearch = "";
+    
+    public static SignListFragment newInstance() {
+    	SignListFragment frag = new SignListFragment();
+        return frag;
+    }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
+		Log.e("INF", "INFLATIIING");
 		myView = inflater.inflate(R.layout.sign_list_fragment, container, false);
 		setHasOptionsMenu(true);
 		return myView;
@@ -73,6 +79,12 @@ public class SignListFragment extends ListFragment {
 		ma = (MainActivity) getActivity();
 		if(ma.getGsonSignsLite() != null){
 			loadSigns();
+		} else {
+			Log.e("Not loading", "Gson null");
+		}
+		
+		if(ma == null){
+			Log.e("Activity null", "Activity null");
 		}
 	}
 	
@@ -106,7 +118,7 @@ public class SignListFragment extends ListFragment {
 
 	void loadSigns(){
 		//Create and set adapter
-		tv = (TextView) ma.findViewById(R.id.alphabetic_header);
+		tv = (TextView) getActivity().findViewById(R.id.alphabetic_header);
 		tv.setText("A");
 		final List<SimpleGson> tmpSigns = new ArrayList<SimpleGson>();
 		final Locale swedishLocale = new Locale("sv", "SE");
@@ -158,7 +170,7 @@ public class SignListFragment extends ListFragment {
 					//Add to container
 					FragmentTransaction transaction = ma.getSupportFragmentManager().beginTransaction();
 					transaction.setCustomAnimations(R.anim.slide_fragment_in_on_replace, R.anim.slide_fragment_out_on_replace);
-					transaction.replace(R.id.fragment_container, newFragment);
+					//transaction.replace(R.id.fragment_container, newFragment);
 					transaction.addToBackStack(null);
 					transaction.commit();
 				} else {

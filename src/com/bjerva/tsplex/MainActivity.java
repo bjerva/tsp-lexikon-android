@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
 
 
 		mViewPager = new ViewPager(this);
-		//mViewPager.setId(R.id.pager);
+		mViewPager.setId(R.id.pager);
 		setContentView(mViewPager);
 
 		final ActionBar bar = getSupportActionBar();
@@ -88,8 +88,6 @@ public class MainActivity extends Activity {
 		if (savedInstanceState != null) {
 			bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}
-
-		setContentView(R.layout.activity_sign_listing);
 
 		int screenSize = getResources().getConfiguration().screenLayout &
 				Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -110,11 +108,13 @@ public class MainActivity extends Activity {
 		}
 
 		//Load local json
-		new LoadHelper(this).execute();
-
+		
+		
+	//	new LoadHelper(this).execute();
+		
+		//SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+		//		.findFragmentById(R.id.list_frag);
 		/*
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
 		if (listFrag == null) {
 			listFragment = new SignListFragment();
 			getSupportFragmentManager().beginTransaction().add(
@@ -126,10 +126,16 @@ public class MainActivity extends Activity {
 		}
 		*/
 	}
+	
+	@Override
+	public void onStart(){
+		super.onStart();
+		new LoadHelper(this).execute();
+	}
 
 	public void onBackPressed(){
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
+		SignListFragment listFrag = null;//(SignListFragment) getSupportFragmentManager()
+		//		.findFragmentById(R.id.list_frag);
 		if(listFrag == null){
 			detFragment = null;
 			//getSupportActionBar().show();
@@ -153,8 +159,8 @@ public class MainActivity extends Activity {
 			break;
 		}
 
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
+		SignListFragment listFrag = null;//(SignListFragment) getSupportFragmentManager()
+				//.findFragmentById(R.id.list_frag);
 
 		if (listFrag != null) {
 			//Tablet
@@ -318,19 +324,22 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(Void result){
 			//Hide loading spinner
 			super.onPostExecute(result);
+			//listFragment = (SignListFragment) mTabsAdapter.getItem(0);
+			((SignListFragment) mTabsAdapter.getItem(0)).loadSigns();
+			/*
 			try{
 				listFragment.loadSigns();
 			} catch (NullPointerException e){
+				//SignListFragment listFrag = (SignListFragment) mTabsAdapter.getItem(0);// (SignListFragment) getSupportFragmentManager()
+						//.findFragmentById(R.id.list_frag);
 
-				SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-						.findFragmentById(R.id.list_frag);
-
-				if (listFrag == null) {
-					((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
+				if (listFragment == null) {
+					//((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
 				} else {
-					listFrag.loadSigns();
+					listFragment.loadSigns();
 				}
 			}
+			*/
 			pbarDialog.dismiss();
 			Log.i("AsyncDBLoad", "Loaded signs from DB");
 		}
@@ -400,8 +409,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public Fragment getItem(int position) {
-			TabInfo info = mTabs.get(position);
-			return Fragment.instantiate(mContext, info.clss.getName(), info.args);
+			return SignListFragment.newInstance();
 		}
 
 		@Override
