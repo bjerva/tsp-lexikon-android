@@ -7,7 +7,7 @@
     <string name="sign_load">Hämtar tecken &#8230;</string>
     <string name="list_load">Laddar sparad teckeninfo &#8230;</string>
     <string name="play_error">Video could not be played.</string>
-    <string name="conn_error">Det är för närvarande problem med videoservern. Vänligen försöka igen senare.</string>
+    <string name="conn_error">Could not connect to video server.</string>
     
     <!-- Sign Detail -->
     <string name="word">Ord</string>

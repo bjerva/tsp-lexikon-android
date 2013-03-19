@@ -261,13 +261,13 @@ public class SignDetailFragment extends Fragment {
 		checkConnection();
 		myVideoView.start();
 	}
-	
+
 	private void replay(){
 		//checkConnection();
 		myVideoView.seekTo(1);
 		myVideoView.start();
 	}
-	
+
 	private void checkConnection(){
 		ConnectivityManager connectivityManager = (ConnectivityManager) ma.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

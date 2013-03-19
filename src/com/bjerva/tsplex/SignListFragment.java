@@ -44,6 +44,8 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 
 public class SignListFragment extends ListFragment {
 
@@ -51,14 +53,17 @@ public class SignListFragment extends ListFragment {
 	private MainActivity ma;
 	private SignAdapter mAdapter;
 
+	private Tracker mGaTracker;
+	private GoogleAnalytics mGaInstance;
+
 	private EditText search;
 	private TextView tv;
 
 	private int index = -1;
-    private int top = 0;
-    
-    private String oldSearch = "";
-	
+	private int top = 0;
+
+	private String oldSearch = "";
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -66,7 +71,7 @@ public class SignListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		return myView;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
@@ -74,8 +79,10 @@ public class SignListFragment extends ListFragment {
 		if(ma.getGsonSignsLite() != null){
 			loadSigns();
 		}
+		mGaInstance = GoogleAnalytics.getInstance(ma);
+		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 	}
-	
+
 	public void onResume(){
 		super.onResume();
 		if(index!=-1){
@@ -95,7 +102,7 @@ public class SignListFragment extends ListFragment {
 		} catch(Exception e) {
 			Log.w("OldListPosErr", "Error when fetching old listpos");
 		}
-		
+
 		try{
 			oldSearch = search.getText().toString();
 		} catch(Exception e) {
@@ -110,16 +117,16 @@ public class SignListFragment extends ListFragment {
 		tv.setText("A");
 		final List<SimpleGson> tmpSigns = new ArrayList<SimpleGson>();
 		final Locale swedishLocale = new Locale("sv", "SE");
-		
+
 		for(int i = 0, l = ma.getGsonSignsLite().size(); i < l; i++){
 			SimpleGson currSign = ma.getGsonSignsLite().get(i);
 			tmpSigns.add(currSign);
 		}
-		
+
 		mAdapter = new SignAdapter(ma, android.R.layout.simple_list_item_1, tmpSigns);
-		
+
 		getListView().setAdapter(mAdapter);
-		
+
 		//Set scroll listener
 		getListView().setOnScrollListener(new OnScrollListener(){
 			@Override
@@ -130,7 +137,7 @@ public class SignListFragment extends ListFragment {
 					tv.setText(word.substring(0, 1).toUpperCase(swedishLocale));
 				}
 			}
-			
+
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}
 		});
@@ -140,7 +147,9 @@ public class SignListFragment extends ListFragment {
 			@Override
 			public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id){
 				ma.showLoader();
-				
+
+				mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), System.currentTimeMillis());
+
 				//Update position
 				ma.loadSingleJson(tmpSigns.get(position).getId());
 
@@ -149,7 +158,7 @@ public class SignListFragment extends ListFragment {
 					InputMethodManager imm = (InputMethodManager) ma.getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
 				}
-				
+
 				if(ma.getDetFragment() == null){
 					//ma.getSupportActionBar().hide();
 					//Create detail fragment
@@ -168,11 +177,11 @@ public class SignListFragment extends ListFragment {
 
 		});
 	}
-	
+
 	public SignAdapter getmAdapter() {
 		return mAdapter;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, MenuInflater inflater) {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
