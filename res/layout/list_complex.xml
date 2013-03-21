@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -11,6 +11,8 @@
         android:id="@+id/list_complex_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textIsSelectable="false" />
 
@@ -18,8 +20,19 @@
         android:id="@+id/list_complex_caption"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/list_complex_title"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/cell_separator"
         android:textIsSelectable="false" />
 
-</LinearLayout>
+    <CheckBox
+        android:id="@+id/star"
+        style="?android:attr/starStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="12dip" />
+
+</RelativeLayout>

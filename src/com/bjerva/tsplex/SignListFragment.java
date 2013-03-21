@@ -29,6 +29,7 @@ import org.holoeverywhere.app.ListFragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,6 +49,8 @@ import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
 public class SignListFragment extends ListFragment {
+	
+	static final String TAG = "SignListFragment";
 
 	private View myView;
 	private MainActivity ma;
@@ -76,11 +79,28 @@ public class SignListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		ma = (MainActivity) getActivity();
-		if(ma.getGsonSignsLite() != null){
-			loadSigns();
-		}
+		
 		mGaInstance = GoogleAnalytics.getInstance(ma);
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
+		
+		if(ma.isDoneLoading()){
+			Log.d(TAG, "Loading signs here");
+			loadSigns();
+		} else {
+			final Handler handler = new Handler();
+			final Runnable r = new Runnable(){
+			    public void run(){
+			    	if(ma.isDoneLoading()){
+			    		Log.d("Runnable", "Loading successful!");
+			    		loadSigns();
+			    	} else {
+				    	Log.d("Runnable", "Loading failed...");
+			    		handler.postDelayed(this, 250);
+			    	}
+			    }
+			};
+			handler.postDelayed(r, 1500);
+		}
 	}
 
 	public void onResume(){
@@ -113,6 +133,10 @@ public class SignListFragment extends ListFragment {
 
 	void loadSigns(){
 		//Create and set adapter
+		if(ma == null){
+			Log.d(TAG, "Null activity");
+			return;
+		}
 		tv = (TextView) ma.findViewById(R.id.alphabetic_header);
 		tv.setText("A");
 		final List<SimpleGson> tmpSigns = new ArrayList<SimpleGson>();
@@ -146,9 +170,10 @@ public class SignListFragment extends ListFragment {
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id){
+				Log.d(TAG, "CLICKED");
 				ma.showLoader();
 
-				mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), System.currentTimeMillis());
+				mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), 1L);
 
 				//Update position
 				ma.loadSingleJson(tmpSigns.get(position).getId());
@@ -160,7 +185,6 @@ public class SignListFragment extends ListFragment {
 				}
 
 				if(ma.getDetFragment() == null){
-					//ma.getSupportActionBar().hide();
 					//Create detail fragment
 					SignDetailFragment newFragment = new SignDetailFragment();
 

@@ -23,6 +23,10 @@ package com.bjerva.tsplex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Context;
 import android.util.Log;
@@ -30,9 +34,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
@@ -44,6 +51,9 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 	private List<SimpleGson> originalItems;
 	private List<SimpleGson> filteredItems;
 	private SignFilter filter;
+	private SharedPreferences sharedPref;
+	private int prefSize;
+	private Map<String, ?> favourites;
 
 	public SignAdapter(Context context, int resource, List<SimpleGson> items) {
 		super(context, resource, items);
@@ -54,31 +64,63 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			filteredItems.add(items.get(i));
 			originalItems.add(items.get(i));
 		}
+
+		sharedPref = ((Activity) context) .getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = sharedPref.edit();
+        //prefEditor.clear();
+        //prefEditor.commit();
+        
+		prefSize = sharedPref.getAll().size();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		SignInfoViewHolder viewHolder;
-		LinearLayout ll = (LinearLayout) convertView;
+		RelativeLayout rl = (RelativeLayout) convertView;
 
-		if (ll == null) {
+		if (rl == null) {
 			final LayoutInflater vi = LayoutInflater.from(getContext());
-			ll = (LinearLayout) vi.inflate(R.layout.list_complex, null, false);
+			rl = (RelativeLayout) vi.inflate(R.layout.list_complex, null, false);
 			viewHolder = new SignInfoViewHolder();
-			viewHolder.title = (TextView) ll.findViewById(R.id.list_complex_title);
-			viewHolder.caption = (TextView) ll.findViewById(R.id.list_complex_caption);
-			ll.setTag(viewHolder);
+			viewHolder.title = (TextView) rl.findViewById(R.id.list_complex_title);
+			viewHolder.caption = (TextView) rl.findViewById(R.id.list_complex_caption);
+			viewHolder.star = (CheckBox) rl.findViewById(R.id.star);
+			rl.setTag(viewHolder);
 		} else {
-			viewHolder = (SignInfoViewHolder) ll.getTag();
+			viewHolder = (SignInfoViewHolder) rl.getTag();
 		}
 
 		final SimpleGson sMod = filteredItems.get(position);
 		if (sMod != null) {
 			viewHolder.title.setText(sMod.getWord());
 			viewHolder.caption.setText(sMod.getTag());
+			viewHolder.star.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					Log.d("StarClick", sMod.getWord()+" Checked: "+isChecked);
+			        SharedPreferences.Editor prefEditor = sharedPref.edit();
+					if(sharedPref.getAll().containsKey(sMod.getWord())){
+						if(!isChecked){
+					        prefEditor.remove(sMod.getWord());
+						}
+					} else {
+						if(isChecked){
+							prefEditor.putInt(sMod.getWord(), 1);
+						}
+					}
+			        prefEditor.commit();
+				}
+			});
+			
+			if(sharedPref.getAll().containsKey(sMod.getWord())){
+				viewHolder.star.setChecked(true);
+			} else {
+				viewHolder.star.setChecked(false);
+			}
 		}
-
-		return ll;
+		
+		return rl;
 	}
 
 	@Override
@@ -144,5 +186,6 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 	static class SignInfoViewHolder {
 		TextView title;
 		TextView caption;
+		CheckBox star;
 	}
 }

@@ -6,7 +6,8 @@
         res/values-v11/styles.xml on API 14+ devices.
     -->
     <style name="AppBaseTheme" parent="Holo.Theme.Light.DarkActionBar">
-        <!-- API 14 theme customizations can go here. -->
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
+        <!-- item name="vpiTabTextStyle">@style/Widget.TabPageIndicator.Text</item> -->
     </style>
 
 </resources>

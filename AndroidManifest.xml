@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bjerva.tsplex"
-    android:versionCode="10"
-    android:versionName="0.3.6" >
+    android:versionCode="11"
+    android:versionName="0.4.0" >
 
     <uses-sdk
         android:minSdkVersion="5"
         android:targetSdkVersion="17" />
-    
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ikon_tsp"
@@ -18,12 +18,14 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.bjerva.tsplex.MainActivity"
-            android:label="@string/app_name"
-			android:configChanges="orientation|screenSize" >
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

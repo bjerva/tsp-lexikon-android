@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.holoeverywhere.app.Activity;
-import org.json.JSONException;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -51,53 +50,65 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MainActivity extends Activity {
+
+	private static final String TAG = "Main Activity";
+	
+	private boolean doneLoading = false;
+
 	private SignListFragment listFragment;
 	private SignDetailFragment detFragment;
-
 	private ProgressDialog pbarDialog;
-	
+
 	private ArrayList<SimpleGson> gsonSignsLite = null;
 	private GsonSign currentSign = null;
 	
+	private ArrayList<SimpleGson> favouriteSigns = null;
+
 	@Override
 	public void onStart() {
 		super.onStart();
-		EasyTracker.getInstance().activityStart(this); // Add this method.
+		EasyTracker.getInstance().activityStart(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		EasyTracker.getInstance().activityStop(this); // Add this method.
+		EasyTracker.getInstance().activityStop(this);
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(new Bundle()); //XXX: Simple ugly fix.
 
 		setContentView(R.layout.activity_sign_listing);
-		
+
 		int screenSize = getResources().getConfiguration().screenLayout &
-		        Configuration.SCREENLAYOUT_SIZE_MASK;
+				Configuration.SCREENLAYOUT_SIZE_MASK;
 
 		switch(screenSize) {
-			case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-				break;
-		    case Configuration.SCREENLAYOUT_SIZE_LARGE:
-		        break;
-		    case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-		    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		        break;
-		    case Configuration.SCREENLAYOUT_SIZE_SMALL:
-		    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		        break;
-		    default:
-		    	break;
+		case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+			break;
+		case Configuration.SCREENLAYOUT_SIZE_LARGE:
+			break;
+		case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			break;
+		case Configuration.SCREENLAYOUT_SIZE_SMALL:
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			break;
+		default:
+			break;
 		}
 
 		//Load local json
-		new LoadHelper(this).execute();
-
+		new LoadHelper().execute();
+        
+        favouriteSigns = new ArrayList<SimpleGson>();
+        
+		getSupportFragmentManager().beginTransaction().add(
+				R.id.fragment_container, new PagerFragment()).commit();
+        
+		/*
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
 		if (listFrag == null) {
@@ -109,8 +120,13 @@ public class MainActivity extends Activity {
 			getSupportFragmentManager().beginTransaction().add(
 					R.id.details_container, detFragment).commit();
 		}
+		 */
 	}
 	
+	boolean isDoneLoading(){
+		return doneLoading;
+	}
+
 	public void onBackPressed(){
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
@@ -124,22 +140,22 @@ public class MainActivity extends Activity {
 	@SuppressLint("NewApi") 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		
+
 		int screenSize = getResources().getConfiguration().screenLayout &
-		        Configuration.SCREENLAYOUT_SIZE_MASK;
+				Configuration.SCREENLAYOUT_SIZE_MASK;
 
 		switch(screenSize) {
-			case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-		        return;
-		    case Configuration.SCREENLAYOUT_SIZE_SMALL:
-		    	return;
-		    default:
-		    	break;
+		case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+			return;
+		case Configuration.SCREENLAYOUT_SIZE_SMALL:
+			return;
+		default:
+			break;
 		}
 
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
-		
+
 		if (listFrag != null) {
 			//Tablet
 			showLoader();
@@ -184,7 +200,7 @@ public class MainActivity extends Activity {
 			Log.i("MA", "metaList is null");
 		}
 	}
-	 
+
 	GsonSign getCurrentSign(){
 		return currentSign;
 	}
@@ -194,7 +210,7 @@ public class MainActivity extends Activity {
 		if(pbarDialog != null){
 			hideLoader();
 		}
-		
+
 		//Show loading spinner
 		pbarDialog = new ProgressDialog(this);
 		pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -208,28 +224,14 @@ public class MainActivity extends Activity {
 	}
 
 	void errorPlayingVideo() {
-		/*
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
-		if(listFrag == null){
-			super.onBackPressed();   
-		}
-		*/
 		Crouton.makeText(this, getString(R.string.play_error), Style.ALERT).show();
 	}
 
 	void networkError() {
-		/*
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
-		if(listFrag == null){
-			super.onBackPressed(); 
-		} 
-		*/
 		Crouton.makeText(this, getString(R.string.conn_error), Style.ALERT).show();
 	}
 
-	private void loadGSONfromStringLite() throws IOException, JSONException{
+	private void loadGSONfromStringLite() throws IOException{
 		Log.i("Load Local JSON", "Loading...");
 		final InputStream is = getAssets().open("words2.json");
 		final Reader reader = new InputStreamReader(is);
@@ -241,7 +243,7 @@ public class MainActivity extends Activity {
 		is.close();
 		Log.i("Load Local GSON", "Loaded!");
 	}
-	
+
 	void loadSingleJson(int id){
 		Log.i("Load Single GSON", "Loading...");
 		InputStream is;
@@ -259,26 +261,17 @@ public class MainActivity extends Activity {
 
 	private class LoadHelper extends AsyncTask<String, Void, Void>{
 
-		final ProgressDialog pbarDialog;
-
-		public LoadHelper(MainActivity activity) {
-			this.pbarDialog = new ProgressDialog(activity);
-		}
-
 		@Override
 		protected Void doInBackground(String... url) {
-			Log.i("AsyncFileLoad", "Loading");
 			try {
 				loadGSONfromStringLite();
-			} catch (IOException e) {
-			} catch (JSONException e) {}
-			Log.i("AsyncFileLoad", "Loaded");
+			} catch (IOException e) {}
 
+			// Sort signs
 			Collections.sort(gsonSignsLite, new CustomComparator());
-			if(gsonSignsLite.size()>100){
-				for(int i=0; i<16; ++i){
-					gsonSignsLite.add(gsonSignsLite.remove(0));
-				}
+			// Put signs containing numbers at the end
+			for(int i=0; i<16; ++i){
+				gsonSignsLite.add(gsonSignsLite.remove(0));
 			}
 			return null;
 		}
@@ -286,35 +279,17 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPreExecute(){
 			//Show loading spinner
-			Log.i("AsyncDBLoad", "Loading Local signs");
-			//pbarDialog = new ProgressDialog(MainActivity.this);
-			pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			pbarDialog.setMessage(getString(R.string.list_load));
-			pbarDialog.setCancelable(false);
-			pbarDialog.show();
-
+			Log.d("AsyncDBLoad", "Loading local signs");
+			showLoader();
 			super.onPreExecute();
 		}
 
 		@Override
 		protected void onPostExecute(Void result){
-			//Hide loading spinner
 			super.onPostExecute(result);
-			try{
-				listFragment.loadSigns();
-			} catch (NullPointerException e){
-
-				SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-						.findFragmentById(R.id.list_frag);
-
-				if (listFrag == null) {
-					((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
-				} else {
-					listFrag.loadSigns();
-				}
-			}
-			pbarDialog.dismiss();
-			Log.i("AsyncDBLoad", "Loaded signs from DB");
+			doneLoading = true;
+			hideLoader();
+			Log.d("AsyncDBLoad", "Loaded local signs");
 		}
 	}
 

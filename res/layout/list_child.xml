@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="10dip"
+    android:paddingLeft="15dip"
+    android:paddingTop="10dip" >
+
+    <TextView
+        android:id="@+id/list_child_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="45dip"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
+
+</LinearLayout>
