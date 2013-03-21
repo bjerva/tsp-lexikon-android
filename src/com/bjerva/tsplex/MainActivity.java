@@ -42,11 +42,13 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MainActivity extends Activity {
 	private SignListFragment listFragment;
@@ -213,7 +215,7 @@ public class MainActivity extends Activity {
 			super.onBackPressed();   
 		}
 		*/
-		Toast.makeText(this, getString(R.string.play_error), Toast.LENGTH_LONG).show();
+		Crouton.makeText(this, getString(R.string.play_error), Style.ALERT).show();
 	}
 
 	void networkError() {
@@ -224,7 +226,7 @@ public class MainActivity extends Activity {
 			super.onBackPressed(); 
 		} 
 		*/
-		Toast.makeText(this, getString(R.string.conn_error), Toast.LENGTH_LONG).show();
+		Crouton.makeText(this, getString(R.string.conn_error), Style.ALERT).show();
 	}
 
 	private void loadGSONfromStringLite() throws IOException, JSONException{
@@ -267,9 +269,7 @@ public class MainActivity extends Activity {
 		protected Void doInBackground(String... url) {
 			Log.i("AsyncFileLoad", "Loading");
 			try {
-				//loadGSONfromString();
 				loadGSONfromStringLite();
-				//loadData();
 			} catch (IOException e) {
 			} catch (JSONException e) {}
 			Log.i("AsyncFileLoad", "Loaded");
@@ -336,154 +336,5 @@ public class MainActivity extends Activity {
 		public int compare(SimpleGson o1, SimpleGson o2) {
 			return o1.getWord().compareToIgnoreCase(o2.getWord());
 		}
-	}	
-	/*
-	private void loadData(){
-		Log.i("SyncDBLoad", "Loading");
-		final ObjectSet<GsonSign> dbList = db.queryByExample(new GsonSign());
-		while(dbList.hasNext()){
-			gsonSigns.add(dbList.next());
-		}
-		Log.i("SyncDBLoad", "Loaded");
 	}
-
-	private void updateSigns(){
-		final String oldDate = getOldDate();
-		if(oldDate.length()>0){
-			jsonURL += "?changed_at="+oldDate;
-		}
-
-		Log.i("New JSON-url", jsonURL);
-
-		//Load sign info from backend
-	//	new JSONParser(this).execute(jsonURL);
-
-		saveRetrievalDate();
-	}
-	 */
-	
-	/*
-	private void saveRetrievalDate(){
-		//Write retrieval date to file
-		final Calendar c = Calendar.getInstance();
-		String date = String.valueOf(c.get(Calendar.YEAR));
-		if (c.get(Calendar.MONTH)+1 < 10){
-			date += "-0"+(c.get(Calendar.MONTH)+1);
-		} else {
-			date += "-"+(c.get(Calendar.MONTH)+1);
-		}
-
-		date += "-"+c.get(Calendar.DATE);
-
-		final FileOutputStream fos;
-		try {
-			fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-			fos.write(date.getBytes());
-			fos.close();
-		} catch (IOException e1) {
-			Log.e("ERROR", "Error saving new file");
-		}
-
-		Log.i("NEW DATE", date);
-	}
-
-	private String getOldDate(){
-		//Load retrieval date to file
-		final FileInputStream fis;
-		final StringBuffer fileContent;
-		String oldDate = "2013-01-30";
-		try {
-			fis = openFileInput(FILENAME);
-			fileContent = new StringBuffer("");
-
-			byte[] buffer = new byte[1];
-			@SuppressWarnings("unused")
-			int length;
-			while ((length = fis.read(buffer)) != -1) {
-				fileContent.append(new String(buffer));
-			}
-			oldDate = fileContent.toString().trim();
-		} catch (IOException e1) {
-			Log.e("ERROR", "Error retrieving old file");
-		}
-
-		return oldDate;
-	}
-	 */
-
-	/*
-	private class JSONParser extends AsyncTask<String, Void, Void>{
-
-	    InputStream is = null;
-	    final ProgressDialog pbarDialog;
-
-	    public JSONParser(MainActivity activity) {
-	        this.pbarDialog = new ProgressDialog(activity);
-	    }
-
-	    @Override
-		protected Void doInBackground(String... url) {
-	        // Making HTTP request
-	    	Log.i("Load Remote GSON", "Loading...");
-	        try {
-	        	final HttpClient client = new DefaultHttpClient();
-	        	final HttpGet httpGet = new HttpGet(url[0]);
-
-	            // defaultHttpClient
-	            final HttpResponse httpResponse = client.execute(httpGet);
-	            final HttpEntity httpEntity = httpResponse.getEntity();
-	            is = httpEntity.getContent();           
-
-	            final Reader reader = new InputStreamReader(is);
-
-				final Gson gson = new Gson();
-				final Type collectionType = new TypeToken<ArrayList<GsonSign>>(){}.getType();
-				final ArrayList<GsonSign> tmpSigns = gson.fromJson(reader, collectionType);
-
-				is.close();
-
-				for(GsonSign sign: tmpSigns){
-					Log.i("Load Remote GSON", "Added sign");
-		        	gsonSigns.add(sign);
-		        	db.store(sign);
-		        }
-				db.commit();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-
-	        Log.i("Load Remote GSON", "Loaded!");
-	        return null;
-	    }
-
-	    @Override
-	    protected void onPreExecute(){
-	    	//Show loading spinner
-	    	Log.i("AsyncServ", "Downloading signs");
-	    	//pbarDialog = new ProgressDialog(MainActivity.this);
-	    	pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	    	pbarDialog.setMessage("H�mtar teckeninfo fr�n server...");
-	    	pbarDialog.setCancelable(false);
-	    	pbarDialog.show();
-	    	super.onPreExecute();
-	    }
-
-	    @Override
-	    protected void onPostExecute(Void result){
-	    	//Hide loading spinner
-	    	super.onPostExecute(result);
-	    	pbarDialog.dismiss();
-	    	/*
-	    	try{
-	    		listFragment.loadSigns();
-	    	} catch (NullPointerException e){
-	    		((SignListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container)).loadSigns();
-	    		Log.w("NullPointer @ ServerLoad", "No ListFragment found.");
-	    	}
-	    	//
-	    	Log.i("AsyncServ", "Downloaded all signs");
-	    }
-	}
-
-	 */
 }
