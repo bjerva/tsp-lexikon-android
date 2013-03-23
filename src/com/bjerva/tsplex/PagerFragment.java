@@ -8,12 +8,15 @@ import org.holoeverywhere.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.viewpagerindicator.TabPageIndicator;
 
 public class PagerFragment extends Fragment {
+	private static final String TAG = "PagerFragment";
 	private static final String[] CONTENT = new String[] { "Tecken", "Kategorier", "Favoriter"};
 
 	private FragmentPagerAdapter mAdapter;
@@ -41,11 +44,13 @@ public class PagerFragment extends Fragment {
 
 		TabPageIndicator indicator = (TabPageIndicator) ma.findViewById(R.id.indicator);
 		indicator.setViewPager(mPager);
+
+		mPager.setOnPageChangeListener(mOnPageChangeListener);
 	}
-	
+
 	class SignAlternativesAdapter extends FragmentPagerAdapter {
 		public SignAlternativesAdapter(android.support.v4.app.Fragment fragment){
-		    super(fragment.getChildFragmentManager());
+			super(fragment.getChildFragmentManager());
 		}
 
 		@Override
@@ -71,5 +76,22 @@ public class PagerFragment extends Fragment {
 			return CONTENT.length;
 		}
 	}
+	
+	private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener(){
+		public void onPageSelected(int position){
+			mPager.setCurrentItem(position);
+			if(position==2){
+				((FavouritesFragment)mAdapter.getItem(2)).notifyChange();
+			}
+			Log.d(TAG, ""+position);
+		}
 
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+		}
+	};
 }

@@ -15,17 +15,22 @@ import android.view.ViewGroup;
 import com.mobeta.android.dslv.DragSortListView;
 
 public class FavouritesFragment extends Fragment {
-	
+
 	private static final String TAG = "FavouritesFragment";
-	
+
 	private ArrayAdapter<String> adapter;
 
 	private View myView;
 
-	private String[] array;
 	private ArrayList<String> list;
-	
+
 	private DragSortListView lv;
+
+	public void notifyChange(){
+		if(adapter != null){
+			adapter.notifyDataSetChanged();
+		}
+	}
 
 	private DragSortListView.DropListener onDrop =
 			new DragSortListView.DropListener() {
@@ -59,7 +64,7 @@ public class FavouritesFragment extends Fragment {
 			}
 		}
 	};
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -79,7 +84,7 @@ public class FavouritesFragment extends Fragment {
 		lv.setDropListener(onDrop);
 		lv.setRemoveListener(onRemove);
 		lv.setDragScrollProfile(ssProfile);
-		
+
 		list = new ArrayList<String>();
 
 

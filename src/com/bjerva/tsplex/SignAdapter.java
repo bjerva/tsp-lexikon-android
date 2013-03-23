@@ -23,7 +23,6 @@ package com.bjerva.tsplex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.SharedPreferences;
@@ -53,7 +52,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 	private SignFilter filter;
 	private SharedPreferences sharedPref;
 	private int prefSize;
-	private Map<String, ?> favourites;
+	//private Map<String, ?> favourites;
 
 	public SignAdapter(Context context, int resource, List<SimpleGson> items) {
 		super(context, resource, items);
@@ -66,7 +65,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 		}
 
 		sharedPref = ((Activity) context) .getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor prefEditor = sharedPref.edit();
+        //SharedPreferences.Editor prefEditor = sharedPref.edit();
         //prefEditor.clear();
         //prefEditor.commit();
         
@@ -103,10 +102,12 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 					if(sharedPref.getAll().containsKey(sMod.getWord())){
 						if(!isChecked){
 					        prefEditor.remove(sMod.getWord());
+					        prefSize--;
 						}
 					} else {
 						if(isChecked){
-							prefEditor.putInt(sMod.getWord(), 1);
+							prefEditor.putInt(sMod.getWord(), prefSize);
+							prefSize++;
 						}
 					}
 			        prefEditor.commit();

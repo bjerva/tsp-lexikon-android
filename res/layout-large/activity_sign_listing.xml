@@ -2,18 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignListing"
+    android:baselineAligned="false"
     android:orientation="horizontal"
-    android:baselineAligned="false" >
+    tools:context=".SignListing" >
 
-    <fragment class="com.bjerva.tsplex.SignListFragment"
-            android:id="@+id/list_frag"
-            android:layout_width="@dimen/list_width"
-            android:layout_height="match_parent"/>
-    
     <LinearLayout
-            android:id="@+id/details_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    
+        android:id="@+id/fragment_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/details_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

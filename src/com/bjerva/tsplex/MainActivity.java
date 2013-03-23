@@ -61,8 +61,6 @@ public class MainActivity extends Activity {
 
 	private ArrayList<SimpleGson> gsonSignsLite = null;
 	private GsonSign currentSign = null;
-	
-	private ArrayList<SimpleGson> favouriteSigns = null;
 
 	@Override
 	public void onStart() {
@@ -103,11 +101,14 @@ public class MainActivity extends Activity {
 		//Load local json
 		new LoadHelper().execute();
         
-        favouriteSigns = new ArrayList<SimpleGson>();
-        
 		getSupportFragmentManager().beginTransaction().add(
 				R.id.fragment_container, new PagerFragment()).commit();
         
+		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
+			detFragment = new SignDetailFragment();
+			getSupportFragmentManager().beginTransaction().add(
+					R.id.details_container, detFragment).commit();
+		}
 		/*
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.list_frag);
@@ -128,12 +129,12 @@ public class MainActivity extends Activity {
 	}
 
 	public void onBackPressed(){
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
+		/*SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
+			.findFragmentById(R.id.list_frag);
 		if(listFrag == null){
 			detFragment = null;
 			//getSupportActionBar().show();
-		}
+		}*/
 		super.onBackPressed();
 	}
 
@@ -153,8 +154,8 @@ public class MainActivity extends Activity {
 			break;
 		}
 
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
+		SignListFragment listFrag = null;//(SignListFragment) getSupportFragmentManager()
+				//.findFragmentById(R.id.list_frag);
 
 		if (listFrag != null) {
 			//Tablet
