@@ -44,8 +44,7 @@ public class PagerFragment extends Fragment {
 
 		TabPageIndicator indicator = (TabPageIndicator) ma.findViewById(R.id.indicator);
 		indicator.setViewPager(mPager);
-
-		mPager.setOnPageChangeListener(mOnPageChangeListener);
+		indicator.setOnPageChangeListener(mOnPageChangeListener);
 	}
 
 	class SignAlternativesAdapter extends FragmentPagerAdapter {
@@ -79,7 +78,6 @@ public class PagerFragment extends Fragment {
 	
 	private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener(){
 		public void onPageSelected(int position){
-			mPager.setCurrentItem(position);
 			if(position==2){
 				((FavouritesFragment)mAdapter.getItem(2)).notifyChange();
 			}
