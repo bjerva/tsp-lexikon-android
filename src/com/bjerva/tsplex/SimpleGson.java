@@ -22,17 +22,17 @@ package com.bjerva.tsplex;
 
 import com.google.gson.annotations.SerializedName;
 
-class SimpleGson {
+public class SimpleGson {
 
-	int getId() {
+	public int getId() {
 		return id;
 	}
 
-	String getWord() {
+	public String getWord() {
 		return word;
 	}
 
-	String getTag() {
+	public String getTag() {
 		return tag;
 	}
 

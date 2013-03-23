@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -45,6 +45,10 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.SignAdapter;
+import com.bjerva.tsplex.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 

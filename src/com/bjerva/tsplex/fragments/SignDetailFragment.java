@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -43,7 +43,14 @@ import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.bjerva.tsplex.GsonSign;
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.SeparatedListAdapter;
 import com.bjerva.tsplex.GsonSign.Word;
+import com.bjerva.tsplex.R.id;
+import com.bjerva.tsplex.R.layout;
+import com.bjerva.tsplex.R.string;
 
 public class SignDetailFragment extends Fragment {
 

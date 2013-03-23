@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.fragments;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +20,12 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
 
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.SimpleGson;
+import com.bjerva.tsplex.R.anim;
+import com.bjerva.tsplex.R.id;
+import com.bjerva.tsplex.R.layout;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 

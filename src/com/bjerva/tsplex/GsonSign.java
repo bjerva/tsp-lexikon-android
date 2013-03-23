@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-class GsonSign{
+public class GsonSign{
 	public List<Example> getExamples() {
 		return examples;
 	}
@@ -67,7 +67,7 @@ class GsonSign{
 	@SerializedName("description")
 	private String description;
 	
-	class Example {
+	public class Example {
 		@SerializedName("video_url")
 		private String video_url;
 		
@@ -83,7 +83,7 @@ class GsonSign{
 		private String description;
 	}
 	
-	class Version {
+	public class Version {
 		@SerializedName("video_url")
 		private String video_url;
 		
@@ -99,7 +99,7 @@ class GsonSign{
 		private String description;
 	}
 	
-	class Word {
+	public class Word {
 		@SerializedName("word")
 		private String word;
 
@@ -108,7 +108,7 @@ class GsonSign{
 		}
 	}
 	
-	class Tag {
+	public class Tag {
 		@SerializedName("tag")
 		private String tag;
 

@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.fragments;
 
 import org.holoeverywhere.app.Fragment;
 

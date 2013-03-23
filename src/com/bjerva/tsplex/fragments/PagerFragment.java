@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.fragments;
 
 import java.util.Locale;
 
@@ -13,6 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.R.id;
+import com.bjerva.tsplex.R.layout;
 import com.viewpagerindicator.TabPageIndicator;
 
 public class PagerFragment extends Fragment {
@@ -48,6 +52,10 @@ public class PagerFragment extends Fragment {
 	}
 
 	class SignAlternativesAdapter extends FragmentPagerAdapter {
+		private SignListFragment signListFrag = null;
+		private SignCategoryFragment signCatFrag = null;
+		private FavouritesFragment favFrag = null;
+
 		public SignAlternativesAdapter(android.support.v4.app.Fragment fragment){
 			super(fragment.getChildFragmentManager());
 		}
@@ -55,11 +63,20 @@ public class PagerFragment extends Fragment {
 		@Override
 		public Fragment getItem(int position) {
 			if(position==0){
-				return new SignListFragment();
+				if(signListFrag == null){
+					signListFrag = new SignListFragment();
+				}
+				return signListFrag;
 			} else if(position==1){
-				return new SignCategoryFragment();
+				if(signCatFrag == null){
+					signCatFrag = new SignCategoryFragment();
+				}
+				return signCatFrag;
 			} else if(position==2){
-				return new FavouritesFragment();
+				if(favFrag == null){
+					favFrag = new FavouritesFragment();
+				}
+				return favFrag;
 			}
 			return null;
 		}
@@ -75,7 +92,7 @@ public class PagerFragment extends Fragment {
 			return CONTENT.length;
 		}
 	}
-	
+
 	private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener(){
 		public void onPageSelected(int position){
 			if(position==2){

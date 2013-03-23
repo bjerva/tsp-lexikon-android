@@ -42,6 +42,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.bjerva.tsplex.fragments.PagerFragment;
+import com.bjerva.tsplex.fragments.SignDetailFragment;
+import com.bjerva.tsplex.fragments.SignListFragment;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -124,7 +127,7 @@ public class MainActivity extends Activity {
 		 */
 	}
 	
-	boolean isDoneLoading(){
+	public boolean isDoneLoading(){
 		return doneLoading;
 	}
 
@@ -202,11 +205,11 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	GsonSign getCurrentSign(){
+	public GsonSign getCurrentSign(){
 		return currentSign;
 	}
 
-	void showLoader(){
+	public void showLoader(){
 		//Remove old spinner if exists
 		if(pbarDialog != null){
 			hideLoader();
@@ -220,15 +223,15 @@ public class MainActivity extends Activity {
 		pbarDialog.show();
 	}
 
-	void hideLoader(){
+	public void hideLoader(){
 		pbarDialog.dismiss();
 	}
 
-	void errorPlayingVideo() {
+	public void errorPlayingVideo() {
 		Crouton.makeText(this, getString(R.string.play_error), Style.ALERT).show();
 	}
 
-	void networkError() {
+	public void networkError() {
 		Crouton.makeText(this, getString(R.string.conn_error), Style.ALERT).show();
 	}
 
@@ -245,7 +248,7 @@ public class MainActivity extends Activity {
 		Log.i("Load Local GSON", "Loaded!");
 	}
 
-	void loadSingleJson(int id){
+	public void loadSingleJson(int id){
 		Log.i("Load Single GSON", "Loading...");
 		InputStream is;
 		try {
@@ -294,7 +297,7 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	SignDetailFragment getDetFragment() {
+	public SignDetailFragment getDetFragment() {
 		return detFragment;
 	}
 
@@ -303,7 +306,7 @@ public class MainActivity extends Activity {
 	}
 
 
-	ArrayList<SimpleGson> getGsonSignsLite() {
+	public ArrayList<SimpleGson> getGsonSignsLite() {
 		return gsonSignsLite;
 	}
 
