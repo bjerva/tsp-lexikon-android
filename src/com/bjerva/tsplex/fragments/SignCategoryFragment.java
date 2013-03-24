@@ -80,6 +80,8 @@ public class SignCategoryFragment extends ExpandableListFragment {
 
 	public void onResume(){
 		super.onResume();
+		// XXX: Should not be necessary...
+		((PagerFragment) getParentFragment()).getPager().setCatFrag(this);
 		if(index!=-1){
 			this.mList.setSelectionFromTop(index, top);
 		}
@@ -110,7 +112,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 		Collections.sort(gsonCats, new CustomComparator());
 
 		List<Map<String, String>> groupData = new ArrayList<Map<String, String>>();
-		List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
+		List<List<Map<String, SimpleGson>>> childData = new ArrayList<List<Map<String, SimpleGson>>>();
 		final ArrayList<Integer> groupSizes = new ArrayList<Integer>();
 
 		groupSizes.add(0);
@@ -130,11 +132,11 @@ public class SignCategoryFragment extends ExpandableListFragment {
 				curGroupMap.put(NAME, currCat);
 			}
 
-			List<Map<String, String>> children = new ArrayList<Map<String, String>>();
+			List<Map<String, SimpleGson>> children = new ArrayList<Map<String, SimpleGson>>();
 			do {
-				Map<String, String> curChildMap = new HashMap<String, String>();
+				Map<String, SimpleGson> curChildMap = new HashMap<String, SimpleGson>();
 				children.add(curChildMap);
-				curChildMap.put(IS_EVEN, gsonCats.get(count).getWord());
+				curChildMap.put(IS_EVEN, gsonCats.get(count));
 				count++;
 				groupCount++;
 				if(count < size){
@@ -170,7 +172,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 				ma.checkConnection();
 
 				int signPosition = groupSizes.get(groupPosition)+childPosition;
-				mGaTracker.sendEvent("ui_action", "sign_click", gsonCats.get(signPosition).getWord(), 1L);
+				mGaTracker.sendEvent("ui_action", "category_click", gsonCats.get(signPosition).getWord(), 1L);
 
 				//Update position
 				ma.loadSingleJson(gsonCats.get(signPosition).getId());

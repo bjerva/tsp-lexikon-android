@@ -51,7 +51,6 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 	private List<SimpleGson> filteredItems;
 	private SignFilter filter;
 	private SharedPreferences sharedPref;
-	private int prefSize;
 	//private Map<String, ?> favourites;
 
 	public SignAdapter(Context context, int resource, List<SimpleGson> items) {
@@ -68,8 +67,6 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
         //SharedPreferences.Editor prefEditor = sharedPref.edit();
         //prefEditor.clear();
         //prefEditor.commit();
-        
-		prefSize = sharedPref.getAll().size();
 	}
 
 	@Override
@@ -102,19 +99,17 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 					if(sharedPref.getAll().containsKey(sMod.getWord())){
 						if(!isChecked){
 					        prefEditor.remove(sMod.getWord());
-					        prefSize--;
 						}
 					} else {
 						if(isChecked){
-							prefEditor.putInt(sMod.getWord(), prefSize);
-							prefSize++;
+							prefEditor.putInt(sMod.getWord(), sMod.getId());
 						}
 					}
 			        prefEditor.commit();
 				}
 			});
 			
-			if(sharedPref.getAll().containsKey(sMod.getWord())){
+			if(sharedPref.getInt(sMod.getWord(), -1) == sMod.getId()){
 				viewHolder.star.setChecked(true);
 			} else {
 				viewHolder.star.setChecked(false);

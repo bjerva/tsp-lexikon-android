@@ -31,8 +31,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +41,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
 import com.bjerva.tsplex.SignAdapter;
@@ -83,7 +79,7 @@ public class SignListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		ma = (MainActivity) getActivity();
-		
+
 		mGaInstance = GoogleAnalytics.getInstance(ma);
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 		
@@ -107,8 +103,14 @@ public class SignListFragment extends ListFragment {
 		}
 	}
 
+	public TextView getTextHeader(){
+		return tv;
+	}
+	
 	public void onResume(){
 		super.onResume();
+		// XXX: Should not be necessary...
+		((PagerFragment) getParentFragment()).getPager().setListFrag(this);
 		if(index!=-1){
 			this.getListView().setSelectionFromTop(index, top);
 		}
@@ -126,13 +128,10 @@ public class SignListFragment extends ListFragment {
 		} catch(Exception e) {
 			Log.w("OldListPosErr", "Error when fetching old listpos");
 		}
-
-		try{
-			oldSearch = search.getText().toString();
-		} catch(Exception e) {
-			oldSearch = "";
-			Log.w("OldSearchErr", "Error when fetching old search");
-		}
+	}
+	
+	public void setOldSearch(String search){
+		oldSearch = search;
 	}
 
 	void loadSigns(){
@@ -224,39 +223,5 @@ public class SignListFragment extends ListFragment {
 		getSupportActionBar().setHomeButtonEnabled(false);
 		menu.add(0, 1, 1, R.string.search).setIcon(R.drawable.ic_action_search).setActionView(R.layout.search_view).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		super.onCreateOptionsMenu(menu, inflater);
-	}*/
-
-	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-		final Locale swedishLocale = new Locale("sv", "SE");
-		Log.i("OPTIONS", ""+item.getItemId());
-		InputMethodManager imm;
-		switch (item.getItemId()) {
-		case 1:
-			search = (EditText) item.getActionView();
-			search.requestFocus();
-			search.addTextChangedListener(new TextWatcher() {
-				public void afterTextChanged(Editable s) {
-				}
-
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				}
-
-				public void onTextChanged(CharSequence cs, int start, int before, int count) {
-					mAdapter.getFilter().filter(cs);
-					try {
-						String word = ((SimpleGson) getListView().getItemAtPosition(0)).getWord();
-						tv.setText(word.substring(0, 1).toUpperCase(swedishLocale));
-					} catch (IndexOutOfBoundsException e){
-						Log.w("IndexErr", "IndexErr after change text");
-					}
-				}
-
-			});
-			search.setText("");
-			imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-		}
-		return true;
-	}       
+	}*/       
 }

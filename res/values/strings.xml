@@ -10,6 +10,8 @@
     <string name="serv_error">Could not connect to video server.</string>
     <string name="conn_error">Internet connection not found.</string>
     <string name="edit_favs">Redigera favoriter</string>
+    <string name="collapse">Collapse</string>
+    <string name="undo_descr">Ångra borttagningen</string>
     
     <!-- Sign Detail -->
     <string name="word">Ord</string>

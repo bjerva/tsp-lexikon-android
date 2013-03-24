@@ -76,7 +76,8 @@ public class ExpandableListFragment extends Fragment
      * way to have the built-in indeterminant progress state be shown.
      */
     
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @SuppressWarnings("deprecation")
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FrameLayout root = new FrameLayout(getActivity());
 
         FrameLayout lframe = new FrameLayout(getActivity());

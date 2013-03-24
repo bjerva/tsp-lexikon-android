@@ -25,8 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,7 +40,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -60,7 +57,12 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MainActivity extends Activity {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "Main Activity";
+	
+	public static final int ID_SEARCH_BUTTON = 1;
+	public static final int ID_COLLAPSE_BUTTON = 2;
+	public static final int ID_EDIT_BUTTON = 3;
 
 	private boolean doneLoading = false;
 
