@@ -59,7 +59,7 @@ public class FavouritesFragment extends Fragment {
 	private boolean showCheckBoxes = false;
 	private ArrayList<String> toDelete;
 	private boolean deletionWasUndone;
-	
+
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
 
@@ -82,7 +82,7 @@ public class FavouritesFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); 
 		ma = (MainActivity) getActivity();
-		
+
 		mGaInstance = GoogleAnalytics.getInstance(ma);
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
@@ -113,7 +113,7 @@ public class FavouritesFragment extends Fragment {
 
 				//Update position
 				ma.loadSingleJson(sharedPref.getInt(adapter.getItem(position), -1));
-				
+
 				if(!ma.isOnline()){
 					ma.connectionError();
 					ma.hideLoader();

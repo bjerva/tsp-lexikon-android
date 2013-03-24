@@ -55,7 +55,7 @@ SimpleExpandableListAdapter {
 			List<? extends Map<String, ?>> groupData, int groupLayout,
 					String[] groupFrom, int[] groupTo,
 					List<List<Map<String, SimpleGson>>> childData,
-							int childLayout, String[] childFrom, int[] childTo) {
+					int childLayout, String[] childFrom, int[] childTo) {
 		super(context, groupData, groupLayout, groupFrom, groupTo, childData,
 				childLayout, childFrom, childTo);
 		mChildData = childData;
@@ -88,7 +88,7 @@ SimpleExpandableListAdapter {
 		final TextView v = (TextView)view.findViewById(R.id.list_child_title);
 		final CheckBox star = (CheckBox) view.findViewById(R.id.child_star);
 		final SimpleGson sMod = data.get(from[0]);
-		
+
 		if (v != null) {
 			v.setText(sMod.getWord());
 		}

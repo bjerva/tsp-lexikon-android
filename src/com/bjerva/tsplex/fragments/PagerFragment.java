@@ -47,7 +47,7 @@ import com.bjerva.tsplex.SimpleGson;
 import com.viewpagerindicator.TabPageIndicator;
 
 public class PagerFragment extends Fragment {
-	
+
 	@SuppressWarnings("unused")
 	private static final String TAG = "PagerFragment";
 	private static final String[] CONTENT = new String[] { "Tecken", "Kategorier", "Favoriter"};
@@ -68,12 +68,12 @@ public class PagerFragment extends Fragment {
 		setHasOptionsMenu(true);
 		return mView;
 	}
-	
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -164,7 +164,7 @@ public class PagerFragment extends Fragment {
 		previousFrag = mPager.getCurrentItem();
 		super.onPause();
 	}
-	
+
 	public SignAlternativesAdapter getPager(){
 		return mAdapter;
 	}
@@ -177,15 +177,15 @@ public class PagerFragment extends Fragment {
 		public SignAlternativesAdapter(Fragment fragment){
 			super(fragment.getChildFragmentManager());
 		}
-		
+
 		public void setFavFrag(FavouritesFragment fav){
 			favFrag = fav;
 		}
-		
+
 		public void setCatFrag(SignCategoryFragment cat){
 			signCatFrag = cat;
 		}
-		
+
 		public void setListFrag(SignListFragment lst){
 			signListFrag = lst;
 		}

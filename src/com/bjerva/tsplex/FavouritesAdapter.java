@@ -1,5 +1,25 @@
 package com.bjerva.tsplex;
 
+/*
+ * Copyright (C) 2013, Johannes Bjerva
+ *
+ * Permission is hereby granted, free of charge, 
+ * to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+ * to deal in the Software without restriction, including without limitation the rights to use, 
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
+ * and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included 
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,18 +37,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class FavouritesAdapter extends ArrayAdapter<String> {
-	
+
 	private static final String TAG = "FavAdapter";
 	private boolean showCheckBoxes = false;
 	private HashSet<Integer> checked;
 	private List<String> mItems;
-	
+
 	public FavouritesAdapter(Context context, int resource, int arg0, List<String> items) {
 		super(context, resource, arg0, items);
 		mItems = items;
 		checked = new HashSet<Integer>();
 	}
-	
+
 	public void showCheckBoxes(boolean status){
 		showCheckBoxes = status;
 	}
@@ -56,7 +76,7 @@ public class FavouritesAdapter extends ArrayAdapter<String> {
 
 		final String key = mItems.get(position);
 		viewHolder.title.setText(key);
-		
+
 		viewHolder.deleteBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
@@ -70,24 +90,24 @@ public class FavouritesAdapter extends ArrayAdapter<String> {
 				}
 			}
 		});
-		
+
 		if(checked.contains(position)){
 			viewHolder.deleteBox.setChecked(true);
 		} else {
 			viewHolder.deleteBox.setChecked(false);
 		}
-		
+
 		return rl;
 	}
-	
+
 	public HashSet<Integer> getChecked(){
 		return checked;
 	}
-	
+
 	public void clearChecked(){
 		checked = new HashSet<Integer>();
 	}
-	
+
 	public void updateChecked(int oldVal, int newVal){
 		//TODO: Implement
 	}

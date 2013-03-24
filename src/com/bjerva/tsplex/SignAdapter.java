@@ -64,9 +64,9 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 		}
 
 		sharedPref = ((Activity) context) .getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
-        //SharedPreferences.Editor prefEditor = sharedPref.edit();
-        //prefEditor.clear();
-        //prefEditor.commit();
+		//SharedPreferences.Editor prefEditor = sharedPref.edit();
+		//prefEditor.clear();
+		//prefEditor.commit();
 	}
 
 	@Override
@@ -95,27 +95,27 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
 					Log.d("StarClick", sMod.getWord()+" Checked: "+isChecked);
-			        SharedPreferences.Editor prefEditor = sharedPref.edit();
+					SharedPreferences.Editor prefEditor = sharedPref.edit();
 					if(sharedPref.getAll().containsKey(sMod.getWord())){
 						if(!isChecked){
-					        prefEditor.remove(sMod.getWord());
+							prefEditor.remove(sMod.getWord());
 						}
 					} else {
 						if(isChecked){
 							prefEditor.putInt(sMod.getWord(), sMod.getId());
 						}
 					}
-			        prefEditor.commit();
+					prefEditor.commit();
 				}
 			});
-			
+
 			if(sharedPref.getInt(sMod.getWord(), -1) == sMod.getId()){
 				viewHolder.star.setChecked(true);
 			} else {
 				viewHolder.star.setChecked(false);
 			}
 		}
-		
+
 		return rl;
 	}
 
