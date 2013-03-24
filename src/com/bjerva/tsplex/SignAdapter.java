@@ -157,7 +157,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			}
 			else
 			{
-				Log.i("SignAdapter", "Refilling: "+originalItems.size());
+				Log.d("SignAdapter", "Refilling: "+originalItems.size());
 				synchronized(this)
 				{
 					result.values = originalItems;
@@ -175,7 +175,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			filteredItems = (ArrayList<SimpleGson>) results.values;
 			notifyDataSetChanged();
 			clear();
-			Log.i("SignAdapter", "Filter count: "+filteredItems.size());
+			Log.d("SignAdapter", "Filter count: "+filteredItems.size());
 			int size = filteredItems.size();
 			for(int i = 0, l = size; i < l; i++)
 				add(filteredItems.get(i));
