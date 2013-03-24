@@ -28,6 +28,7 @@
         android:textColor="@color/cell_separator"
         android:textIsSelectable="false" />
 
+    
     <CheckBox
         android:id="@+id/star"
         style="?android:attr/starStyle"
@@ -36,7 +37,9 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:focusable="false"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
         android:layout_gravity="center_vertical|right"
-        android:layout_marginRight="12dip" />
+        android:layout_marginRight="24dip" />
 
 </RelativeLayout>

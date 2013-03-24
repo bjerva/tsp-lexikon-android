@@ -26,7 +26,9 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical|right"
         android:padding="8dip"
-        android:layout_marginRight="20dip"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        android:layout_marginRight="24dip"
         android:focusable="false" />
 
 </RelativeLayout>
