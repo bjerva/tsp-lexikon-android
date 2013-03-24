@@ -139,6 +139,7 @@ public class PagerFragment extends Fragment {
 			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 			break;
 		case MainActivity.ID_COLLAPSE_BUTTON:
+			((SignCategoryFragment) mAdapter.getItem(1)).collapseaAll();
 			break;
 		case MainActivity.ID_EDIT_BUTTON:
 			FavouritesFragment favFrag = (FavouritesFragment) mAdapter.getItem(2);

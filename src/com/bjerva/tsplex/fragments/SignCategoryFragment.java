@@ -118,6 +118,13 @@ public class SignCategoryFragment extends ExpandableListFragment {
 		}
 	}
 
+	public void collapseaAll(){
+		int count =  mAdapter.getGroupCount();
+		for (int i = 0; i <count ; i++){
+			getExpandableListView().collapseGroup(i);
+		}
+	}
+
 	private void loadCategories(){
 		if(ma == null){
 			Log.d(TAG, "Null activity");
