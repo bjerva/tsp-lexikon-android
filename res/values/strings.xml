@@ -12,6 +12,9 @@
     <string name="edit_favs">Redigera favoriter</string>
     <string name="collapse">Collapse</string>
     <string name="undo_descr">Ångra borttagningen</string>
+    <string name="favourite">Lägg till i favoriter</string>
+    <string name="no_favourites">Du har inga tecken bland dina favoriter. 
+        \nKlicka på en stjärna för att lägga till några!</string>
     
     <!-- Sign Detail -->
     <string name="word">Ord</string>

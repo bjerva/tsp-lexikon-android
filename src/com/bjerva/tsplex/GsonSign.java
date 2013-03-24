@@ -52,6 +52,10 @@ public class GsonSign{
 	public String getDescription() {
 		return description;
 	}
+	
+	public int getId() {
+		return id;
+	}
 
 	private List<Example> examples;
 	private List<Version> versions;
@@ -66,6 +70,9 @@ public class GsonSign{
 	
 	@SerializedName("description")
 	private String description;
+	
+	@SerializedName("id")
+	private int id;
 	
 	public class Example {
 		@SerializedName("video_url")

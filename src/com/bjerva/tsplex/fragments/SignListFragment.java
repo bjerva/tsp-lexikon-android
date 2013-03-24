@@ -91,15 +91,13 @@ public class SignListFragment extends ListFragment {
 			final Runnable r = new Runnable(){
 			    public void run(){
 			    	if(ma.isDoneLoading()){
-			    		Log.d("Runnable", "Loading successful!");
 			    		loadSigns();
 			    	} else {
-				    	Log.d("Runnable", "Loading failed...");
-			    		handler.postDelayed(this, 250);
+			    		handler.postDelayed(this, 150);
 			    	}
 			    }
 			};
-			handler.postDelayed(r, 1500);
+			handler.postDelayed(r, 1000);
 		}
 	}
 
@@ -177,7 +175,7 @@ public class SignListFragment extends ListFragment {
 				ma.showLoader();
 				ma.checkConnection();
 
-				mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), 1L);
+				mGaTracker.sendEvent("sign", "list_click", tmpSigns.get(position).getWord(), 1L);
 
 				//Update position
 				ma.loadSingleJson(tmpSigns.get(position).getId());

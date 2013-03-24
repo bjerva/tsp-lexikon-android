@@ -23,7 +23,9 @@ package com.bjerva.tsplex.fragments;
 import java.util.List;
 
 import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -43,13 +45,20 @@ import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.bjerva.tsplex.GsonSign;
 import com.bjerva.tsplex.GsonSign.Word;
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
 import com.bjerva.tsplex.SeparatedListAdapter;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 
 public class SignDetailFragment extends Fragment {
+
+	private static final String TAG = "DetailFragment";
 
 	private View myView;
 	private VideoView myVideoView;
@@ -57,6 +66,10 @@ public class SignDetailFragment extends Fragment {
 	private String lastPlayed = "";
 	private boolean wasDisconnected = false;
 	private boolean firstErr;
+	private Menu mMenu = null;
+	private GsonSign currSign;
+	private Tracker mGaTracker;
+	private GoogleAnalytics mGaInstance;
 
 	VideoView getVideoView(){
 		return myVideoView;
@@ -66,6 +79,7 @@ public class SignDetailFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.sign_detail_fragment, container, false);
+		setHasOptionsMenu(true);
 		firstErr = true;
 		return myView;
 	}
@@ -75,27 +89,72 @@ public class SignDetailFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		ma = (MainActivity) getActivity();
 
+		mGaInstance = GoogleAnalytics.getInstance(ma);
+		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
+
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
 		myVideoView.setZOrderOnTop(true);
 
-		GsonSign currSign = ma.getCurrentSign();
+		currSign = ma.getCurrentSign();
+		ma.onPrepareOptionsMenu(mMenu);  // Refresh the options menu now that we have our sign
+
 		if(currSign == null){
-			Log.w("NULL SIGN", "NULL SIGN");
+			Log.w(TAG, "NULL SIGN");
 		} else {
 			startUpHelper(currSign);
 		}
 	}
 
-	public void onResume(){
-		super.onResume();
-		/*
-		SignListFragment listFrag = (SignListFragment) ma.getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
-
-		if (listFrag == null) {
-			ma.getSupportActionBar().hide();
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setHomeButtonEnabled(false);
+		
+		if(mMenu == null){
+			mMenu = menu;
+			mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_off).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		}
-		 */
+		if(ma != null){
+			SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			if(sharedPref.contains(currSign.getWords().get(0).getWord())){
+				Log.d(TAG, "Setting on");
+				mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_on).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			} else {
+				Log.d(TAG, "Setting off");
+				mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_off).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			}
+		}
+		
+		super.onCreateOptionsMenu(mMenu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		//TODO: Clean this up
+		switch (item.getItemId()) {
+		case MainActivity.ID_FAV_BUTTON:
+			SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			SharedPreferences.Editor prefEditor = sharedPref.edit();
+			if(!sharedPref.contains(currSign.getWords().get(0).getWord())){
+				Log.d(TAG, "Adding");
+				prefEditor.putInt(currSign.getWords().get(0).getWord(), currSign.getId());
+			} else {
+				Log.d(TAG, "Removing");
+				prefEditor.remove(currSign.getWords().get(0).getWord());
+			}
+			prefEditor.commit();
+			mMenu.clear();
+			if(sharedPref.contains(currSign.getWords().get(0).getWord())){
+				Log.d(TAG, "Setting on");
+				mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_on).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			} else {
+				Log.d(TAG, "Setting off");
+				mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_off).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			}
+			ma.onPrepareOptionsMenu(mMenu);
+			break;
+		}
+		return true;
 	}
 
 	void startUpHelper(final GsonSign currSign){
@@ -184,6 +243,7 @@ public class SignDetailFragment extends Fragment {
 				} else if(position < 5+currSign.getExamples().size()){
 					url = currSign.getExamples().get(position-5).getVideo_url();
 					Log.i("VideoView", "Play example: "+url);
+					mGaTracker.sendEvent("example", "favourite_click", currSign.getExamples().get(position-5).getDescription(), 1L);
 					if(url.equals(lastPlayed)){
 						replay();
 					} else {
@@ -193,6 +253,7 @@ public class SignDetailFragment extends Fragment {
 				} else if(currSign.getExamples().size() > 0 && position < 6+currSign.getVersions().size()+currSign.getExamples().size()){
 					url = currSign.getVersions().get(position-currSign.getExamples().size()-6).getVideo_url();
 					Log.i("VideoView", "Play variant: "+url);
+					mGaTracker.sendEvent("example", "variant_click", currSign.getVersions().get(position-currSign.getExamples().size()-6).getDescription(), 1L);
 					if(url.equals(lastPlayed)){
 						replay();
 					} else {
@@ -242,7 +303,7 @@ public class SignDetailFragment extends Fragment {
 				ma.hideLoader();
 			}
 		});
-		
+
 		playNormal();
 	}
 

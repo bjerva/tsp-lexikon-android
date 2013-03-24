@@ -49,6 +49,8 @@ import com.bjerva.tsplex.fragments.PagerFragment;
 import com.bjerva.tsplex.fragments.SignDetailFragment;
 import com.bjerva.tsplex.fragments.SignListFragment;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -63,6 +65,7 @@ public class MainActivity extends Activity {
 	public static final int ID_SEARCH_BUTTON = 1;
 	public static final int ID_COLLAPSE_BUTTON = 2;
 	public static final int ID_EDIT_BUTTON = 3;
+	public static final int ID_FAV_BUTTON = 4;
 
 	private boolean doneLoading = false;
 
@@ -73,8 +76,10 @@ public class MainActivity extends Activity {
 	private ArrayList<SimpleGson> gsonSignsLite = null;
 	private GsonSign currentSign = null;
 
+	private Tracker mGaTracker;
+	private GoogleAnalytics mGaInstance;
+
 	private boolean isOnline;
-	private Thread connectionThread;
 
 	@Override
 	public void onStart() {
@@ -91,6 +96,9 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(new Bundle()); //XXX: Simple ugly fix.
+		
+		mGaInstance = GoogleAnalytics.getInstance(this);
+		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
 		setContentView(R.layout.activity_sign_listing);
 
@@ -318,7 +326,8 @@ public class MainActivity extends Activity {
 	}
 
 	private class LoadHelper extends AsyncTask<String, Void, Void>{
-
+		private long timeConsumed;
+		
 		@Override
 		protected Void doInBackground(String... url) {
 			try {
@@ -338,6 +347,7 @@ public class MainActivity extends Activity {
 		protected void onPreExecute(){
 			//Show loading spinner
 			Log.d("AsyncDBLoad", "Loading local signs");
+			timeConsumed = System.currentTimeMillis();
 			showLoader();
 			super.onPreExecute();
 		}
@@ -346,6 +356,8 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(Void result){
 			super.onPostExecute(result);
 			doneLoading = true;
+			timeConsumed = System.currentTimeMillis()-timeConsumed;
+			mGaTracker.sendTiming("LOAD", timeConsumed, "Local loading", "gson");
 			hideLoader();
 			Log.d("AsyncDBLoad", "Loaded local signs");
 		}

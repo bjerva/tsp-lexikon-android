@@ -199,7 +199,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 				ma.checkConnection();
 
 				int signPosition = groupSizes.get(groupPosition)+childPosition;
-				mGaTracker.sendEvent("ui_action", "category_click", gsonCats.get(signPosition).getWord(), 1L);
+				mGaTracker.sendEvent("sign", "category_click", gsonCats.get(signPosition).getWord(), 1L);
 
 				//Update position
 				ma.loadSingleJson(gsonCats.get(signPosition).getId());

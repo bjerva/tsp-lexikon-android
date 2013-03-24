@@ -21,7 +21,8 @@ package com.bjerva.tsplex.fragments;
  */
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
@@ -29,7 +30,6 @@ import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.preference.SharedPreferences;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -57,8 +57,7 @@ public class FavouritesFragment extends Fragment {
 	private MainActivity ma;
 	private SharedPreferences sharedPref;
 	private boolean showCheckBoxes = false;
-	private ArrayList<String> toDelete;
-	private boolean deletionWasUndone;
+	private HashMap<String, Integer> toDelete;
 
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
@@ -99,6 +98,7 @@ public class FavouritesFragment extends Fragment {
 			list.add((String) key);
 		}
 
+		Collections.sort(list);
 		adapter = new FavouritesAdapter(ma, R.layout.list_handle, R.id.list_drag_title, list);
 		lv.setAdapter(adapter);
 
@@ -109,7 +109,7 @@ public class FavouritesFragment extends Fragment {
 				ma.showLoader();
 				ma.checkConnection();
 
-				mGaTracker.sendEvent("ui_action", "favourite_click", adapter.getItem(position), 1L);
+				mGaTracker.sendEvent("sign", "favourite_click", adapter.getItem(position), 1L);
 
 				//Update position
 				ma.loadSingleJson(sharedPref.getInt(adapter.getItem(position), -1));
@@ -137,11 +137,6 @@ public class FavouritesFragment extends Fragment {
 		});
 	}
 
-	public void onPause(){
-		Log.w(TAG, "PAUSING");
-		super.onPause();
-	}
-
 	public void notifyChange(){
 		Log.d(TAG, "Preparing change");
 		if(adapter != null){
@@ -152,6 +147,7 @@ public class FavouritesFragment extends Fragment {
 			for(Object key : sharedPref.getAll().keySet()){
 				list.add((String) key);
 			}
+			Collections.sort(list);
 			adapter = new FavouritesAdapter(ma, R.layout.list_handle, R.id.list_drag_title, list);
 			lv.setAdapter(adapter);
 		}
@@ -161,57 +157,34 @@ public class FavouritesFragment extends Fragment {
 		if(adapter.getChecked().size() == 0){
 			return;
 		}
-		toDelete = new ArrayList<String>(adapter.getChecked().size());
+		toDelete = new HashMap<String, Integer>(adapter.getChecked().size());
+
+		sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 		for(Integer i : adapter.getChecked()){
 			String entry = adapter.getItem(i);
-			toDelete.add(entry);
+			toDelete.put(entry, sharedPref.getInt(entry, -1));
 		}
-		for(String entry : toDelete){
+
+		for(String entry : toDelete.keySet()){
 			adapter.remove(entry);
+			SharedPreferences.Editor prefEditor = sharedPref.edit();
+			prefEditor.remove(entry);
+			prefEditor.commit();
 		}
 		adapter.clearChecked();
-		deletionWasUndone = false;
 		UndoBarController.show(getActivity(), getString(R.string.undo_descr), mUndoListener);
-		handleDeletion(5000);
-	}
-
-	/**
-	 * Handle deletion of items appropriately.
-	 * I.e. no deletion if the undo button is pressed.
-	 * TODO: Consider inverting the behaviour - i.e. restore if undo...
-	 * 
-	 * @param delay - Time before deletion is handled (ms)
-	 */
-	private void handleDeletion(int delay){
-		Handler deletionHandler = new Handler();
-		Runnable r = new Runnable(){
-			@Override
-			public void run() {
-				if(deletionWasUndone){
-					return;
-				}
-
-				Map<String, ?> items = sharedPref.getAll();
-				for(String entry : toDelete){
-					if(items.containsKey(entry)){
-						SharedPreferences.Editor prefEditor = sharedPref.edit();
-						prefEditor.remove(entry);
-						prefEditor.commit();
-					}
-				}
-			}
-		};
-		deletionHandler.postDelayed(r, delay);
 	}
 
 	private UndoListener mUndoListener = new UndoListener(){
 		@Override
 		public void onUndo(Parcelable token) {
-			deletionWasUndone = true;
-			for(String entry : toDelete){
-				adapter.add(entry);
+			for(String entry : toDelete.keySet()){
+				SharedPreferences.Editor prefEditor = sharedPref.edit();
+				prefEditor.putInt(entry, toDelete.get(entry));
+				prefEditor.commit();
 			}
 			toDelete.clear();
+			notifyChange();
 		}
 	};
 
@@ -223,8 +196,12 @@ public class FavouritesFragment extends Fragment {
 		lv.setAdapter(adapter);
 	}
 
-	public boolean chechBoxesVisible(){
+	public boolean checkBoxesVisible(){
 		return showCheckBoxes;
+	}
+	
+	public FavouritesAdapter getAdapter(){
+		return adapter;
 	}
 
 	private DragSortListView.DropListener onDrop =

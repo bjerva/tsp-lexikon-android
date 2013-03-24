@@ -32,6 +32,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="12dip"
         android:background="@drawable/drag"
+        android:alpha="0.0"
         android:scaleY="0.8" />
 
 </RelativeLayout>

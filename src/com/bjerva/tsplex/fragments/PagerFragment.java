@@ -46,6 +46,9 @@ import com.bjerva.tsplex.R;
 import com.bjerva.tsplex.SimpleGson;
 import com.viewpagerindicator.TabPageIndicator;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class PagerFragment extends Fragment {
 
 	@SuppressWarnings("unused")
@@ -144,7 +147,7 @@ public class PagerFragment extends Fragment {
 		case MainActivity.ID_EDIT_BUTTON:
 			FavouritesFragment favFrag = (FavouritesFragment) mAdapter.getItem(2);
 			mMenu.clear();
-			if(!favFrag.chechBoxesVisible()){
+			if(!favFrag.checkBoxesVisible()){
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.recyclebin).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 			} else {
 				favFrag.deleteChecked();
@@ -236,7 +239,11 @@ public class PagerFragment extends Fragment {
 				ma.onPrepareOptionsMenu(mMenu);
 			} else if(position==2){
 				// Update favourites
-				((FavouritesFragment)mAdapter.getItem(2)).notifyChange();
+				FavouritesFragment favFrag = (FavouritesFragment) mAdapter.getItem(2);
+				favFrag.notifyChange();
+				if(favFrag.getAdapter() != null && favFrag.getAdapter().getCount() == 0){
+					Crouton.makeText(getActivity(), getString(R.string.no_favourites), Style.INFO).show();
+				}
 				mMenu.clear();
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.edit_query).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 				ma.onPrepareOptionsMenu(mMenu);
