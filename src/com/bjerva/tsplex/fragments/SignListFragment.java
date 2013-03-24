@@ -75,7 +75,7 @@ public class SignListFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.sign_list_fragment, container, false);
-		setHasOptionsMenu(true);
+		//setHasOptionsMenu(true);
 		return myView;
 	}
 
@@ -176,6 +176,7 @@ public class SignListFragment extends ListFragment {
 			public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id){
 				Log.d(TAG, "CLICKED");
 				ma.showLoader();
+				ma.checkConnection();
 
 				mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), 1L);
 
@@ -186,6 +187,12 @@ public class SignListFragment extends ListFragment {
 				if(search != null){
 					InputMethodManager imm = (InputMethodManager) ma.getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+				}
+
+				if(!ma.isOnline()){
+					ma.connectionError();
+					ma.hideLoader();
+					return;
 				}
 
 				if(ma.getDetFragment() == null){
@@ -210,13 +217,14 @@ public class SignListFragment extends ListFragment {
 		return mAdapter;
 	}
 
+	/*
 	@Override
 	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, MenuInflater inflater) {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		getSupportActionBar().setHomeButtonEnabled(false);
 		menu.add(0, 1, 1, R.string.search).setIcon(R.drawable.ic_action_search).setActionView(R.layout.search_view).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		super.onCreateOptionsMenu(menu, inflater);
-	}
+	}*/
 
 	@Override
 	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {

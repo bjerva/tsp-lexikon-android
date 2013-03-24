@@ -44,13 +44,10 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.bjerva.tsplex.GsonSign;
+import com.bjerva.tsplex.GsonSign.Word;
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
 import com.bjerva.tsplex.SeparatedListAdapter;
-import com.bjerva.tsplex.GsonSign.Word;
-import com.bjerva.tsplex.R.id;
-import com.bjerva.tsplex.R.layout;
-import com.bjerva.tsplex.R.string;
 
 public class SignDetailFragment extends Fragment {
 
@@ -231,7 +228,7 @@ public class SignDetailFragment extends Fragment {
 				}
 				ma.hideLoader();
 				if(arg2 == -1004){
-					ma.networkError();
+					ma.serverError();
 				} else {
 					ma.errorPlayingVideo();
 				}
@@ -245,15 +242,7 @@ public class SignDetailFragment extends Fragment {
 				ma.hideLoader();
 			}
 		});
-
-		ConnectivityManager connectivityManager = (ConnectivityManager) ma.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-		if(activeNetworkInfo == null){
-			//TODO: Maybe check for handset
-			wasDisconnected = true;
-			ma.hideLoader();
-			ma.networkError();
-		}
+		
 		playNormal();
 	}
 

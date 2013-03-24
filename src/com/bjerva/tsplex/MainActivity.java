@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,10 +35,14 @@ import org.holoeverywhere.app.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -55,7 +61,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class MainActivity extends Activity {
 
 	private static final String TAG = "Main Activity";
-	
+
 	private boolean doneLoading = false;
 
 	private SignListFragment listFragment;
@@ -64,6 +70,9 @@ public class MainActivity extends Activity {
 
 	private ArrayList<SimpleGson> gsonSignsLite = null;
 	private GsonSign currentSign = null;
+
+	private boolean isOnline;
+	private Thread connectionThread;
 
 	@Override
 	public void onStart() {
@@ -103,10 +112,10 @@ public class MainActivity extends Activity {
 
 		//Load local json
 		new LoadHelper().execute();
-        
+
 		getSupportFragmentManager().beginTransaction().add(
 				R.id.fragment_container, new PagerFragment()).commit();
-        
+
 		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
 			detFragment = new SignDetailFragment();
 			getSupportFragmentManager().beginTransaction().add(
@@ -126,18 +135,13 @@ public class MainActivity extends Activity {
 		}
 		 */
 	}
-	
+
 	public boolean isDoneLoading(){
 		return doneLoading;
 	}
-
+	
 	public void onBackPressed(){
-		/*SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-			.findFragmentById(R.id.list_frag);
-		if(listFrag == null){
-			detFragment = null;
-			//getSupportActionBar().show();
-		}*/
+		Crouton.cancelAllCroutons();
 		super.onBackPressed();
 	}
 
@@ -158,7 +162,7 @@ public class MainActivity extends Activity {
 		}
 
 		SignListFragment listFrag = null;//(SignListFragment) getSupportFragmentManager()
-				//.findFragmentById(R.id.list_frag);
+		//.findFragmentById(R.id.list_frag);
 
 		if (listFrag != null) {
 			//Tablet
@@ -222,16 +226,25 @@ public class MainActivity extends Activity {
 		pbarDialog.setCancelable(false);
 		pbarDialog.show();
 	}
+	
+	public void onDestroy(){
+		Crouton.cancelAllCroutons();
+		super.onDestroy();
+	}
 
 	public void hideLoader(){
 		pbarDialog.dismiss();
 	}
 
-	public void errorPlayingVideo() {
+	public void errorPlayingVideo(){
 		Crouton.makeText(this, getString(R.string.play_error), Style.ALERT).show();
 	}
 
-	public void networkError() {
+	public void serverError(){
+		Crouton.makeText(this, getString(R.string.serv_error), Style.ALERT).show();
+	}
+
+	public void connectionError(){
 		Crouton.makeText(this, getString(R.string.conn_error), Style.ALERT).show();
 	}
 
@@ -262,6 +275,45 @@ public class MainActivity extends Activity {
 		Log.i("Load Single GSON", "Loaded!");
 	}
 
+	public void checkConnection() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+		// Check that we have connectivity
+		if (netInfo != null && netInfo.isConnected()) {
+			isOnline = true;
+			/* 
+			// Make sure we also have proper internet connectivity (in case of e.g. VPN)
+			connectionThread = new Thread(){
+				@Override
+				public void run(){
+					try {
+						InetAddress.getByName("google.com").isReachable(1000);
+						isOnline = true;
+						return;
+					} catch (UnknownHostException e){
+						isOnline = false;
+						return;
+					} catch (IOException e){
+						isOnline = false;
+						return;
+					}
+				}
+			};
+			connectionThread.start();
+			*/
+		} else {
+			isOnline = false;
+		}
+	}
+	
+	public boolean isOnline(){
+		/*
+		try {
+			connectionThread.join();
+		} catch (InterruptedException e) {}*/
+		return isOnline;
+	}
 
 	private class LoadHelper extends AsyncTask<String, Void, Void>{
 

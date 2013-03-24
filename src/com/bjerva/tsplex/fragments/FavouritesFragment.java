@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.R.id;
-import com.bjerva.tsplex.R.layout;
 import com.mobeta.android.dslv.DragSortListView;
 
 public class FavouritesFragment extends Fragment {
@@ -29,15 +27,16 @@ public class FavouritesFragment extends Fragment {
 	private ArrayList<String> list;
 	private DragSortListView lv;
 	private MainActivity ma;
+	private SharedPreferences sharedPref;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.favourites_fragment, container, false);
-		setHasOptionsMenu(true);
+		//setHasOptionsMenu(true);
 		return myView;
 	}
-	
+
 	public void onResume(){
 		super.onResume();
 		Log.d(TAG, "Resuming");
@@ -57,7 +56,7 @@ public class FavouritesFragment extends Fragment {
 
 		list = new ArrayList<String>();
 
-		SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 		for(String key : sharedPref.getAll().keySet()){
 			list.add(key);
 		}
@@ -70,9 +69,9 @@ public class FavouritesFragment extends Fragment {
 		Log.d(TAG, "Preparing change");
 		if(adapter != null){
 			Log.d(TAG, "Getting shared");
-			SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 			Set<String> keys = sharedPref.getAll().keySet();
-			if(keys.size() <= adapter.getCount()){
+			if(keys.size() == adapter.getCount()){
 				Log.d(TAG, "Return");
 				return;
 			}
@@ -102,6 +101,11 @@ public class FavouritesFragment extends Fragment {
 			new DragSortListView.RemoveListener() {
 		@Override
 		public void remove(int which) {
+			if(sharedPref.getAll().containsKey(adapter.getItem(which))){
+				SharedPreferences.Editor prefEditor = sharedPref.edit();
+				prefEditor.remove(adapter.getItem(which));
+				prefEditor.commit();
+			}
 			adapter.remove(adapter.getItem(which));
 		}
 	};

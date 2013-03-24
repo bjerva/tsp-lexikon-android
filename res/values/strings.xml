@@ -7,7 +7,9 @@
     <string name="sign_load">Hämtar tecken &#8230;</string>
     <string name="list_load">Laddar sparad teckeninfo &#8230;</string>
     <string name="play_error">Video could not be played.</string>
-    <string name="conn_error">Could not connect to video server.</string>
+    <string name="serv_error">Could not connect to video server.</string>
+    <string name="conn_error">Internet connection not found.</string>
+    <string name="edit_favs">Redigera favoriter</string>
     
     <!-- Sign Detail -->
     <string name="word">Ord</string>

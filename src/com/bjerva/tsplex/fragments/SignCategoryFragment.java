@@ -18,14 +18,11 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
-import android.widget.SimpleExpandableListAdapter;
 
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.SimpleExpandableSignListAdapter;
 import com.bjerva.tsplex.SimpleGson;
-import com.bjerva.tsplex.R.anim;
-import com.bjerva.tsplex.R.id;
-import com.bjerva.tsplex.R.layout;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
@@ -40,7 +37,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
-	
+
 	private ArrayList<SimpleGson> gsonCats;
 
 	private int index = -1;
@@ -115,7 +112,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 		List<Map<String, String>> groupData = new ArrayList<Map<String, String>>();
 		List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
 		final ArrayList<Integer> groupSizes = new ArrayList<Integer>();
-		
+
 		groupSizes.add(0);
 		int count = 0;
 		int size = gsonCats.size();
@@ -132,7 +129,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 			} else {
 				curGroupMap.put(NAME, currCat);
 			}
-			
+
 			List<Map<String, String>> children = new ArrayList<Map<String, String>>();
 			do {
 				Map<String, String> curChildMap = new HashMap<String, String>();
@@ -150,7 +147,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 		}
 
 		// Set up our adapter
-		mAdapter = new SimpleExpandableListAdapter(
+		mAdapter = new SimpleExpandableSignListAdapter(
 				getActivity(),
 				groupData,
 				android.R.layout.simple_expandable_list_item_1,
@@ -163,55 +160,26 @@ public class SignCategoryFragment extends ExpandableListFragment {
 				);
 
 		setListAdapter(mAdapter);
-		
+
 		//Set listener
 		getExpandableListView().setOnChildClickListener(new OnChildClickListener() {
-			/*
-			@Override
-			public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id){
-				
-				ma.showLoader();
-
-				mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), System.currentTimeMillis());
-
-				//Update position
-				ma.loadSingleJson(tmpSigns.get(position).getId());
-
-				if(ma.getDetFragment() == null){
-					//ma.getSupportActionBar().hide();
-					//Create detail fragment
-					SignDetailFragment newFragment = new SignDetailFragment();
-
-					//Add to container
-					FragmentTransaction transaction = ma.getSupportFragmentManager().beginTransaction();
-					transaction.setCustomAnimations(R.anim.slide_fragment_in_on_replace, R.anim.slide_fragment_out_on_replace);
-					//transaction.replace(R.id.fragment_container, newFragment);
-					transaction.addToBackStack(null);
-					transaction.commit();
-				} else {
-					ma.getDetFragment().startUpHelper(ma.getCurrentSign());
-				}
-				
-			}*/
-			/*
-			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id) {
-				SimpleGson clickedSign = (SimpleGson) getExpandableListView().getItemAtPosition(childPosition);
-				Log.d(TAG, clickedSign.getWord());
-				//mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), 1L);
-				return false;
-			}*/
-
 			@Override
 			public boolean onChildClick(android.widget.ExpandableListView parent, View v, 
 					int groupPosition, int childPosition, long id) {
 				ma.showLoader();
-				
+				ma.checkConnection();
+
 				int signPosition = groupSizes.get(groupPosition)+childPosition;
 				mGaTracker.sendEvent("ui_action", "sign_click", gsonCats.get(signPosition).getWord(), 1L);
-				
+
 				//Update position
 				ma.loadSingleJson(gsonCats.get(signPosition).getId());
+
+				if(!ma.isOnline()){
+					ma.connectionError();
+					ma.hideLoader();
+					return true;
+				}
 
 				SignDetailFragment newFragment = new SignDetailFragment();
 
@@ -221,19 +189,19 @@ public class SignCategoryFragment extends ExpandableListFragment {
 				transaction.replace(R.id.fragment_container, newFragment);
 				transaction.addToBackStack(null);
 				transaction.commit();
-				return false;
+				return true;
 			}
 		});
-		
+
 		getExpandableListView().setFastScrollEnabled(true);
 	}
-	
+
 	@Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(ListView l, View v, int position, long id) {
 		SimpleGson clickedSign = (SimpleGson) getExpandableListView().getItemAtPosition(position);
 		Log.d(TAG, clickedSign.getWord());
 		//mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), 1L);
-    }
+	}
 
 	private class CustomComparator implements Comparator<SimpleGson>  {
 		@Override

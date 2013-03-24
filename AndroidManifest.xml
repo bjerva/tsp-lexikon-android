@@ -10,6 +10,19 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    
+    <!-- Temporary restriction for 0.4.0 -->
+    <compatible-screens>
+	    <screen android:screenSize="small" android:screenDensity="ldpi" />
+	    <screen android:screenSize="small" android:screenDensity="mdpi" />
+	    <screen android:screenSize="small" android:screenDensity="hdpi" />
+	    <screen android:screenSize="small" android:screenDensity="xhdpi" />
+	
+	    <screen android:screenSize="normal" android:screenDensity="ldpi" />
+	    <screen android:screenSize="normal" android:screenDensity="mdpi" />
+	    <screen android:screenSize="normal" android:screenDensity="hdpi" />
+	    <screen android:screenSize="normal" android:screenDensity="xhdpi" />
+	</compatible-screens>
 
     <application
         android:allowBackup="true"
