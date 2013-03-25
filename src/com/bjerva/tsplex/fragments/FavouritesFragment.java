@@ -22,6 +22,7 @@ package com.bjerva.tsplex.fragments;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.holoeverywhere.LayoutInflater;
@@ -98,7 +99,7 @@ public class FavouritesFragment extends Fragment {
 			list.add((String) key);
 		}
 
-		Collections.sort(list);
+		Collections.sort(list, new CaseIgnoreComparator());
 		adapter = new FavouritesAdapter(ma, R.layout.list_handle, R.id.list_drag_title, list);
 		lv.setAdapter(adapter);
 
@@ -147,9 +148,11 @@ public class FavouritesFragment extends Fragment {
 			for(Object key : sharedPref.getAll().keySet()){
 				list.add((String) key);
 			}
-			Collections.sort(list);
+			Collections.sort(list, new CaseIgnoreComparator());
 			adapter = new FavouritesAdapter(ma, R.layout.list_handle, R.id.list_drag_title, list);
 			lv.setAdapter(adapter);
+		} else {
+			Log.e(TAG, "Null adapter!");
 		}
 	}
 
@@ -169,7 +172,7 @@ public class FavouritesFragment extends Fragment {
 			adapter.remove(entry);
 			SharedPreferences.Editor prefEditor = sharedPref.edit();
 			prefEditor.remove(entry);
-			prefEditor.commit();
+			prefEditor.apply();
 		}
 		adapter.clearChecked();
 		UndoBarController.show(getActivity(), getString(R.string.undo_descr), mUndoListener);
@@ -181,7 +184,7 @@ public class FavouritesFragment extends Fragment {
 			for(String entry : toDelete.keySet()){
 				SharedPreferences.Editor prefEditor = sharedPref.edit();
 				prefEditor.putInt(entry, toDelete.get(entry));
-				prefEditor.commit();
+				prefEditor.apply();
 			}
 			toDelete.clear();
 			notifyChange();
@@ -241,4 +244,11 @@ public class FavouritesFragment extends Fragment {
 			}
 		}
 	};
+	
+	private class CaseIgnoreComparator implements Comparator<String>  {
+		@Override
+		public int compare(String o1, String o2) {
+			return o1.compareToIgnoreCase(o2);
+		}
+	}
 }

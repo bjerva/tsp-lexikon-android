@@ -142,7 +142,7 @@ public class SignDetailFragment extends Fragment {
 				Log.d(TAG, "Removing");
 				prefEditor.remove(currSign.getWords().get(0).getWord());
 			}
-			prefEditor.commit();
+			prefEditor.apply();
 			mMenu.clear();
 			if(sharedPref.contains(currSign.getWords().get(0).getWord())){
 				Log.d(TAG, "Setting on");

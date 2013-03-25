@@ -27,12 +27,13 @@
 
     <ImageView
         android:id="@id/drag_handle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:layout_height="0dip"
         android:layout_alignParentRight="true"
         android:layout_marginRight="12dip"
         android:background="@drawable/drag"
         android:alpha="0.0"
-        android:scaleY="0.8" />
+        android:scaleX="0.0"
+        android:scaleY="0.0" />
 
 </RelativeLayout>

@@ -108,7 +108,7 @@ SimpleExpandableListAdapter {
 							prefEditor.putInt(sMod.getWord(), sMod.getId());
 						}
 					}
-					prefEditor.commit();
+					prefEditor.apply();
 				}
 			});
 

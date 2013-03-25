@@ -105,7 +105,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 							prefEditor.putInt(sMod.getWord(), sMod.getId());
 						}
 					}
-					prefEditor.commit();
+					prefEditor.apply();
 				}
 			});
 

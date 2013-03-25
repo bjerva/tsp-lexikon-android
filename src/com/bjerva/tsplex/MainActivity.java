@@ -129,7 +129,7 @@ public class MainActivity extends Activity {
 		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
 			detFragment = new SignDetailFragment();
 			getSupportFragmentManager().beginTransaction().add(
-					R.id.details_container, detFragment).commit();
+					R.id.sign_detail, detFragment).commit();
 		}
 		/*
 		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
@@ -171,15 +171,13 @@ public class MainActivity extends Activity {
 			break;
 		}
 
-		SignListFragment listFrag = null;//(SignListFragment) getSupportFragmentManager()
-		//.findFragmentById(R.id.list_frag);
 
-		if (listFrag != null) {
+		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
 			//Tablet
 			showLoader();
 			detFragment = new SignDetailFragment();
 			getSupportFragmentManager().beginTransaction().replace(
-					R.id.details_container, detFragment).commit();
+					R.id.sign_detail, detFragment).commit();
 			hideLoader();
 		} /*else {
 			//Handset

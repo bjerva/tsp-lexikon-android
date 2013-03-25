@@ -19,7 +19,7 @@
 
     <CheckBox
         android:id="@+id/child_star"
-        style="?android:attr/starStyle"
+        android:button="@drawable/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
