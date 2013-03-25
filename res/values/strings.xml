@@ -4,7 +4,7 @@
     
     <!-- Main Activity -->
     <string name="search">Sök efter tecken &#8230;</string>
-    <string name="sign_load">Hämtar tecken &#8230;</string>
+    <string name="sign_load">Hämtar video &#8230;</string>
     <string name="list_load">Laddar sparad teckeninfo &#8230;</string>
     <string name="play_error">Video could not be played.</string>
     <string name="serv_error">Could not connect to video server.</string>
@@ -13,8 +13,7 @@
     <string name="collapse">Collapse</string>
     <string name="undo_descr">Ångra borttagningen</string>
     <string name="favourite">Lägg till i favoriter</string>
-    <string name="no_favourites">Du har inga tecken bland dina favoriter. 
-        \nKlicka på en stjärna för att lägga till några!</string>
+    <string name="no_favourites">Klicka på en stjärna för att lägga till favoriter!</string>
     
     <!-- Sign Detail -->
     <string name="word">Ord</string>

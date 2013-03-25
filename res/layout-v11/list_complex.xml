@@ -2,33 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical"
     android:paddingBottom="10dip"
     android:paddingLeft="15dip"
     android:paddingTop="10dip" >
 
     <TextView
-        android:id="@+id/list_child_title"
+        android:id="@+id/list_complex_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:paddingLeft="45dip"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignParentTop="true"
+        android:focusable="false"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textIsSelectable="false" />
 
+    <TextView
+        android:id="@+id/list_complex_caption"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_complex_title"
+        android:focusable="false"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/cell_separator"
+        android:textIsSelectable="false" />
+
+    
     <CheckBox
-        android:id="@+id/child_star"
+        android:id="@+id/star"
         android:button="@drawable/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical|right"
-        android:padding="8dip"
+        android:focusable="false"
         android:scaleX="1.2"
         android:scaleY="1.2"
-        android:layout_marginRight="12dip"
-        android:focusable="false" />
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="24dip" />
 
 </RelativeLayout>

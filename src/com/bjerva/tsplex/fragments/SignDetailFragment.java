@@ -115,6 +115,7 @@ public class SignDetailFragment extends Fragment {
 			mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_off).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		}
 		if(ma != null){
+			mMenu.clear();
 			SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 			if(sharedPref.contains(currSign.getWords().get(0).getWord())){
 				Log.d(TAG, "Setting on");

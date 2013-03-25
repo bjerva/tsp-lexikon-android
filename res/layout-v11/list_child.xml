@@ -28,7 +28,7 @@
         android:padding="8dip"
         android:scaleX="1.2"
         android:scaleY="1.2"
-        android:layout_marginRight="12dip"
+        android:layout_marginRight="24dip"
         android:focusable="false" />
 
 </RelativeLayout>

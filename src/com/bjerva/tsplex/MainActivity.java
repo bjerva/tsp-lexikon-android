@@ -230,7 +230,11 @@ public class MainActivity extends Activity {
 		//Show loading spinner
 		pbarDialog = new ProgressDialog(this);
 		pbarDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		pbarDialog.setMessage(getString(R.string.sign_load));
+		if(gsonSignsLite == null){
+			pbarDialog.setMessage(getString(R.string.list_load));
+		} else {
+			pbarDialog.setMessage(getString(R.string.sign_load));
+		}
 		pbarDialog.setCancelable(false);
 		pbarDialog.show();
 	}
