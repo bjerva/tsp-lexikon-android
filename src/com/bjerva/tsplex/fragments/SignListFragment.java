@@ -43,8 +43,8 @@ import android.widget.TextView;
 
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.SignAdapter;
-import com.bjerva.tsplex.SimpleGson;
+import com.bjerva.tsplex.adapters.SignAdapter;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 

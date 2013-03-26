@@ -38,9 +38,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.bjerva.tsplex.FavouritesAdapter;
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.adapters.FavouritesAdapter;
 import com.cocosw.undobar.UndoBarController;
 import com.cocosw.undobar.UndoBarController.UndoListener;
 import com.google.analytics.tracking.android.GoogleAnalytics;

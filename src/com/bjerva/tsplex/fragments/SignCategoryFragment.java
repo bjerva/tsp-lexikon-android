@@ -41,8 +41,8 @@ import android.widget.ListView;
 
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.SimpleExpandableSignListAdapter;
-import com.bjerva.tsplex.SimpleGson;
+import com.bjerva.tsplex.adapters.SimpleExpandableSignListAdapter;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
@@ -210,14 +210,19 @@ public class SignCategoryFragment extends ExpandableListFragment {
 					return true;
 				}
 
-				SignDetailFragment newFragment = new SignDetailFragment();
+				if(ma.getDetFragment() == null){
+					//Create detail fragment
+					SignDetailFragment newFragment = new SignDetailFragment();
 
-				//Add to container
-				FragmentTransaction transaction = ma.getSupportFragmentManager().beginTransaction();
-				transaction.setCustomAnimations(R.anim.slide_fragment_in_on_replace, R.anim.slide_fragment_out_on_replace);
-				transaction.replace(R.id.fragment_container, newFragment);
-				transaction.addToBackStack(null);
-				transaction.commit();
+					//Add to container
+					FragmentTransaction transaction = ma.getSupportFragmentManager().beginTransaction();
+					transaction.setCustomAnimations(R.anim.slide_fragment_in_on_replace, R.anim.slide_fragment_out_on_replace);
+					transaction.replace(R.id.fragment_container, newFragment);
+					transaction.addToBackStack(null);
+					transaction.commit();
+				} else {
+					ma.getDetFragment().startUpHelper(ma.getCurrentSign());
+				}
 				return true;
 			}
 		});

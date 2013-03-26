@@ -43,7 +43,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.SimpleGson;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.viewpagerindicator.TabPageIndicator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;

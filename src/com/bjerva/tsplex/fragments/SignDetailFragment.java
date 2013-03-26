@@ -28,6 +28,7 @@ import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -43,18 +44,26 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MediaController;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.VideoView;
 
+import com.actionbarsherlock.internal.nineoldandroids.animation.Animator;
+import com.actionbarsherlock.internal.nineoldandroids.animation.Animator.AnimatorListener;
+import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
+import com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator;
+import com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.bjerva.tsplex.GsonSign;
-import com.bjerva.tsplex.GsonSign.Word;
 import com.bjerva.tsplex.MainActivity;
 import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.SeparatedListAdapter;
+import com.bjerva.tsplex.adapters.SeparatedListAdapter;
+import com.bjerva.tsplex.models.GsonSign;
+import com.bjerva.tsplex.models.GsonSign.Word;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
+
+import de.passsy.holocircularprogressbar.HoloCircularProgressBar;
 
 public class SignDetailFragment extends Fragment {
 
@@ -71,6 +80,9 @@ public class SignDetailFragment extends Fragment {
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
 
+    private HoloCircularProgressBar bufferBar;
+    private boolean animateBufferBar;
+
 	VideoView getVideoView(){
 		return myVideoView;
 	}
@@ -79,7 +91,6 @@ public class SignDetailFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.sign_detail_fragment, container, false);
-		setHasOptionsMenu(true);
 		firstErr = true;
 		return myView;
 	}
@@ -92,29 +103,43 @@ public class SignDetailFragment extends Fragment {
 		mGaInstance = GoogleAnalytics.getInstance(ma);
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
+
+        bufferBar = (HoloCircularProgressBar) myView.findViewById(R.id.holoCircularProgressBar1);
+        animateBufferBar = true;
+        
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
 		myVideoView.setZOrderOnTop(true);
+		final int width = ma.getScreenWidth();
+		final int height = (int) (width*0.75);
+		myVideoView.setLayoutParams(new LayoutParams(width, height));
 
 		currSign = ma.getCurrentSign();
-		ma.onPrepareOptionsMenu(mMenu);  // Refresh the options menu now that we have our sign
+
+		if(ma.getScreenSize() != Configuration.SCREENLAYOUT_SIZE_XLARGE && 
+				ma.getScreenSize() != Configuration.SCREENLAYOUT_SIZE_LARGE){
+			setHasOptionsMenu(true);
+			ma.onPrepareOptionsMenu(mMenu);  // Refresh the options menu now that we have our sign
+		}
 
 		if(currSign == null){
 			Log.w(TAG, "NULL SIGN");
 		} else {
 			startUpHelper(currSign);
 		}
+		
+		//showBufferBar();
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		getSupportActionBar().setHomeButtonEnabled(false);
-		
+
 		if(mMenu == null){
 			mMenu = menu;
 			mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_off).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		}
-		if(ma != null){
+		if(ma != null && currSign != null){
 			mMenu.clear();
 			SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 			if(sharedPref.contains(currSign.getWords().get(0).getWord())){
@@ -125,7 +150,7 @@ public class SignDetailFragment extends Fragment {
 				mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_off).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			}
 		}
-		
+
 		super.onCreateOptionsMenu(mMenu, inflater);
 	}
 
@@ -357,6 +382,65 @@ public class SignDetailFragment extends Fragment {
 
 	private void playNormal(){
 		myVideoView.start();
+	}
+
+	/**
+	 * Make the buffer bar visible and start animation
+	 */
+	public void showBufferBar(){
+		Log.d(TAG, "Showing bar");
+		bufferBar.setVisibility(View.VISIBLE);
+		animateBufferBar = true;
+		animate(bufferBar, mAnimatorListener);
+	}
+
+	/**
+	 * Make the buffer bar invisible and stop animation
+	 */
+	public void hideBufferBar(){
+		Log.d(TAG, "Hiding bar");
+		bufferBar.setVisibility(View.GONE);
+		animateBufferBar = false;
+	}
+
+	private AnimatorListener mAnimatorListener = new AnimatorListener() {
+		@Override
+		public void onAnimationEnd(final Animator animation) {
+			// Repeat the animation as long as necessary
+			if(animateBufferBar){
+				animate(bufferBar, this);
+			}
+		}
+
+		@Override
+		public void onAnimationCancel(final Animator animation) {}
+		@Override
+		public void onAnimationRepeat(final Animator animation) {}
+		@Override
+		public void onAnimationStart(final Animator animation) {}
+	};
+
+	/**
+	 * Animate.
+	 * 
+	 * @param progressBar
+	 *            the progress bar
+	 * @param listener
+	 *            the listener
+	 */
+	private void animate(final HoloCircularProgressBar progressBar, final AnimatorListener listener) {
+		progressBar.setProgress(0.0f);
+		final float progress = 10;                                      // Animation loops
+		final ObjectAnimator progressBarAnimator = ObjectAnimator.ofFloat(progressBar, "progress", progress);
+		progressBarAnimator.setDuration(10000);         // Animation duration
+		progressBarAnimator.addListener(listener);
+		progressBarAnimator.addUpdateListener(new AnimatorUpdateListener() {
+			@Override
+			public void onAnimationUpdate(final ValueAnimator animation) {
+				progressBar.setProgress((Float) animation.getAnimatedValue());
+			}
+		});
+		progressBarAnimator.start();
 	}
 
 	/*

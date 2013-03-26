@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bjerva.tsplex"
-    android:versionCode="11"
-    android:versionName="0.4.0" >
+    android:versionCode="12"
+    android:versionName="0.4.1_dev" >
 
     <uses-sdk
         android:minSdkVersion="5"
@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     
-    <!-- Temporary restriction for 0.4.0 -->
+    <!-- Temporary restriction for 0.4.0 
     <compatible-screens>
 	    <screen android:screenSize="small" android:screenDensity="ldpi" />
 	    <screen android:screenSize="small" android:screenDensity="mdpi" />
@@ -22,7 +22,7 @@
 	    <screen android:screenSize="normal" android:screenDensity="mdpi" />
 	    <screen android:screenSize="normal" android:screenDensity="hdpi" />
 	    <screen android:screenSize="normal" android:screenDensity="xhdpi" />
-	</compatible-screens>
+	</compatible-screens>-->
 
     <application
         android:allowBackup="true"

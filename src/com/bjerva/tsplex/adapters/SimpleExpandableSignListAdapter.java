@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.adapters;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -25,6 +25,10 @@ import java.util.Map;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.SharedPreferences;
+
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.R.id;
+import com.bjerva.tsplex.models.SimpleGson;
 
 import android.content.Context;
 import android.util.Log;

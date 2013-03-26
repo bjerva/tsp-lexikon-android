@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.adapters;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -22,6 +22,9 @@ package com.bjerva.tsplex;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.R.layout;
 
 import android.content.Context;
 import android.view.View;

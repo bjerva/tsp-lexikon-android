@@ -36,18 +36,21 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.bjerva.tsplex.fragments.PagerFragment;
 import com.bjerva.tsplex.fragments.SignDetailFragment;
-import com.bjerva.tsplex.fragments.SignListFragment;
+import com.bjerva.tsplex.models.GsonSign;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -61,15 +64,18 @@ public class MainActivity extends Activity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "Main Activity";
-	
+
 	public static final int ID_SEARCH_BUTTON = 1;
 	public static final int ID_COLLAPSE_BUTTON = 2;
 	public static final int ID_EDIT_BUTTON = 3;
 	public static final int ID_FAV_BUTTON = 4;
 
+	private int screenSize;
+	private int screenWidth;
+	private int screenHeight;
+
 	private boolean doneLoading = false;
 
-	private SignListFragment listFragment;
 	private SignDetailFragment detFragment;
 	private ProgressDialog pbarDialog;
 
@@ -93,23 +99,32 @@ public class MainActivity extends Activity {
 		EasyTracker.getInstance().activityStop(this);
 	}
 
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(new Bundle()); //XXX: Simple ugly fix.
-		
+
 		mGaInstance = GoogleAnalytics.getInstance(this);
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
 		setContentView(R.layout.activity_sign_listing);
 
-		int screenSize = getResources().getConfiguration().screenLayout &
+		Display display = getWindowManager().getDefaultDisplay();
+		if (android.os.Build.VERSION.SDK_INT >= 13){
+			Point size = new Point();
+			display.getSize(size);
+			screenWidth = size.x;
+			screenHeight = size.y;
+		} else {
+			screenWidth = display.getWidth();
+			screenHeight = display.getHeight();
+		}
+
+		screenSize = getResources().getConfiguration().screenLayout &
 				Configuration.SCREENLAYOUT_SIZE_MASK;
 
 		switch(screenSize) {
-		case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-			break;
-		case Configuration.SCREENLAYOUT_SIZE_LARGE:
-			break;
 		case Configuration.SCREENLAYOUT_SIZE_NORMAL:
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 			break;
@@ -126,30 +141,18 @@ public class MainActivity extends Activity {
 		getSupportFragmentManager().beginTransaction().add(
 				R.id.fragment_container, new PagerFragment()).commit();
 
+		// If we are on a tablet the details fragment should be added
 		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
 			detFragment = new SignDetailFragment();
 			getSupportFragmentManager().beginTransaction().add(
 					R.id.sign_detail, detFragment).commit();
 		}
-		/*
-		SignListFragment listFrag = (SignListFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.list_frag);
-		if (listFrag == null) {
-			listFragment = new SignListFragment();
-			getSupportFragmentManager().beginTransaction().add(
-					R.id.fragment_container, listFragment).commit();
-		} else {
-			detFragment = new SignDetailFragment();
-			getSupportFragmentManager().beginTransaction().add(
-					R.id.details_container, detFragment).commit();
-		}
-		 */
 	}
 
 	public boolean isDoneLoading(){
 		return doneLoading;
 	}
-	
+
 	public void onBackPressed(){
 		Crouton.cancelAllCroutons();
 		super.onBackPressed();
@@ -159,8 +162,7 @@ public class MainActivity extends Activity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 
-		int screenSize = getResources().getConfiguration().screenLayout &
-				Configuration.SCREENLAYOUT_SIZE_MASK;
+		screenSize = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
 
 		switch(screenSize) {
 		case Configuration.SCREENLAYOUT_SIZE_NORMAL:
@@ -238,7 +240,7 @@ public class MainActivity extends Activity {
 		pbarDialog.setCancelable(false);
 		pbarDialog.show();
 	}
-	
+
 	public void onDestroy(){
 		Crouton.cancelAllCroutons();
 		super.onDestroy();
@@ -313,12 +315,12 @@ public class MainActivity extends Activity {
 				}
 			};
 			connectionThread.start();
-			*/
+			 */
 		} else {
 			isOnline = false;
 		}
 	}
-	
+
 	public boolean isOnline(){
 		/*
 		try {
@@ -327,9 +329,30 @@ public class MainActivity extends Activity {
 		return isOnline;
 	}
 
+	public SignDetailFragment getDetFragment() {
+		return detFragment;
+	}
+
+	ProgressDialog getPbarDialog() {
+		return pbarDialog;
+	}
+
+
+	public ArrayList<SimpleGson> getGsonSignsLite() {
+		return gsonSignsLite;
+	}
+
+	public int getScreenSize(){
+		return screenSize;
+	}
+	
+	public int getScreenWidth(){
+		return screenWidth;
+	}
+
 	private class LoadHelper extends AsyncTask<String, Void, Void>{
 		private long timeConsumed;
-		
+
 		@Override
 		protected Void doInBackground(String... url) {
 			try {
@@ -363,19 +386,6 @@ public class MainActivity extends Activity {
 			hideLoader();
 			Log.d("AsyncDBLoad", "Loaded local signs");
 		}
-	}
-
-	public SignDetailFragment getDetFragment() {
-		return detFragment;
-	}
-
-	ProgressDialog getPbarDialog() {
-		return pbarDialog;
-	}
-
-
-	public ArrayList<SimpleGson> getGsonSignsLite() {
-		return gsonSignsLite;
 	}
 
 	private class CustomComparator implements Comparator<SimpleGson>  {

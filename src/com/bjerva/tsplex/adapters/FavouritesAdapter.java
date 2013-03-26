@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tsplex.adapters;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -24,6 +24,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.holoeverywhere.ArrayAdapter;
+
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.R.id;
+import com.bjerva.tsplex.R.layout;
 
 import android.content.Context;
 import android.util.Log;
