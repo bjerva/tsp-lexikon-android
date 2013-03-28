@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bjerva.tsplex"
     android:versionCode="12"
-    android:versionName="0.4.1_dev" >
+    android:versionName="0.4.1_dev_NO" >
 
     <uses-sdk
         android:minSdkVersion="5"

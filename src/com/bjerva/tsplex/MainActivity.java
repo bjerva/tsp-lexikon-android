@@ -29,7 +29,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.holoeverywhere.app.Activity;
+import org.xml.sax.SAXException;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -50,7 +53,9 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.bjerva.tsplex.fragments.PagerFragment;
 import com.bjerva.tsplex.fragments.SignDetailFragment;
 import com.bjerva.tsplex.models.GsonSign;
+import com.bjerva.tsplex.models.NorwegianXMLSign;
 import com.bjerva.tsplex.models.SimpleGson;
+import com.bjerva.tsplex.norwegian.ParseSignXML;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -81,6 +86,7 @@ public class MainActivity extends Activity {
 
 	private ArrayList<SimpleGson> gsonSignsLite = null;
 	private GsonSign currentSign = null;
+	private NorwegianXMLSign[] norwegianSigns = null;
 
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
@@ -109,6 +115,19 @@ public class MainActivity extends Activity {
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
 		setContentView(R.layout.activity_sign_listing);
+		
+		try {
+			norwegianSigns = ParseSignXML.parseXML(getAssets().open("tegnordbok.xml"));
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		Display display = getWindowManager().getDefaultDisplay();
 		if (android.os.Build.VERSION.SDK_INT >= 13){
