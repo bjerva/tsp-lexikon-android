@@ -408,7 +408,7 @@ public class MainActivity extends Activity {
 			if(categories.getLength() > 0){
 				currentCategory = ((Element) categories.item(0)).getAttribute("gruppe");
 			} else {
-				currentCategory = "";
+				currentCategory = null;
 			}
 
 			NodeList examples = currElement.getElementsByTagName("kontekstform");

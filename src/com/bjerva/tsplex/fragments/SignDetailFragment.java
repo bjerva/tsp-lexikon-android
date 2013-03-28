@@ -215,6 +215,8 @@ public class SignDetailFragment extends Fragment {
 		if(currSign.getDescription() != null){
 			adapter.addSection(getString(R.string.desc), new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { currSign.getDescription() }));
+		} else if(MainActivity.LANGUAGE == MainActivity.NORWEGIAN){
+			// Do nothing
 		} else {
 			adapter.addSection(getString(R.string.desc), new ArrayAdapter<String>(ma,
 					R.layout.list_item, new String[] { getString(R.string.no_desc) }));
@@ -263,6 +265,9 @@ public class SignDetailFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				final String url;
 				firstErr = true;
+				if(MainActivity.LANGUAGE == MainActivity.NORWEGIAN){
+					position += 2;
+				}
 				if(position<=3){
 					Log.i("VideoView", "Play sign");
 					url = currSign.getVideo_url();
