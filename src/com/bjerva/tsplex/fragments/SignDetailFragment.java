@@ -128,6 +128,7 @@ public class SignDetailFragment extends Fragment {
 		}
 		
 		//showBufferBar();
+		hideBufferBar();
 	}
 
 	@Override
