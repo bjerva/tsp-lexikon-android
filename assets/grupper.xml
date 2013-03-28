@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tegnordbok>
+	<gruppe navn="aktivitet/verb" />
+	<gruppe navn="alfabet" />
+	<gruppe navn="bær/frukt/grønnsaker"/>
+	<gruppe navn="dyr"/>
+	<gruppe navn="familie"/>
+	<gruppe navn="farge"/>
+	<gruppe navn="geografi"/>
+	<gruppe navn="høytider"/>
+	<gruppe navn="idrett"/>
+	<gruppe navn="klær"/>
+	<gruppe navn="kropp/sanser/sykdom"/>
+	<gruppe navn="mat/drikke"/>
+	<gruppe navn="matematikk"/>
+	<gruppe navn="person"/>
+	<gruppe navn="skole"/>
+	<gruppe navn="tall"/>
+	<gruppe navn="teknologi"/>
+	<gruppe navn="tid"/>
+	<gruppe navn="transport"/>
+</tegnordbok>
