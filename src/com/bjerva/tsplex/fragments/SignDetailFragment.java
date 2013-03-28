@@ -80,8 +80,8 @@ public class SignDetailFragment extends Fragment {
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
 
-    private HoloCircularProgressBar bufferBar;
-    private boolean animateBufferBar;
+	private HoloCircularProgressBar bufferBar;
+	private boolean animateBufferBar;
 
 	VideoView getVideoView(){
 		return myVideoView;
@@ -104,9 +104,9 @@ public class SignDetailFragment extends Fragment {
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
 
-        bufferBar = (HoloCircularProgressBar) myView.findViewById(R.id.holoCircularProgressBar1);
-        animateBufferBar = true;
-        
+		bufferBar = (HoloCircularProgressBar) myView.findViewById(R.id.holoCircularProgressBar1);
+		animateBufferBar = true;
+
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
 		myVideoView.setZOrderOnTop(true);
 		final int width = ma.getScreenWidth();
@@ -126,7 +126,7 @@ public class SignDetailFragment extends Fragment {
 		} else {
 			startUpHelper(currSign);
 		}
-		
+
 		//showBufferBar();
 		hideBufferBar();
 	}
@@ -185,7 +185,12 @@ public class SignDetailFragment extends Fragment {
 	}
 
 	void startUpHelper(final GsonSign currSign){
-		String fileName = currSign.getVideo_url().substring(0, currSign.getVideo_url().length()-3)+"3gp";
+		String fileName;
+		if(MainActivity.LANGUAGE == MainActivity.NORWEGIAN){
+			fileName = "http://www.minetegn.no/Tegnordbok-HTML/video_/"+currSign.getVideo_url()+".mp4";
+		} else {
+			fileName = currSign.getVideo_url().substring(0, currSign.getVideo_url().length()-3)+"3gp";
+		}
 		Log.i("SignDetail", fileName);
 
 		myVideoView.setVideoURI(Uri.parse(fileName));
@@ -336,7 +341,12 @@ public class SignDetailFragment extends Fragment {
 
 	private void loadFilm(String url){
 		checkConnection();
-		final String fileName = url.substring(0, url.length()-3)+"3gp";
+		final String fileName;
+		if(MainActivity.LANGUAGE == MainActivity.NORWEGIAN){
+			fileName = "http://www.minetegn.no/Tegnordbok-HTML/video_/"+url+".mp4";
+		} else {
+			fileName = url.substring(0, url.length()-3)+"3gp";
+		}
 		Log.i("SignDetail", url);
 		Log.i("Loading new film", fileName);
 		myVideoView.setMediaController(new MediaController(ma));

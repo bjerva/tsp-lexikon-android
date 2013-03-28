@@ -23,6 +23,14 @@ package com.bjerva.tsplex.models;
 import com.google.gson.annotations.SerializedName;
 
 public class SimpleGson {
+	
+	public SimpleGson(String word, String fileName, 
+			String category, int id){
+		this.word = word;
+		this.fileName = fileName;
+		this.tag = category;
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;
@@ -44,4 +52,6 @@ public class SimpleGson {
 
 	@SerializedName("tag")
 	private String tag;
+	
+	private String fileName;
 }

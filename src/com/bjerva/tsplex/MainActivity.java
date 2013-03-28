@@ -29,9 +29,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.holoeverywhere.app.Activity;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.annotation.SuppressLint;
@@ -53,9 +59,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.bjerva.tsplex.fragments.PagerFragment;
 import com.bjerva.tsplex.fragments.SignDetailFragment;
 import com.bjerva.tsplex.models.GsonSign;
-import com.bjerva.tsplex.models.NorwegianXMLSign;
 import com.bjerva.tsplex.models.SimpleGson;
-import com.bjerva.tsplex.norwegian.ParseSignXML;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -75,6 +79,10 @@ public class MainActivity extends Activity {
 	public static final int ID_EDIT_BUTTON = 3;
 	public static final int ID_FAV_BUTTON = 4;
 
+	public static final int SWEDISH = 1001;
+	public static final int NORWEGIAN = 1002;
+	public static int LANGUAGE;
+
 	private int screenSize;
 	private int screenWidth;
 	private int screenHeight;
@@ -85,8 +93,8 @@ public class MainActivity extends Activity {
 	private ProgressDialog pbarDialog;
 
 	private ArrayList<SimpleGson> gsonSignsLite = null;
+	private ArrayList<GsonSign> gsonSigns = null;
 	private GsonSign currentSign = null;
-	private NorwegianXMLSign[] norwegianSigns = null;
 
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
@@ -115,19 +123,6 @@ public class MainActivity extends Activity {
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
 		setContentView(R.layout.activity_sign_listing);
-		
-		try {
-			norwegianSigns = ParseSignXML.parseXML(getAssets().open("tegnordbok.xml"));
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		Display display = getWindowManager().getDefaultDisplay();
 		if (android.os.Build.VERSION.SDK_INT >= 13){
@@ -154,8 +149,18 @@ public class MainActivity extends Activity {
 			break;
 		}
 
-		//Load local json
-		new LoadHelper().execute();
+		LANGUAGE = NORWEGIAN;
+		if(LANGUAGE == SWEDISH){
+			//Load local json
+			new LoadHelper().execute();
+		} else if (LANGUAGE == NORWEGIAN){
+			try {
+				parseXML(getAssets().open("tegnordbok.xml"));
+			} catch (Exception e) {
+				Log.e(TAG, "XML Exception");
+			}
+			doneLoading = true;
+		}
 
 		getSupportFragmentManager().beginTransaction().add(
 				R.id.fragment_container, new PagerFragment()).commit();
@@ -295,6 +300,12 @@ public class MainActivity extends Activity {
 	}
 
 	public void loadSingleJson(int id){
+		if(LANGUAGE == NORWEGIAN){
+			Log.d(TAG, "Getting norwegian sign");
+			currentSign = gsonSigns.get(id);
+			return;
+		}
+		
 		Log.i("Load Single GSON", "Loading...");
 		InputStream is;
 		try {
@@ -356,17 +367,64 @@ public class MainActivity extends Activity {
 		return pbarDialog;
 	}
 
-
 	public ArrayList<SimpleGson> getGsonSignsLite() {
 		return gsonSignsLite;
+	}
+	
+	public ArrayList<GsonSign> getGsonSigns() {
+		return gsonSigns;
 	}
 
 	public int getScreenSize(){
 		return screenSize;
 	}
-	
+
 	public int getScreenWidth(){
 		return screenWidth;
+	}
+	
+	private void parseXML(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException{
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		Document doc = db.parse(new InputSource(inputStream));
+		doc.getDocumentElement().normalize();
+		NodeList nodeList = doc.getElementsByTagName("leksem");
+		
+		int size = nodeList.getLength();
+		ArrayList<SimpleGson> norwegianSimpleSigns = new ArrayList<SimpleGson>(size);
+		ArrayList<GsonSign> norwegianSigns = new ArrayList<GsonSign>(size);
+
+		String currentWord;
+		String currentFileName;
+		String currentCategory;
+		String[] currentExampleDescriptions;
+		String[] currentExampleUrls;
+		for(int i=0; i < size; i++){
+			Element currElement = (Element) nodeList.item(i);
+			currentWord = currElement.getAttribute("visningsord");
+			currentFileName = currElement.getAttribute("filnavn");
+
+			NodeList categories = currElement.getElementsByTagName("grupper");
+			if(categories.getLength() > 0){
+				currentCategory = ((Element) categories.item(0)).getAttribute("gruppe");
+			} else {
+				currentCategory = "";
+			}
+
+			NodeList examples = currElement.getElementsByTagName("kontekstform");
+			currentExampleDescriptions = new String[examples.getLength()];
+			currentExampleUrls = new String[examples.getLength()];
+			for(int j=0; j < examples.getLength(); j++){
+				currentExampleDescriptions[j] = ((Element) examples.item(j)).getAttribute("kommentar");
+				currentExampleUrls[j] = ((Element) examples.item(j)).getAttribute("filnavn");
+			}
+
+			norwegianSimpleSigns.add(new SimpleGson(currentWord, currentFileName, currentCategory, i));
+			norwegianSigns.add(new GsonSign(currentWord, currentFileName, currentCategory, currentExampleDescriptions, currentExampleUrls, i));
+		}
+		
+		gsonSignsLite = norwegianSimpleSigns;
+		gsonSigns = norwegianSigns;
 	}
 
 	private class LoadHelper extends AsyncTask<String, Void, Void>{

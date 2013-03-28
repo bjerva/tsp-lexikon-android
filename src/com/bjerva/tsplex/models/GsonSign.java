@@ -20,11 +20,29 @@ package com.bjerva.tsplex.models;
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
 public class GsonSign{
+	
+	public GsonSign(String word, String fileName, 
+			String category, String[] ex_decs, String[] ex_urls, int id){
+		this.words = new ArrayList<Word>(1);
+		this.words.add(new Word(word));
+		this.video_url = fileName;
+		this.examples = new ArrayList<Example>(ex_decs.length);
+		for(int i=0; i<ex_decs.length; i++){
+			this.examples.add(new Example(ex_urls[i], ex_decs[i]));
+		}
+		this.tags = new ArrayList<Tag>(1);
+		this.tags.add(new Tag(category));
+		this.versions = new ArrayList<Version>();
+		this.unusual = false;
+		this.id = id;
+	}
+	
 	public List<Example> getExamples() {
 		return examples;
 	}
@@ -77,6 +95,14 @@ public class GsonSign{
 	public class Example {
 		@SerializedName("video_url")
 		private String video_url;
+
+		@SerializedName("description")
+		private String description;
+		
+		public Example(String url, String desc){
+			this.video_url = url;
+			this.description = desc;
+		}
 		
 		public String getVideo_url() {
 			return video_url;
@@ -85,9 +111,6 @@ public class GsonSign{
 		public String getDescription() {
 			return description;
 		}
-
-		@SerializedName("description")
-		private String description;
 	}
 	
 	public class Version {
@@ -109,6 +132,10 @@ public class GsonSign{
 	public class Word {
 		@SerializedName("word")
 		private String word;
+		
+		public Word(String word){
+			this.word = word;
+		}
 
 		public String getWord() {
 			return word;
@@ -118,7 +145,10 @@ public class GsonSign{
 	public class Tag {
 		@SerializedName("tag")
 		private String tag;
-
+		
+		public Tag(String tag){
+			this.tag = tag;
+		}
 		public String getTag() {
 			return tag;
 		}

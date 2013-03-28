@@ -1,28 +1,28 @@
 <resources>
 
-    <string name="app_name">Svenskt Teckenspråkslexikon</string>
+    <string name="app_name">Norsk Tegnordbok</string>
     
     <!-- Main Activity -->
-    <string name="search">Sök efter tecken &#8230;</string>
-    <string name="sign_load">Hämtar video &#8230;</string>
-    <string name="list_load">Laddar sparad teckeninfo &#8230;</string>
+    <string name="search">Søk etter tegn &#8230;</string>
+    <string name="sign_load">Henter video &#8230;</string>
+    <string name="list_load">Henter lagret tegninfo &#8230;</string>
     <string name="play_error">Video could not be played.</string>
     <string name="serv_error">Could not connect to video server.</string>
     <string name="conn_error">Internet connection not found.</string>
-    <string name="edit_favs">Redigera favoriter</string>
+    <string name="edit_favs">Rediger favoritter</string>
     <string name="collapse">Collapse</string>
-    <string name="undo_descr">Ångra borttagningen</string>
-    <string name="favourite">Lägg till i favoriter</string>
-    <string name="no_favourites">Klicka på en stjärna för att lägga till favoriter!</string>
+    <string name="undo_descr">Angre slettingen</string>
+    <string name="favourite">Legg til i favoritter</string>
+    <string name="no_favourites">Klikk på en stjerne for å legge till favoritter!</string>
     
     <!-- Sign Detail -->
     <string name="word">Ord</string>
-    <string name="desc">Beskrivning</string>
-    <string name="example">Exempel</string>
+    <string name="desc">Beskrivelse</string>
+    <string name="example">Eksempel</string>
     <string name="ver">Varianter</string>
     <string name="cat">Kategori</string>
-    <string name="unusual">Ovanligt</string>
-    <string name="is_unusual">Tecknet är ovanligt</string>
-    <string name="no_desc">Tecknet har ingen beskrivning i lexikonet</string>
+    <string name="unusual">Uvanlig</string>
+    <string name="is_unusual">Tegnet er uvanlig</string>
+    <string name="no_desc">Tegnet har ingen beskrivelse i tegnordboken</string>
 
 </resources>
