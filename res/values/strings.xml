@@ -14,6 +14,7 @@
     <string name="undo_descr">Angre slettingen</string>
     <string name="favourite">Legg til i favoritter</string>
     <string name="no_favourites">Klikk på en stjerne for å legge till favoritter!</string>
+    <string name="no_category">Ukategorisert</string>
     
     <!-- Sign Detail -->
     <string name="word">Ord</string>
