@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.fragments;
+package com.bjerva.tsplex.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -41,9 +41,9 @@ import android.widget.EditText;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.bjerva.tegnordbok.MainActivity;
-import com.bjerva.tegnordbok.R;
-import com.bjerva.tegnordbok.models.SimpleGson;
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.viewpagerindicator.TabPageIndicator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -53,7 +53,6 @@ public class PagerFragment extends Fragment {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "PagerFragment";
-	private static final String[] CONTENT = new String[] { "Tecken", "Kategorier", "Favoriter"};
 
 	private SignAlternativesAdapter mAdapter;
 	private ViewPager mPager;
@@ -218,12 +217,16 @@ public class PagerFragment extends Fragment {
 		@Override
 		public CharSequence getPageTitle(int position) {
 			final Locale swedishLocale = new Locale("sv", "SE");
-			return CONTENT[position % CONTENT.length].toUpperCase(swedishLocale);
+			if(MainActivity.LANGUAGE == MainActivity.NORWEGIAN){
+				return MainActivity.CONTENT_NORWEGIAN[position % MainActivity.CONTENT_NORWEGIAN.length].toUpperCase(swedishLocale);
+			} else {
+				return MainActivity.CONTENT_SWEDISH[position % MainActivity.CONTENT_SWEDISH.length].toUpperCase(swedishLocale);
+			}
 		}
 
 		@Override
 		public int getCount() {
-			return CONTENT.length;
+			return MainActivity.CONTENT_SWEDISH.length;
 		}
 	}
 

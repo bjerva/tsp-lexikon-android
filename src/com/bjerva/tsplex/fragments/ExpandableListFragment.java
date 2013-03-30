@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.fragments;
+package com.bjerva.tsplex.fragments;
 
 import org.holoeverywhere.app.Fragment;
 

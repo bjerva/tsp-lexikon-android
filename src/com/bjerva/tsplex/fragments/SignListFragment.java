@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.fragments;
+package com.bjerva.tsplex.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -41,10 +41,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.bjerva.tegnordbok.MainActivity;
-import com.bjerva.tegnordbok.R;
-import com.bjerva.tegnordbok.adapters.SignAdapter;
-import com.bjerva.tegnordbok.models.SimpleGson;
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.adapters.SignAdapter;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
@@ -109,8 +109,9 @@ public class SignListFragment extends ListFragment {
 		super.onResume();
 		// XXX: Should not be necessary...
 		((PagerFragment) getParentFragment()).getPager().setListFrag(this);
-		if(index!=-1){
-			this.getListView().setSelectionFromTop(index, top);
+		Log.d(TAG, ""+MainActivity.LIST_POS);
+		if(MainActivity.LIST_POS!=-1){
+			this.getListView().setSelectionFromTop(MainActivity.LIST_POS, top);
 		}
 		if(mAdapter != null){
 			mAdapter.getFilter().filter(oldSearch);
@@ -120,7 +121,7 @@ public class SignListFragment extends ListFragment {
 	public void onPause(){
 		super.onPause();
 		try{
-			index = this.getListView().getFirstVisiblePosition();
+			MainActivity.LIST_POS = this.getListView().getFirstVisiblePosition();
 			View v = this.getListView().getChildAt(0);
 			top = (v == null) ? 0 : v.getTop();
 		} catch(Exception e) {

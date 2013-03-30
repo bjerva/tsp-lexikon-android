@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.adapters;
+package com.bjerva.tsplex.adapters;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -37,8 +37,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
-import com.bjerva.tegnordbok.R;
-import com.bjerva.tegnordbok.models.SimpleGson;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.models.SimpleGson;
 
 public class SimpleExpandableSignListAdapter extends
 SimpleExpandableListAdapter {

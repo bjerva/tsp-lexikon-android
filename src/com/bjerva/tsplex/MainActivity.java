@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok;
+package com.bjerva.tsplex;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -56,10 +56,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-import com.bjerva.tegnordbok.fragments.PagerFragment;
-import com.bjerva.tegnordbok.fragments.SignDetailFragment;
-import com.bjerva.tegnordbok.models.GsonSign;
-import com.bjerva.tegnordbok.models.SimpleGson;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.fragments.PagerFragment;
+import com.bjerva.tsplex.fragments.SignDetailFragment;
+import com.bjerva.tsplex.models.GsonSign;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -81,7 +82,13 @@ public class MainActivity extends Activity {
 
 	public static final int SWEDISH = 1001;
 	public static final int NORWEGIAN = 1002;
-	public static int LANGUAGE;
+
+	public static final String[] CONTENT_SWEDISH = new String[] { "Tecken", "Kategorier", "Favoriter"};
+	public static final String[] CONTENT_NORWEGIAN = new String[] { "Tegn", "Kategorier", "Favoritter"};
+	
+	public static int LANGUAGE = SWEDISH;
+	
+	public static int LIST_POS = -1;
 
 	private int screenSize;
 	private int screenWidth;
@@ -148,8 +155,7 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
-
-		LANGUAGE = NORWEGIAN;
+		
 		if(LANGUAGE == SWEDISH){
 			//Load local json
 			new LoadHelper().execute();
