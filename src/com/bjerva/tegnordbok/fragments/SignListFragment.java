@@ -42,9 +42,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
 import com.bjerva.tegnordbok.adapters.SignAdapter;
 import com.bjerva.tegnordbok.models.SimpleGson;
-import com.bjerva.tsplex.R;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 

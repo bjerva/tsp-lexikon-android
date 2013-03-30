@@ -25,10 +25,6 @@ import java.util.List;
 
 import org.holoeverywhere.ArrayAdapter;
 
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.R.id;
-import com.bjerva.tsplex.R.layout;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +35,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bjerva.tegnordbok.R;
 
 public class FavouritesAdapter extends ArrayAdapter<String> {
 

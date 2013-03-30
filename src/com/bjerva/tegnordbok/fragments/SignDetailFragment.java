@@ -47,23 +47,16 @@ import android.widget.MediaController;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.VideoView;
 
-import com.actionbarsherlock.internal.nineoldandroids.animation.Animator;
-import com.actionbarsherlock.internal.nineoldandroids.animation.Animator.AnimatorListener;
-import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
-import com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator;
-import com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
 import com.bjerva.tegnordbok.adapters.SeparatedListAdapter;
 import com.bjerva.tegnordbok.models.GsonSign;
 import com.bjerva.tegnordbok.models.GsonSign.Word;
-import com.bjerva.tsplex.R;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
-
-import de.passsy.holocircularprogressbar.HoloCircularProgressBar;
 
 public class SignDetailFragment extends Fragment {
 
@@ -79,9 +72,6 @@ public class SignDetailFragment extends Fragment {
 	private GsonSign currSign;
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
-
-	private HoloCircularProgressBar bufferBar;
-	private boolean animateBufferBar;
 
 	VideoView getVideoView(){
 		return myVideoView;
@@ -104,8 +94,6 @@ public class SignDetailFragment extends Fragment {
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
 
-		bufferBar = (HoloCircularProgressBar) myView.findViewById(R.id.holoCircularProgressBar1);
-		animateBufferBar = true;
 
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
 		myVideoView.setZOrderOnTop(true);
@@ -126,9 +114,6 @@ public class SignDetailFragment extends Fragment {
 		} else {
 			startUpHelper(currSign);
 		}
-
-		//showBufferBar();
-		hideBufferBar();
 	}
 
 	@Override
@@ -402,65 +387,6 @@ public class SignDetailFragment extends Fragment {
 
 	private void playNormal(){
 		myVideoView.start();
-	}
-
-	/**
-	 * Make the buffer bar visible and start animation
-	 */
-	public void showBufferBar(){
-		Log.d(TAG, "Showing bar");
-		bufferBar.setVisibility(View.VISIBLE);
-		animateBufferBar = true;
-		animate(bufferBar, mAnimatorListener);
-	}
-
-	/**
-	 * Make the buffer bar invisible and stop animation
-	 */
-	public void hideBufferBar(){
-		Log.d(TAG, "Hiding bar");
-		bufferBar.setVisibility(View.GONE);
-		animateBufferBar = false;
-	}
-
-	private AnimatorListener mAnimatorListener = new AnimatorListener() {
-		@Override
-		public void onAnimationEnd(final Animator animation) {
-			// Repeat the animation as long as necessary
-			if(animateBufferBar){
-				animate(bufferBar, this);
-			}
-		}
-
-		@Override
-		public void onAnimationCancel(final Animator animation) {}
-		@Override
-		public void onAnimationRepeat(final Animator animation) {}
-		@Override
-		public void onAnimationStart(final Animator animation) {}
-	};
-
-	/**
-	 * Animate.
-	 * 
-	 * @param progressBar
-	 *            the progress bar
-	 * @param listener
-	 *            the listener
-	 */
-	private void animate(final HoloCircularProgressBar progressBar, final AnimatorListener listener) {
-		progressBar.setProgress(0.0f);
-		final float progress = 10;                                      // Animation loops
-		final ObjectAnimator progressBarAnimator = ObjectAnimator.ofFloat(progressBar, "progress", progress);
-		progressBarAnimator.setDuration(10000);         // Animation duration
-		progressBarAnimator.addListener(listener);
-		progressBarAnimator.addUpdateListener(new AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(final ValueAnimator animation) {
-				progressBar.setProgress((Float) animation.getAnimatedValue());
-			}
-		});
-		progressBarAnimator.start();
 	}
 
 	/*

@@ -26,10 +26,6 @@ import java.util.Map;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.SharedPreferences;
 
-import com.bjerva.tegnordbok.models.SimpleGson;
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.R.id;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +36,9 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.models.SimpleGson;
 
 public class SimpleExpandableSignListAdapter extends
 SimpleExpandableListAdapter {

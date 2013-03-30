@@ -27,11 +27,6 @@ import java.util.Locale;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.SharedPreferences;
 
-import com.bjerva.tegnordbok.models.SimpleGson;
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.R.id;
-import com.bjerva.tsplex.R.layout;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +40,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.models.SimpleGson;
 
 public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 

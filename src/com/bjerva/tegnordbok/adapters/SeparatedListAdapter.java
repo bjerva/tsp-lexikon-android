@@ -23,15 +23,14 @@ package com.bjerva.tegnordbok.adapters;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.R.layout;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+
+import com.bjerva.tegnordbok.R;
 
 public class SeparatedListAdapter extends BaseAdapter {
 

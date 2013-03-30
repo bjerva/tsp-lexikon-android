@@ -42,8 +42,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
 import com.bjerva.tegnordbok.models.SimpleGson;
-import com.bjerva.tsplex.R;
 import com.viewpagerindicator.TabPageIndicator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;

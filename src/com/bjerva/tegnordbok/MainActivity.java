@@ -60,7 +60,6 @@ import com.bjerva.tegnordbok.fragments.PagerFragment;
 import com.bjerva.tegnordbok.fragments.SignDetailFragment;
 import com.bjerva.tegnordbok.models.GsonSign;
 import com.bjerva.tegnordbok.models.SimpleGson;
-import com.bjerva.tsplex.R;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -156,7 +155,7 @@ public class MainActivity extends Activity {
 			new LoadHelper().execute();
 		} else if (LANGUAGE == NORWEGIAN){
 			try {
-				parseXML(getAssets().open("tegnordbok.xml"));
+				parseXML(getAssets().open("norwegian/tegnordbok.xml"));
 			} catch (Exception e) {
 				Log.e(TAG, "XML Exception");
 			}
@@ -289,7 +288,7 @@ public class MainActivity extends Activity {
 
 	private void loadGSONfromStringLite() throws IOException{
 		Log.i("Load Local JSON", "Loading...");
-		final InputStream is = getAssets().open("words2.json");
+		final InputStream is = getAssets().open("swedish/words2.json");
 		final Reader reader = new InputStreamReader(is);
 
 		final Gson gson = new Gson();
@@ -310,7 +309,7 @@ public class MainActivity extends Activity {
 		Log.i("Load Single GSON", "Loading...");
 		InputStream is;
 		try {
-			is = getAssets().open("split_json/"+String.valueOf(id)+".json");
+			is = getAssets().open("swedish/split_json/"+String.valueOf(id)+".json");
 			final Reader reader = new InputStreamReader(is);
 			final Gson gson = new Gson();
 			currentSign = gson.fromJson(reader, GsonSign.class);
