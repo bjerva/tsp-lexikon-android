@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.fragments;
+package com.bjerva.tegnordbok.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -41,10 +41,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.bjerva.tsplex.MainActivity;
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.adapters.SignAdapter;
-import com.bjerva.tsplex.models.SimpleGson;
+import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.adapters.SignAdapter;
+import com.bjerva.tegnordbok.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
@@ -62,7 +62,6 @@ public class SignListFragment extends ListFragment {
 	private EditText search;
 	private TextView tv;
 
-	private int index = -1;
 	private int top = 0;
 
 	private String oldSearch = "";
@@ -176,7 +175,7 @@ public class SignListFragment extends ListFragment {
 				ma.showLoader();
 				ma.checkConnection();
 
-				mGaTracker.sendEvent("sign", "list_click", tmpSigns.get(position).getWord(), 1L);
+				mGaTracker.sendEvent(MainActivity.LANG_STR, "list_click", tmpSigns.get(position).getWord(), 1L);
 
 				//Update position
 				ma.loadSingleJson(tmpSigns.get(position).getId());

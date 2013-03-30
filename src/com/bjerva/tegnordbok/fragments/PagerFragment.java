@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.fragments;
+package com.bjerva.tegnordbok.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -41,9 +41,11 @@ import android.widget.EditText;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.bjerva.tsplex.MainActivity;
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.models.SimpleGson;
+import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.models.SimpleGson;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.viewpagerindicator.TabPageIndicator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -63,6 +65,9 @@ public class PagerFragment extends Fragment {
 	private EditText search;
 	private int previousFrag;
 
+	private Tracker mGaTracker;
+	private GoogleAnalytics mGaInstance;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -80,6 +85,9 @@ public class PagerFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		ma = (MainActivity) getActivity();
+		
+		mGaInstance = GoogleAnalytics.getInstance(ma);
+		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
 		mAdapter = new SignAlternativesAdapter(this);
 
@@ -232,6 +240,13 @@ public class PagerFragment extends Fragment {
 
 	private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener(){
 		public void onPageSelected(int position){
+
+			if(MainActivity.LANGUAGE == MainActivity.NORWEGIAN){
+				mGaTracker.sendEvent(MainActivity.LANG_STR, "page_swipe", MainActivity.CONTENT_NORWEGIAN[position], 1L);
+			} else {
+				mGaTracker.sendEvent(MainActivity.LANG_STR, "page_swipe", MainActivity.CONTENT_SWEDISH[position], 1L);
+			}
+			
 			if(position==0){
 				mMenu.clear();
 				mMenu.add(0, MainActivity.ID_SEARCH_BUTTON, 1, R.string.search).setIcon(R.drawable.ic_action_search).setActionView(R.layout.search_view).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);

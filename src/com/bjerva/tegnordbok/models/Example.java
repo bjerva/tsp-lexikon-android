@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.models;
+package com.bjerva.tegnordbok.models;
 
 public class Example {
 	private String fileName;

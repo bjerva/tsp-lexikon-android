@@ -1,4 +1,4 @@
-package com.bjerva.tsplex;
+package com.bjerva.tegnordbok;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -56,11 +56,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.fragments.PagerFragment;
-import com.bjerva.tsplex.fragments.SignDetailFragment;
-import com.bjerva.tsplex.models.GsonSign;
-import com.bjerva.tsplex.models.SimpleGson;
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.fragments.PagerFragment;
+import com.bjerva.tegnordbok.fragments.SignDetailFragment;
+import com.bjerva.tegnordbok.models.GsonSign;
+import com.bjerva.tegnordbok.models.SimpleGson;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -85,14 +85,14 @@ public class MainActivity extends Activity {
 
 	public static final String[] CONTENT_SWEDISH = new String[] { "Tecken", "Kategorier", "Favoriter"};
 	public static final String[] CONTENT_NORWEGIAN = new String[] { "Tegn", "Kategorier", "Favoritter"};
-	
-	public static int LANGUAGE = SWEDISH;
-	
+
+	public static int LANGUAGE = NORWEGIAN;
+	public static final String LANG_STR = "NO"; //"SE"
+
 	public static int LIST_POS = -1;
 
 	private int screenSize;
 	private int screenWidth;
-	private int screenHeight;
 
 	private boolean doneLoading = false;
 
@@ -136,10 +136,8 @@ public class MainActivity extends Activity {
 			Point size = new Point();
 			display.getSize(size);
 			screenWidth = size.x;
-			screenHeight = size.y;
 		} else {
 			screenWidth = display.getWidth();
-			screenHeight = display.getHeight();
 		}
 
 		screenSize = getResources().getConfiguration().screenLayout &
@@ -155,18 +153,9 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
-		
-		if(LANGUAGE == SWEDISH){
-			//Load local json
-			new LoadHelper().execute();
-		} else if (LANGUAGE == NORWEGIAN){
-			try {
-				parseXML(getAssets().open("norwegian/tegnordbok.xml"));
-			} catch (Exception e) {
-				Log.e(TAG, "XML Exception");
-			}
-			doneLoading = true;
-		}
+
+		// Load sign resources
+		new LoadHelper().execute();
 
 		getSupportFragmentManager().beginTransaction().add(
 				R.id.fragment_container, new PagerFragment()).commit();
@@ -202,7 +191,6 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
-
 
 		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
 			//Tablet
@@ -311,7 +299,7 @@ public class MainActivity extends Activity {
 			currentSign = gsonSigns.get(id);
 			return;
 		}
-		
+
 		Log.i("Load Single GSON", "Loading...");
 		InputStream is;
 		try {
@@ -332,36 +320,12 @@ public class MainActivity extends Activity {
 		// Check that we have connectivity
 		if (netInfo != null && netInfo.isConnected()) {
 			isOnline = true;
-			/* 
-			// Make sure we also have proper internet connectivity (in case of e.g. VPN)
-			connectionThread = new Thread(){
-				@Override
-				public void run(){
-					try {
-						InetAddress.getByName("google.com").isReachable(1000);
-						isOnline = true;
-						return;
-					} catch (UnknownHostException e){
-						isOnline = false;
-						return;
-					} catch (IOException e){
-						isOnline = false;
-						return;
-					}
-				}
-			};
-			connectionThread.start();
-			 */
 		} else {
 			isOnline = false;
 		}
 	}
 
 	public boolean isOnline(){
-		/*
-		try {
-			connectionThread.join();
-		} catch (InterruptedException e) {}*/
 		return isOnline;
 	}
 
@@ -376,7 +340,7 @@ public class MainActivity extends Activity {
 	public ArrayList<SimpleGson> getGsonSignsLite() {
 		return gsonSignsLite;
 	}
-	
+
 	public ArrayList<GsonSign> getGsonSigns() {
 		return gsonSigns;
 	}
@@ -388,14 +352,14 @@ public class MainActivity extends Activity {
 	public int getScreenWidth(){
 		return screenWidth;
 	}
-	
+
 	private void parseXML(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException{
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(new InputSource(inputStream));
 		doc.getDocumentElement().normalize();
 		NodeList nodeList = doc.getElementsByTagName("leksem");
-		
+
 		int size = nodeList.getLength();
 		ArrayList<SimpleGson> norwegianSimpleSigns = new ArrayList<SimpleGson>(size);
 		ArrayList<GsonSign> norwegianSigns = new ArrayList<GsonSign>(size);
@@ -428,7 +392,7 @@ public class MainActivity extends Activity {
 			norwegianSimpleSigns.add(new SimpleGson(currentWord, currentFileName, currentCategory, i));
 			norwegianSigns.add(new GsonSign(currentWord, currentFileName, currentCategory, currentExampleDescriptions, currentExampleUrls, i));
 		}
-		
+
 		gsonSignsLite = norwegianSimpleSigns;
 		gsonSigns = norwegianSigns;
 	}
@@ -438,15 +402,22 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected Void doInBackground(String... url) {
-			try {
-				loadGSONfromStringLite();
-			} catch (IOException e) {}
+			if(MainActivity.LANGUAGE == NORWEGIAN){
+				try {
+					parseXML(getAssets().open("norwegian/tegnordbok.xml"));
+				} 
+				catch (Exception e) {}
+			} else {
+				try {
+					loadGSONfromStringLite();
+				} catch (IOException e) {}
 
-			// Sort signs
-			Collections.sort(gsonSignsLite, new CustomComparator());
-			// Put signs containing numbers at the end
-			for(int i=0; i<16; ++i){
-				gsonSignsLite.add(gsonSignsLite.remove(0));
+				// Sort signs
+				Collections.sort(gsonSignsLite, new CustomComparator());
+				// Put signs containing numbers at the end
+				for(int i=0; i<16; ++i){
+					gsonSignsLite.add(gsonSignsLite.remove(0));
+				}
 			}
 			return null;
 		}
@@ -465,7 +436,7 @@ public class MainActivity extends Activity {
 			super.onPostExecute(result);
 			doneLoading = true;
 			timeConsumed = System.currentTimeMillis()-timeConsumed;
-			mGaTracker.sendTiming("LOAD", timeConsumed, "Local loading", "gson");
+			mGaTracker.sendTiming("LOAD", timeConsumed, "Local loading", MainActivity.LANG_STR);
 			hideLoader();
 			Log.d("AsyncDBLoad", "Loaded local signs");
 		}

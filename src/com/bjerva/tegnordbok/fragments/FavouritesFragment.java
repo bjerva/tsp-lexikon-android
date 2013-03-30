@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.fragments;
+package com.bjerva.tegnordbok.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -38,9 +38,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.bjerva.tsplex.MainActivity;
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.adapters.FavouritesAdapter;
+import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.adapters.FavouritesAdapter;
 import com.cocosw.undobar.UndoBarController;
 import com.cocosw.undobar.UndoBarController.UndoListener;
 import com.google.analytics.tracking.android.GoogleAnalytics;
@@ -110,7 +110,7 @@ public class FavouritesFragment extends Fragment {
 				ma.showLoader();
 				ma.checkConnection();
 
-				mGaTracker.sendEvent("sign", "favourite_click", adapter.getItem(position), 1L);
+				mGaTracker.sendEvent(MainActivity.LANG_STR, "favourite_click", adapter.getItem(position), 1L);
 
 				//Update position
 				ma.loadSingleJson(sharedPref.getInt(adapter.getItem(position), -1));

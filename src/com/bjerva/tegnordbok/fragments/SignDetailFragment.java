@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.fragments;
+package com.bjerva.tegnordbok.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -50,11 +50,11 @@ import android.widget.VideoView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.bjerva.tsplex.MainActivity;
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.adapters.SeparatedListAdapter;
-import com.bjerva.tsplex.models.GsonSign;
-import com.bjerva.tsplex.models.GsonSign.Word;
+import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.adapters.SeparatedListAdapter;
+import com.bjerva.tegnordbok.models.GsonSign;
+import com.bjerva.tegnordbok.models.GsonSign.Word;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
@@ -269,7 +269,7 @@ public class SignDetailFragment extends Fragment {
 				} else if(position < 5+currSign.getExamples().size()){
 					url = currSign.getExamples().get(position-5).getVideo_url();
 					Log.i("VideoView", "Play example: "+url);
-					mGaTracker.sendEvent("example", "favourite_click", currSign.getExamples().get(position-5).getDescription(), 1L);
+					mGaTracker.sendEvent(MainActivity.LANG_STR, "example_click", currSign.getExamples().get(position-5).getDescription(), 1L);
 					if(url.equals(lastPlayed)){
 						replay();
 					} else {
@@ -279,7 +279,7 @@ public class SignDetailFragment extends Fragment {
 				} else if(currSign.getExamples().size() > 0 && position < 6+currSign.getVersions().size()+currSign.getExamples().size()){
 					url = currSign.getVersions().get(position-currSign.getExamples().size()-6).getVideo_url();
 					Log.i("VideoView", "Play variant: "+url);
-					mGaTracker.sendEvent("example", "variant_click", currSign.getVersions().get(position-currSign.getExamples().size()-6).getDescription(), 1L);
+					mGaTracker.sendEvent(MainActivity.LANG_STR, "variant_click", currSign.getVersions().get(position-currSign.getExamples().size()-6).getDescription(), 1L);
 					if(url.equals(lastPlayed)){
 						replay();
 					} else {

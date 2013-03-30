@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.adapters;
+package com.bjerva.tegnordbok.adapters;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -41,8 +41,8 @@ import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.models.SimpleGson;
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.models.SimpleGson;
 
 public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 

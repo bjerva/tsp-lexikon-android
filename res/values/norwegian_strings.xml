@@ -1,6 +1,6 @@
 <resources>
 
-    <!--
+    
     <string name="app_name">Norsk Tegnordbok</string>
 
     
@@ -26,6 +26,5 @@
     <string name="unusual">Uvanlig</string>
     <string name="is_unusual">Tegnet er uvanlig</string>
     <string name="no_desc">Tegnet har ingen beskrivelse i tegnordboken</string>
-    -->
 
 </resources>

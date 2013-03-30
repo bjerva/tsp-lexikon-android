@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.fragments;
+package com.bjerva.tegnordbok.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -39,10 +39,10 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 
-import com.bjerva.tsplex.MainActivity;
-import com.bjerva.tsplex.R;
-import com.bjerva.tsplex.adapters.SimpleExpandableSignListAdapter;
-import com.bjerva.tsplex.models.SimpleGson;
+import com.bjerva.tegnordbok.MainActivity;
+import com.bjerva.tegnordbok.R;
+import com.bjerva.tegnordbok.adapters.SimpleExpandableSignListAdapter;
+import com.bjerva.tegnordbok.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
@@ -199,7 +199,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 				ma.checkConnection();
 
 				int signPosition = groupSizes.get(groupPosition)+childPosition;
-				mGaTracker.sendEvent("sign", "category_click", gsonCats.get(signPosition).getWord(), 1L);
+				mGaTracker.sendEvent(MainActivity.LANG_STR, "category_click", gsonCats.get(signPosition).getWord(), 1L);
 
 				//Update position
 				ma.loadSingleJson(gsonCats.get(signPosition).getId());
@@ -234,7 +234,6 @@ public class SignCategoryFragment extends ExpandableListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		SimpleGson clickedSign = (SimpleGson) getExpandableListView().getItemAtPosition(position);
 		Log.d(TAG, clickedSign.getWord());
-		//mGaTracker.sendEvent("ui_action", "sign_click", tmpSigns.get(position).getWord(), 1L);
 	}
 
 	private class CustomComparator implements Comparator<SimpleGson>  {

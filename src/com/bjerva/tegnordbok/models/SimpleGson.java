@@ -1,4 +1,4 @@
-package com.bjerva.tsplex.models;
+package com.bjerva.tegnordbok.models;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
