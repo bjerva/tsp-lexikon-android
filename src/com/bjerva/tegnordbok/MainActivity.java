@@ -28,12 +28,16 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -152,7 +156,9 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
-
+		
+		fixOldPrefs(); // TODO: Remove this after a few updates
+		
 		// Load sign resources
 		new LoadHelper().execute();
 
@@ -165,6 +171,26 @@ public class MainActivity extends Activity {
 			getSupportFragmentManager().beginTransaction().add(
 					R.id.sign_detail, detFragment).commit();
 		}
+	}
+	
+	// TODO: Remove this after a few updates
+	private void fixOldPrefs(){
+		SharedPreferences oldPrefs = getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		Map<String, ?> tmpMap = oldPrefs.getAll();
+		if(tmpMap.size() <= 0){
+			return;
+		}
+		SharedPreferences newPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		
+		SharedPreferences.Editor prefEditor = newPrefs.edit();
+		for(String key : tmpMap.keySet()){
+			prefEditor.putInt(key, (Integer) tmpMap.get(key));
+		}
+		prefEditor.apply();
+		
+		SharedPreferences.Editor oldEditor = oldPrefs.edit();
+		oldEditor.clear();
+		oldEditor.apply();
 	}
 
 	public boolean isDoneLoading(){
