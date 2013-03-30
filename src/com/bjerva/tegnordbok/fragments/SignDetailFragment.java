@@ -25,6 +25,7 @@ import java.util.List;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Context;
@@ -127,7 +128,8 @@ public class SignDetailFragment extends Fragment {
 		}
 		if(ma != null && currSign != null){
 			mMenu.clear();
-			SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			//SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ma.getApplicationContext());
 			if(sharedPref.contains(currSign.getWords().get(0).getWord())){
 				Log.d(TAG, "Setting on");
 				mMenu.add(0, MainActivity.ID_FAV_BUTTON, 1, R.string.favourite).setIcon(R.drawable.my_star_on).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
@@ -145,7 +147,8 @@ public class SignDetailFragment extends Fragment {
 		//TODO: Clean this up
 		switch (item.getItemId()) {
 		case MainActivity.ID_FAV_BUTTON:
-			SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			//SharedPreferences sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ma.getApplicationContext());
 			SharedPreferences.Editor prefEditor = sharedPref.edit();
 			if(!sharedPref.contains(currSign.getWords().get(0).getWord())){
 				Log.d(TAG, "Adding");

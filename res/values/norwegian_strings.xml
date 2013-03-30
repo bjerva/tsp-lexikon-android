@@ -16,6 +16,7 @@
     <string name="no_favourites">Klikk på en stjerne for å legge till favoritter!</string>
     <string name="no_category">Ukategorisert</string>
     <string name="flash_cards">Flash cards</string>
+    <string name="flash">Flash cards</string>
 
     <string name="word">Ord</string>
     <string name="desc">Beskrivelse</string>

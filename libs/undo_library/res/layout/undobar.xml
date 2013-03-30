@@ -4,7 +4,8 @@
     style="@style/UndoBar" >
     <TextView
         android:id="@+id/undobar_message"
-        style="@style/UndoBarMessage" />
+        style="@style/UndoBarMessage"
+        android:textIsSelectable="false" />
     <View
         android:layout_width="1dp"
         android:layout_height="fill_parent"

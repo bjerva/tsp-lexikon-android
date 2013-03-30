@@ -64,8 +64,6 @@ public class SignListFragment extends ListFragment {
 
 	private int top = 0;
 
-	private String oldSearch = "";
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -112,8 +110,8 @@ public class SignListFragment extends ListFragment {
 		if(MainActivity.LIST_POS!=-1){
 			this.getListView().setSelectionFromTop(MainActivity.LIST_POS, top);
 		}
-		if(mAdapter != null){
-			mAdapter.getFilter().filter(oldSearch);
+		if(mAdapter != null && !MainActivity.OLD_SEARCH.equals("")){
+			mAdapter.getFilter().filter(MainActivity.OLD_SEARCH);
 		}
 	}
 
@@ -129,7 +127,7 @@ public class SignListFragment extends ListFragment {
 	}
 	
 	public void setOldSearch(String search){
-		oldSearch = search;
+		MainActivity.OLD_SEARCH = search;
 	}
 
 	void loadSigns(){

@@ -88,6 +88,7 @@ public class MainActivity extends Activity {
 	public static final String LANG_STR = "NO"; //"SE"
 
 	public static int LIST_POS = -1;
+	public static String OLD_SEARCH = "";
 
 	private int screenSize;
 	private int screenWidth;

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Context;
@@ -66,7 +66,8 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			originalItems.add(items.get(i));
 		}
 
-		sharedPref = ((Activity) context).getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		//sharedPref = ((Activity) context).getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
 import android.os.Bundle;
@@ -94,7 +95,8 @@ public class FavouritesFragment extends Fragment {
 
 		list = new ArrayList<String>();
 
-		sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		//sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(ma.getApplicationContext());
 		for(Object key : sharedPref.getAll().keySet()){
 			list.add((String) key);
 		}
@@ -142,7 +144,8 @@ public class FavouritesFragment extends Fragment {
 		Log.d(TAG, "Preparing change");
 		if(adapter != null){
 			Log.d(TAG, "Getting shared");
-			sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			//sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+			sharedPref = PreferenceManager.getDefaultSharedPreferences(ma.getApplicationContext());
 			Log.d(TAG, "Changing");
 			list.clear();
 			for(Object key : sharedPref.getAll().keySet()){
@@ -162,7 +165,8 @@ public class FavouritesFragment extends Fragment {
 		}
 		toDelete = new HashMap<String, Integer>(adapter.getChecked().size());
 
-		sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		//sharedPref = ma.getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(ma.getApplicationContext());
 		for(Integer i : adapter.getChecked()){
 			String entry = adapter.getItem(i);
 			toDelete.put(entry, sharedPref.getInt(entry, -1));

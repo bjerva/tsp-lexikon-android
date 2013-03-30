@@ -23,7 +23,7 @@ package com.bjerva.tegnordbok.adapters;
 import java.util.List;
 import java.util.Map;
 
-import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Context;
@@ -66,7 +66,8 @@ SimpleExpandableListAdapter {
 		mChildFrom = childFrom;
 		mContext = context;
 		mLastChildLayout = mChildLayout;
-		sharedPref = ((Activity) mContext).getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		//sharedPref = ((Activity) mContext).getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
