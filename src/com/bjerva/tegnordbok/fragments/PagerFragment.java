@@ -111,7 +111,7 @@ public class PagerFragment extends Fragment {
 		} else if (previousFrag == 1){
 			mMenu.add(0, MainActivity.ID_COLLAPSE_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_media_group_collapse).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 		} else if (previousFrag == 2){
-			mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.edit_query).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+			mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 		}
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -158,7 +158,7 @@ public class PagerFragment extends Fragment {
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 			} else {
 				favFrag.deleteChecked();
-				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.edit_query).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 			}
 			ma.onPrepareOptionsMenu(mMenu);
 			favFrag.toggleCheckBoxes();
@@ -263,7 +263,7 @@ public class PagerFragment extends Fragment {
 					Crouton.makeText(getActivity(), getString(R.string.no_favourites), Style.INFO).show();
 				}
 				mMenu.clear();
-				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.edit_query).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 				ma.onPrepareOptionsMenu(mMenu);
 			}
 		}
