@@ -28,7 +28,6 @@ import org.holoeverywhere.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +45,8 @@ import com.bjerva.tegnordbok.R;
 import com.bjerva.tegnordbok.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
+import com.jfeinstein.jazzyviewpager.JazzyViewPager;
+import com.jfeinstein.jazzyviewpager.JazzyViewPager.TransitionEffect;
 import com.viewpagerindicator.TabPageIndicator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -57,7 +58,8 @@ public class PagerFragment extends Fragment {
 	private static final String TAG = "PagerFragment";
 
 	private SignAlternativesAdapter mAdapter;
-	private ViewPager mPager;
+	//private ViewPager mPager;
+	private JazzyViewPager mJazzy;
 	private TabPageIndicator mIndicator;
 	private View mView;
 	private Menu mMenu = null;
@@ -71,7 +73,7 @@ public class PagerFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
-		mView = inflater.inflate(R.layout.pager_fragment, container, false);
+		mView = inflater.inflate(R.layout.fragment_pager, container, false);
 		setHasOptionsMenu(true);
 		return mView;
 	}
@@ -91,12 +93,15 @@ public class PagerFragment extends Fragment {
 
 		mAdapter = new SignAlternativesAdapter(this);
 
-		mPager = (ViewPager) ma.findViewById(R.id.pager);
-		mPager.setAdapter(mAdapter);
-		mPager.setOffscreenPageLimit(3);
+		mJazzy = (JazzyViewPager) ma.findViewById(R.id.jazzy_pager);
+		mJazzy.setTransitionEffect(TransitionEffect.CubeOut);
+		//mJazzy.setBackgroundColor(getResources().getColor(android.R.color.background_light));
+		mJazzy.setAdapter(mAdapter);
+		mJazzy.setPageMargin(30);
+		mJazzy.setOffscreenPageLimit(3);
 
 		mIndicator = (TabPageIndicator) ma.findViewById(R.id.indicator);
-		mIndicator.setViewPager(mPager);
+		mIndicator.setViewPager(mJazzy);
 		mIndicator.setOnPageChangeListener(mOnPageChangeListener);
 	}
 
@@ -177,7 +182,7 @@ public class PagerFragment extends Fragment {
 			InputMethodManager imm = (InputMethodManager) ma.getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
 		}
-		previousFrag = mPager.getCurrentItem();
+		previousFrag = mJazzy.getCurrentItem();
 		super.onPause();
 	}
 
@@ -240,6 +245,22 @@ public class PagerFragment extends Fragment {
 		@Override
 		public int getCount() {
 			return MainActivity.CONTENT_SWEDISH.length;
+		}
+		
+		@Override
+		public Object instantiateItem(ViewGroup container, final int position) {
+		    Object obj = super.instantiateItem(container, position);
+		    mJazzy.setObjectForPosition(obj, position);
+		    return obj;
+		}
+
+		@Override
+		public boolean isViewFromObject(View view, Object object) {
+			try{
+				return ((Fragment)object).getView() == view;
+			} catch (NullPointerException e){
+				return false;
+			}
 		}
 	}
 

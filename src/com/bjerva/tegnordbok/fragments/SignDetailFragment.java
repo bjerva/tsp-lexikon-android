@@ -81,7 +81,7 @@ public class SignDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
-		myView = inflater.inflate(R.layout.sign_detail_fragment, container, false);
+		myView = inflater.inflate(R.layout.fragment_sign_detail, container, false);
 		firstErr = true;
 		return myView;
 	}

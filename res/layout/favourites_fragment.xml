@@ -3,7 +3,8 @@
     xmlns:dslv="http://schemas.android.com/apk/res/com.bjerva.tegnordbok"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@android:color/background_light" >
 
     <com.mobeta.android.dslv.DragSortListView
         android:id="@+id/drag_list"

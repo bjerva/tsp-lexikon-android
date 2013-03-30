@@ -65,7 +65,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
-		myView = inflater.inflate(R.layout.sign_list_fragment, container, false);
+		myView = inflater.inflate(R.layout.fragment_sign_category, container, false);
 		setHasOptionsMenu(true);
 		return myView;
 	}
@@ -228,6 +228,7 @@ public class SignCategoryFragment extends ExpandableListFragment {
 		});
 
 		getExpandableListView().setFastScrollEnabled(true);
+		getExpandableListView().setBackgroundColor(getResources().getColor(android.R.color.background_light));
 	}
 
 	@Override

@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@android:color/background_light">
 
     <TextView
         android:id="@+id/alphabetic_header"

@@ -389,8 +389,8 @@ public class MainActivity extends Activity {
 		NodeList nodeList = doc.getElementsByTagName("leksem");
 
 		int size = nodeList.getLength();
-		ArrayList<SimpleGson> norwegianSimpleSigns = new ArrayList<SimpleGson>(size);
-		ArrayList<GsonSign> norwegianSigns = new ArrayList<GsonSign>(size);
+		gsonSignsLite = new ArrayList<SimpleGson>(size);
+		gsonSigns = new ArrayList<GsonSign>(size);
 
 		String currentWord;
 		String currentFileName;
@@ -417,12 +417,9 @@ public class MainActivity extends Activity {
 				currentExampleUrls[j] = ((Element) examples.item(j)).getAttribute("filnavn");
 			}
 
-			norwegianSimpleSigns.add(new SimpleGson(currentWord, currentFileName, currentCategory, i));
-			norwegianSigns.add(new GsonSign(currentWord, currentFileName, currentCategory, currentExampleDescriptions, currentExampleUrls, i));
+			gsonSignsLite.add(new SimpleGson(currentWord, currentFileName, currentCategory, i));
+			gsonSigns.add(new GsonSign(currentWord, currentFileName, currentCategory, currentExampleDescriptions, currentExampleUrls, i));
 		}
-
-		gsonSignsLite = norwegianSimpleSigns;
-		gsonSigns = norwegianSigns;
 	}
 
 	private class LoadHelper extends AsyncTask<String, Void, Void>{
