@@ -155,7 +155,7 @@ public class PagerFragment extends Fragment {
 			FavouritesFragment favFrag = (FavouritesFragment) mAdapter.getItem(2);
 			mMenu.clear();
 			if(!favFrag.checkBoxesVisible()){
-				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.recyclebin).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
 			} else {
 				favFrag.deleteChecked();
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.edit_query).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
