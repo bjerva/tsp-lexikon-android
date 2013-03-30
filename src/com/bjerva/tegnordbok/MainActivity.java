@@ -452,7 +452,7 @@ public class MainActivity extends Activity {
 			//Show loading spinner
 			Log.d("AsyncDBLoad", "Loading local signs");
 			timeConsumed = System.currentTimeMillis();
-			showLoader();
+			//showLoader();
 			super.onPreExecute();
 		}
 
@@ -462,7 +462,7 @@ public class MainActivity extends Activity {
 			doneLoading = true;
 			timeConsumed = System.currentTimeMillis()-timeConsumed;
 			mGaTracker.sendTiming("LOAD", timeConsumed, "Local loading", MainActivity.LANG_STR);
-			hideLoader();
+			//hideLoader();
 			Log.d("AsyncDBLoad", "Loaded local signs");
 		}
 	}

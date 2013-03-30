@@ -95,9 +95,8 @@ public class PagerFragment extends Fragment {
 
 		mJazzy = (JazzyViewPager) ma.findViewById(R.id.jazzy_pager);
 		mJazzy.setTransitionEffect(TransitionEffect.CubeOut);
-		//mJazzy.setBackgroundColor(getResources().getColor(android.R.color.background_light));
 		mJazzy.setAdapter(mAdapter);
-		mJazzy.setPageMargin(30);
+		mJazzy.setPageMargin(40);
 		mJazzy.setOffscreenPageLimit(3);
 
 		mIndicator = (TabPageIndicator) ma.findViewById(R.id.indicator);

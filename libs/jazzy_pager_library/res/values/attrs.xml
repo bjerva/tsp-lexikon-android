@@ -15,6 +15,8 @@
             <enum name="rotateup" value="9" />
             <enum name="rotatedown" value="10" />
             <enum name="accordion" value="11" />
+            <enum name="trianglein" value="12" />
+            <enum name="triangleout" value="13" />
         </attr>
         <attr name="fadeEnabled" format="boolean" />
         <attr name="outlineEnabled" format="boolean" />

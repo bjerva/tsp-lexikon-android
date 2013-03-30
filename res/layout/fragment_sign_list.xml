@@ -18,7 +18,7 @@
         android:textSize="20sp" />
 
     <ListView
-        android:id="@+id/android:list"
+        android:id="@+id/sign_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"

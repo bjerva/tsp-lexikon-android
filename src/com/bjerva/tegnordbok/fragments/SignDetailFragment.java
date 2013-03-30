@@ -23,7 +23,6 @@ package com.bjerva.tegnordbok.fragments;
 import java.util.List;
 
 import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;

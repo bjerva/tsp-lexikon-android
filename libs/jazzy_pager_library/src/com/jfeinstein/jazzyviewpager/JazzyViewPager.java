@@ -29,6 +29,8 @@ public class JazzyViewPager extends ViewPager {
 	public static int sOutlineColor = Color.WHITE;
 	private TransitionEffect mEffect = TransitionEffect.Standard;
 	
+	private int mEdges = 4;
+	
 	private HashMap<Integer, Object> mObjs = new LinkedHashMap<Integer, Object>();
 
 	private static final float SCALE_MAX = 0.5f;
@@ -47,7 +49,9 @@ public class JazzyViewPager extends ViewPager {
 		ZoomOut,
 		RotateUp,
 		RotateDown,
-		Accordion
+		Accordion,
+		TriangleIn,
+		TriangleOut
 	}
 
 	private static final boolean API_11;
@@ -261,6 +265,25 @@ public class JazzyViewPager extends ViewPager {
 				mRot = -(in ? 90.0f : -90.0f) * (1-positionOffset);
 				ViewHelper.setPivotX(right, 0);
 				ViewHelper.setPivotY(right, right.getMeasuredHeight()*0.5f);
+				ViewHelper.setRotationY(right, mRot);
+			}
+		}
+	}
+	
+	private void animateTriangle(View left, View right, float positionOffset, boolean in) {
+		if (mState != State.IDLE) {
+			if (left != null) {
+				manageLayer(left, true);
+				mRot = (in ? 90.0f : -90.0f) * positionOffset;
+				ViewHelper.setPivotX(left, left.getMeasuredWidth());
+				ViewHelper.setPivotY(left, left.getMeasuredHeight()*0.33f);
+				ViewHelper.setRotationY(left, mRot);
+			}
+			if (right != null) {
+				manageLayer(right, true);
+				mRot = -(in ? 90.0f : -90.0f) * (1-positionOffset);
+				ViewHelper.setPivotX(right, 0);
+				ViewHelper.setPivotY(right, right.getMeasuredHeight()*0.33f);
 				ViewHelper.setRotationY(right, mRot);
 			}
 		}
@@ -537,6 +560,12 @@ public class JazzyViewPager extends ViewPager {
 			break;
 		case Accordion:
 			animateAccordion(mLeft, mRight, effectOffset);
+			break;
+		case TriangleIn:
+			animateTriangle(mLeft, mRight, effectOffset, true);
+			break;
+		case TriangleOut:
+			animateTriangle(mLeft, mRight, effectOffset, false);
 			break;
 		}
 

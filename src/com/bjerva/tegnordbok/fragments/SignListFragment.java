@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.ListFragment;
+import org.holoeverywhere.widget.ListView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -45,10 +45,11 @@ import com.bjerva.tegnordbok.MainActivity;
 import com.bjerva.tegnordbok.R;
 import com.bjerva.tegnordbok.adapters.SignAdapter;
 import com.bjerva.tegnordbok.models.SimpleGson;
+import com.devspark.progressfragment.ProgressFragment;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 
-public class SignListFragment extends ListFragment {
+public class SignListFragment extends ProgressFragment {
 	
 	static final String TAG = "SignListFragment";
 
@@ -59,6 +60,7 @@ public class SignListFragment extends ListFragment {
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
 
+	private ListView lv;
 	private EditText search;
 	private TextView tv;
 
@@ -68,13 +70,18 @@ public class SignListFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.fragment_sign_list, container, false);
-		//setHasOptionsMenu(true);
-		return myView;
+		lv = (ListView) myView.findViewById(R.id.sign_list);
+        return inflater.inflate(R.layout.fragment_custom_progress, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
+		// Setup content view
+        setContentView(myView);
+        // Show indeterminate progress
+        setContentShown(false);
+        
 		ma = (MainActivity) getActivity();
 
 		mGaInstance = GoogleAnalytics.getInstance(ma);
@@ -108,7 +115,7 @@ public class SignListFragment extends ListFragment {
 		((PagerFragment) getParentFragment()).getPager().setListFrag(this);
 		Log.d(TAG, ""+MainActivity.LIST_POS);
 		if(MainActivity.LIST_POS!=-1){
-			this.getListView().setSelectionFromTop(MainActivity.LIST_POS, top);
+			lv.setSelectionFromTop(MainActivity.LIST_POS, top);
 		}
 		if(mAdapter != null && !MainActivity.OLD_SEARCH.equals("")){
 			mAdapter.getFilter().filter(MainActivity.OLD_SEARCH);
@@ -118,8 +125,8 @@ public class SignListFragment extends ListFragment {
 	public void onPause(){
 		super.onPause();
 		try{
-			MainActivity.LIST_POS = this.getListView().getFirstVisiblePosition();
-			View v = this.getListView().getChildAt(0);
+			MainActivity.LIST_POS = lv.getFirstVisiblePosition();
+			View v = lv.getChildAt(0);
 			top = (v == null) ? 0 : v.getTop();
 		} catch(Exception e) {
 			Log.w("OldListPosErr", "Error when fetching old listpos");
@@ -148,10 +155,10 @@ public class SignListFragment extends ListFragment {
 
 		mAdapter = new SignAdapter(ma, android.R.layout.simple_list_item_1, tmpSigns);
 
-		getListView().setAdapter(mAdapter);
+		lv.setAdapter(mAdapter);
 
 		//Set scroll listener
-		getListView().setOnScrollListener(new OnScrollListener(){
+		lv.setOnScrollListener(new OnScrollListener(){
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
@@ -166,7 +173,7 @@ public class SignListFragment extends ListFragment {
 		});
 
 		//Set listener
-		getListView().setOnItemClickListener(new OnItemClickListener() {
+		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id){
 				Log.d(TAG, "CLICKED");
@@ -206,10 +213,16 @@ public class SignListFragment extends ListFragment {
 			}
 
 		});
+
+        setContentShown(true);
 	}
 
 	public SignAdapter getmAdapter() {
 		return mAdapter;
+	}
+	
+	public ListView getListView() {
+		return lv;
 	}
 
 	/*
