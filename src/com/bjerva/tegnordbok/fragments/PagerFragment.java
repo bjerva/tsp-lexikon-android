@@ -26,6 +26,7 @@ import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -40,6 +41,7 @@ import android.widget.EditText;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.bjerva.tegnordbok.FlashActivity;
 import com.bjerva.tegnordbok.MainActivity;
 import com.bjerva.tegnordbok.R;
 import com.bjerva.tegnordbok.models.SimpleGson;
@@ -170,7 +172,8 @@ public class PagerFragment extends Fragment {
 			favFrag.toggleCheckBoxes();
 			break;
 		case MainActivity.ID_FLASH_BUTTON:
-			Log.d(TAG, "FLASHCARDS!");
+			Intent intent = new Intent(ma, FlashActivity.class);
+			ma.startActivity(intent);
 			break;
 		}
 		return true;

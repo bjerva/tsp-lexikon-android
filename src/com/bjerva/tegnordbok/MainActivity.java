@@ -134,6 +134,9 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.activity_sign_listing);
 
+		getSupportFragmentManager().beginTransaction().add(
+				R.id.fragment_container, new PagerFragment()).commit();
+
 		Display display = getWindowManager().getDefaultDisplay();
 		if (android.os.Build.VERSION.SDK_INT >= 13){
 			Point size = new Point();
@@ -161,9 +164,6 @@ public class MainActivity extends Activity {
 		
 		// Load sign resources
 		new LoadHelper().execute();
-
-		getSupportFragmentManager().beginTransaction().add(
-				R.id.fragment_container, new PagerFragment()).commit();
 
 		// If we are on a tablet the details fragment should be added
 		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
