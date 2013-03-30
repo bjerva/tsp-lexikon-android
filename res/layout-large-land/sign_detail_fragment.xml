@@ -3,18 +3,19 @@
     android:id="@+id/detailLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal"
+    android:baselineAligned="false" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
+        android:layout_height="wrap_content" 
         android:layout_weight="1.0"
         android:layout_gravity="center">
 
         <VideoView
             android:id="@+id/myVideoView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 

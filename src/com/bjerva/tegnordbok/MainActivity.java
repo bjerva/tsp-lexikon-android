@@ -86,6 +86,7 @@ public class MainActivity extends Activity {
 	public static final String[] CONTENT_SWEDISH = new String[] { "Tecken", "Kategorier", "Favoriter"};
 	public static final String[] CONTENT_NORWEGIAN = new String[] { "Tegn", "Kategorier", "Favoritter"};
 
+	// TODO: Change these depending on language
 	public static int LANGUAGE = NORWEGIAN;
 	public static final String LANG_STR = "NO"; //"SE"
 
@@ -177,6 +178,7 @@ public class MainActivity extends Activity {
 		super.onBackPressed();
 	}
 
+	/*
 	@SuppressLint("NewApi") 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -192,6 +194,7 @@ public class MainActivity extends Activity {
 			break;
 		}
 
+		/*
 		if(screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE || screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE){
 			//Tablet
 			showLoader();
@@ -213,7 +216,7 @@ public class MainActivity extends Activity {
 				transaction.commit();
 				hideLoader();
 			}
-		}*/
+		}
 
 		ListView metaList = (ListView) findViewById(R.id.metaList);
 		if(metaList != null){
@@ -235,7 +238,8 @@ public class MainActivity extends Activity {
 		} else {
 			Log.i("MA", "metaList is null");
 		}
-	}
+		
+	}*/
 
 	public GsonSign getCurrentSign(){
 		return currentSign;
