@@ -66,10 +66,7 @@ public class SignAdapter extends ArrayAdapter<SimpleGson> implements Filterable{
 			originalItems.add(items.get(i));
 		}
 
-		sharedPref = ((Activity) context) .getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
-		//SharedPreferences.Editor prefEditor = sharedPref.edit();
-		//prefEditor.clear();
-		//prefEditor.commit();
+		sharedPref = ((Activity) context).getSharedPreferences("SignDetails", Activity.MODE_PRIVATE);
 	}
 
 	@Override

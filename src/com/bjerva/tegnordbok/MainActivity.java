@@ -52,11 +52,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 
-import com.bjerva.tegnordbok.R;
 import com.bjerva.tegnordbok.fragments.PagerFragment;
 import com.bjerva.tegnordbok.fragments.SignDetailFragment;
 import com.bjerva.tegnordbok.models.GsonSign;
@@ -79,6 +75,7 @@ public class MainActivity extends Activity {
 	public static final int ID_COLLAPSE_BUTTON = 2;
 	public static final int ID_EDIT_BUTTON = 3;
 	public static final int ID_FAV_BUTTON = 4;
+	public static final int ID_FLASH_BUTTON = 5;
 
 	public static final int SWEDISH = 1001;
 	public static final int NORWEGIAN = 1002;
@@ -259,7 +256,7 @@ public class MainActivity extends Activity {
 		} else {
 			pbarDialog.setMessage(getString(R.string.sign_load));
 		}
-		pbarDialog.setCancelable(false);
+		pbarDialog.setCancelable(true);
 		pbarDialog.show();
 	}
 

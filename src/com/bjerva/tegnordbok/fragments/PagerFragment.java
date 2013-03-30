@@ -109,9 +109,10 @@ public class PagerFragment extends Fragment {
 		if(previousFrag == 0){
 			mMenu.add(0, MainActivity.ID_SEARCH_BUTTON, 1, R.string.search).setIcon(R.drawable.ic_action_search).setActionView(R.layout.search_view).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		} else if (previousFrag == 1){
-			mMenu.add(0, MainActivity.ID_COLLAPSE_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_media_group_collapse).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+			mMenu.add(0, MainActivity.ID_COLLAPSE_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_media_group_collapse).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		} else if (previousFrag == 2){
-			mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+			mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		}
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -155,13 +156,17 @@ public class PagerFragment extends Fragment {
 			FavouritesFragment favFrag = (FavouritesFragment) mAdapter.getItem(2);
 			mMenu.clear();
 			if(!favFrag.checkBoxesVisible()){
-				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			} else {
 				favFrag.deleteChecked();
-				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			}
+			mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			ma.onPrepareOptionsMenu(mMenu);
 			favFrag.toggleCheckBoxes();
+			break;
+		case MainActivity.ID_FLASH_BUTTON:
+			Log.d(TAG, "FLASHCARDS!");
 			break;
 		}
 		return true;
@@ -253,7 +258,7 @@ public class PagerFragment extends Fragment {
 				ma.onPrepareOptionsMenu(mMenu);
 			} else if (position==1){
 				mMenu.clear();
-				mMenu.add(0, MainActivity.ID_COLLAPSE_BUTTON, 1, R.string.collapse).setIcon(R.drawable.ic_media_group_collapse).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+				mMenu.add(0, MainActivity.ID_COLLAPSE_BUTTON, 1, R.string.collapse).setIcon(R.drawable.ic_media_group_collapse).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 				ma.onPrepareOptionsMenu(mMenu);
 			} else if(position==2){
 				// Update favourites
@@ -263,7 +268,9 @@ public class PagerFragment extends Fragment {
 					Crouton.makeText(getActivity(), getString(R.string.no_favourites), Style.INFO).show();
 				}
 				mMenu.clear();
-				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);;
+				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+				mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+				
 				ma.onPrepareOptionsMenu(mMenu);
 			}
 		}
