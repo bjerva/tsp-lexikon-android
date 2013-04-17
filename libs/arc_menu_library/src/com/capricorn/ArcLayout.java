@@ -226,7 +226,12 @@ public class ArcLayout extends ViewGroup {
 
 			@Override
 			public void onAnimationStart(Animation animation) {
-				child.setVisibility(View.VISIBLE);
+				postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						child.setVisibility(View.VISIBLE);
+					}
+				}, 200);
 			}
 
 			@Override

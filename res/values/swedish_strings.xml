@@ -1,5 +1,5 @@
 <resources>
-    <!-- 
+    
     <string name="app_name">Svenskt Teckenspråkslexikon</string>
     
     <string name="search">Sök efter tecken &#8230;</string>
@@ -23,6 +23,5 @@
     <string name="unusual">Ovanligt</string>
     <string name="is_unusual">Tecknet är ovanligt</string>
     <string name="no_desc">Tecknet har ingen beskrivning i lexikonet</string>
-     -->
     
 </resources>

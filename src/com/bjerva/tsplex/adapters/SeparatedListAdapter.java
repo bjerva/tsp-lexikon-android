@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.adapters;
+package com.bjerva.tsplex.adapters;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -30,7 +30,7 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
-import com.bjerva.tegnordbok.R;
+import com.bjerva.tsplex.R;
 
 public class SeparatedListAdapter extends BaseAdapter {
 

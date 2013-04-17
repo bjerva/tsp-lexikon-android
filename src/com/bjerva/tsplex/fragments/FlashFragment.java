@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.fragments;
+package com.bjerva.tsplex.fragments;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
@@ -11,8 +11,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bjerva.tegnordbok.FlashActivity;
-import com.bjerva.tegnordbok.R;
+import com.bjerva.tsplex.FlashActivity;
+import com.bjerva.tsplex.R;
 import com.capricorn.ArcMenu;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -28,6 +28,10 @@ public class FlashFragment extends Fragment{
 	private int count = 0;
 
 	private View myView;
+	
+	private static final int[] ITEM_DRAWABLES = new int[] {R.drawable.rating_0, R.drawable.rating_1, 
+		R.drawable.rating_2, R.drawable.rating_3, 
+		R.drawable.rating_4, R.drawable.rating_5};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,10 +56,7 @@ public class FlashFragment extends Fragment{
 	}
 
 	private void setupArcMenu(){
-
-
 		final ArcMenu menu = (ArcMenu) myView.findViewById(R.id.arc_menu);
-
 		final Handler mHandler = new Handler();
 		final Runnable r = new Runnable(){
 			public void run(){
@@ -64,9 +65,7 @@ public class FlashFragment extends Fragment{
 				}
 			}
 		};
-
-		int[] ITEM_DRAWABLES = new int[] {R.drawable.ic_action_search, R.drawable.my_star_off, R.drawable.ic_media_group_collapse, 
-				R.drawable.ic_menu_delete, R.drawable.ic_menu_edit};
+		
 		final int itemCount = ITEM_DRAWABLES.length;
 		for (int i = 0; i < itemCount; i++) {
 			ImageView item = new ImageView(fa);
@@ -75,15 +74,20 @@ public class FlashFragment extends Fragment{
 			menu.addItem(item, new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					updateFlashText();
-					mHandler.postDelayed(r, 1000);
+					count++;
+					if(count < fa.getFlashList().length){
+						updateFlashText();
+						mHandler.postDelayed(r, 1000);
+					}
 				}
 			});
 		}
+		
+		mHandler.postDelayed(r, 1000);
 	}
 	
 	private void updateFlashText(){
-		tv.setText((String) fa.getFlashList()[++count]);
+		tv.setText((String) fa.getFlashList()[count]);
 	}
 
 }

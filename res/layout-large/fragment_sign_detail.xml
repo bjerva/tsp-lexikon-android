@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/detailLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@android:color/background_light">
+    android:background="@android:color/background_light" >
 
     <RelativeLayout
+        android:id="@+id/videoWrapperLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:layout_weight="1.0"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
         <VideoView
             android:id="@+id/myVideoView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
     <ListView
         android:id="@+id/metaList"
-        android:layout_weight="1.0"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_below="@id/videoWrapperLayout"
         android:cacheColorHint="@android:color/transparent"
         android:paddingLeft="15dp"
         android:paddingRight="15dp" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.fragments;
+package com.bjerva.tsplex.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -41,10 +41,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.bjerva.tegnordbok.MainActivity;
-import com.bjerva.tegnordbok.R;
-import com.bjerva.tegnordbok.adapters.SignAdapter;
-import com.bjerva.tegnordbok.models.SimpleGson;
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.adapters.SignAdapter;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.devspark.progressfragment.ProgressFragment;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;

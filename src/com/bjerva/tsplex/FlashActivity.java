@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok;
+package com.bjerva.tsplex;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
@@ -7,7 +7,7 @@ import org.holoeverywhere.preference.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.bjerva.tegnordbok.fragments.FlashFragment;
+import com.bjerva.tsplex.fragments.FlashFragment;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;

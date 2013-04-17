@@ -60,7 +60,7 @@ public class ArcMenu extends RelativeLayout {
 
         mArcLayout = (ArcLayout) findViewById(R.id.item_layout);
 
-        final ViewGroup controlLayout = (ViewGroup) findViewById(R.id.control_layout);
+        /*final ViewGroup controlLayout = (ViewGroup) findViewById(R.id.control_layout);
         controlLayout.setClickable(true);
         controlLayout.setOnTouchListener(new OnTouchListener() {
 
@@ -73,7 +73,7 @@ public class ArcMenu extends RelativeLayout {
 
                 return false;
             }
-        });
+        });*/
 
         mHintView = (ImageView) findViewById(R.id.control_hint);
     }

@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.fragments;
+package com.bjerva.tsplex.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -50,11 +50,11 @@ import android.widget.VideoView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.bjerva.tegnordbok.MainActivity;
-import com.bjerva.tegnordbok.R;
-import com.bjerva.tegnordbok.adapters.SeparatedListAdapter;
-import com.bjerva.tegnordbok.models.GsonSign;
-import com.bjerva.tegnordbok.models.GsonSign.Word;
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.adapters.SeparatedListAdapter;
+import com.bjerva.tsplex.models.GsonSign;
+import com.bjerva.tsplex.models.GsonSign.Word;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 

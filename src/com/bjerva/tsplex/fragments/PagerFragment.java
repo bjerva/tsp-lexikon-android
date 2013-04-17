@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.fragments;
+package com.bjerva.tsplex.fragments;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -25,8 +25,10 @@ import java.util.Locale;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -41,10 +43,10 @@ import android.widget.EditText;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.bjerva.tegnordbok.FlashActivity;
-import com.bjerva.tegnordbok.MainActivity;
-import com.bjerva.tegnordbok.R;
-import com.bjerva.tegnordbok.models.SimpleGson;
+import com.bjerva.tsplex.FlashActivity;
+import com.bjerva.tsplex.MainActivity;
+import com.bjerva.tsplex.R;
+import com.bjerva.tsplex.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager;
@@ -71,7 +73,7 @@ public class PagerFragment extends Fragment {
 
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -89,7 +91,7 @@ public class PagerFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		ma = (MainActivity) getActivity();
-		
+
 		mGaInstance = GoogleAnalytics.getInstance(ma);
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
@@ -118,7 +120,7 @@ public class PagerFragment extends Fragment {
 			mMenu.add(0, MainActivity.ID_COLLAPSE_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_media_group_collapse).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		} else if (previousFrag == 2){
 			mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-			mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			//mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		}
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -167,7 +169,7 @@ public class PagerFragment extends Fragment {
 				favFrag.deleteChecked();
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			}
-			mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			//	mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			ma.onPrepareOptionsMenu(mMenu);
 			favFrag.toggleCheckBoxes();
 			break;
@@ -179,6 +181,7 @@ public class PagerFragment extends Fragment {
 		return true;
 	}
 
+	@Override
 	public void onPause(){
 		if(search != null){
 			InputMethodManager imm = (InputMethodManager) ma.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -188,6 +191,11 @@ public class PagerFragment extends Fragment {
 		super.onPause();
 	}
 
+	@Override
+	public void onDestroy(){
+		Crouton.cancelAllCroutons();
+		super.onDestroy();
+	}
 	public SignAlternativesAdapter getPager(){
 		return mAdapter;
 	}
@@ -248,12 +256,12 @@ public class PagerFragment extends Fragment {
 		public int getCount() {
 			return MainActivity.CONTENT_SWEDISH.length;
 		}
-		
+
 		@Override
 		public Object instantiateItem(ViewGroup container, final int position) {
-		    Object obj = super.instantiateItem(container, position);
-		    mJazzy.setObjectForPosition(obj, position);
-		    return obj;
+			Object obj = super.instantiateItem(container, position);
+			mJazzy.setObjectForPosition(obj, position);
+			return obj;
 		}
 
 		@Override
@@ -274,7 +282,7 @@ public class PagerFragment extends Fragment {
 			} else {
 				mGaTracker.sendEvent(MainActivity.LANG_STR, "page_swipe", MainActivity.CONTENT_SWEDISH[position], 1L);
 			}
-			
+
 			if(position==0){
 				mMenu.clear();
 				mMenu.add(0, MainActivity.ID_SEARCH_BUTTON, 1, R.string.search).setIcon(R.drawable.ic_action_search).setActionView(R.layout.search_view).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
@@ -288,12 +296,12 @@ public class PagerFragment extends Fragment {
 				FavouritesFragment favFrag = (FavouritesFragment) mAdapter.getItem(2);
 				favFrag.notifyChange();
 				if(favFrag.getAdapter() != null && favFrag.getAdapter().getCount() == 0){
-					Crouton.makeText(getActivity(), getString(R.string.no_favourites), Style.INFO).show();
+					Crouton.makeText(getActivity(), getString(R.string.no_favourites), Style.INFO, (ViewGroup) getView()).show();
 				}
 				mMenu.clear();
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-				mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-				
+				//	mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
 				ma.onPrepareOptionsMenu(mMenu);
 			}
 		}

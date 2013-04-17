@@ -1,4 +1,4 @@
-package com.bjerva.tegnordbok.adapters;
+package com.bjerva.tsplex.adapters;
 
 /*
  * Copyright (C) 2013, Johannes Bjerva
@@ -36,7 +36,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bjerva.tegnordbok.R;
+import com.bjerva.tsplex.R;
 
 public class FavouritesAdapter extends ArrayAdapter<String> {
 
