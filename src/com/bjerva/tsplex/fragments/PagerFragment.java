@@ -25,12 +25,11 @@ import java.util.Locale;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -49,8 +48,6 @@ import com.bjerva.tsplex.R;
 import com.bjerva.tsplex.models.SimpleGson;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
-import com.jfeinstein.jazzyviewpager.JazzyViewPager;
-import com.jfeinstein.jazzyviewpager.JazzyViewPager.TransitionEffect;
 import com.viewpagerindicator.TabPageIndicator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -63,7 +60,7 @@ public class PagerFragment extends Fragment {
 
 	private SignAlternativesAdapter mAdapter;
 	//private ViewPager mPager;
-	private JazzyViewPager mJazzy;
+	private ViewPager mJazzy;
 	private TabPageIndicator mIndicator;
 	private View mView;
 	private Menu mMenu = null;
@@ -73,7 +70,7 @@ public class PagerFragment extends Fragment {
 
 	private Tracker mGaTracker;
 	private GoogleAnalytics mGaInstance;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -97,8 +94,8 @@ public class PagerFragment extends Fragment {
 
 		mAdapter = new SignAlternativesAdapter(this);
 
-		mJazzy = (JazzyViewPager) ma.findViewById(R.id.jazzy_pager);
-		mJazzy.setTransitionEffect(TransitionEffect.CubeOut);
+		mJazzy = (ViewPager) ma.findViewById(R.id.jazzy_pager);
+		//mJazzy.setTransitionEffect(TransitionEffect.CubeOut);
 		mJazzy.setAdapter(mAdapter);
 		mJazzy.setPageMargin(40);
 		mJazzy.setOffscreenPageLimit(3);
@@ -119,8 +116,8 @@ public class PagerFragment extends Fragment {
 		} else if (previousFrag == 1){
 			mMenu.add(0, MainActivity.ID_COLLAPSE_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_media_group_collapse).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		} else if (previousFrag == 2){
-			mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-			//mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 0, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 		}
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -142,14 +139,18 @@ public class PagerFragment extends Fragment {
 				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 				}
 				public void onTextChanged(CharSequence cs, int start, int before, int count) {
-					signListFragment.getmAdapter().getFilter().filter(cs);
-					try {
-						String word = ((SimpleGson) signListFragment.getListView().getItemAtPosition(0)).getWord();
-						signListFragment.getTextHeader().setText(word.substring(0, 1).toUpperCase(swedishLocale));
-					} catch (IndexOutOfBoundsException e){
-						Log.w("IndexErr", "IndexErr after change text");
+					try{
+						signListFragment.getmAdapter().getFilter().filter(cs);
+						try {
+							String word = ((SimpleGson) signListFragment.getListView().getItemAtPosition(0)).getWord();
+							signListFragment.getTextHeader().setText(word.substring(0, 1).toUpperCase(swedishLocale));
+						} catch (IndexOutOfBoundsException e){
+							Log.w("IndexErr", "IndexErr after change text");
+						}
+						signListFragment.setOldSearch(cs.toString());
+					} catch (NullPointerException e){
+						Log.w("NullPointer", "Probably the search was clicked too early.");
 					}
-					signListFragment.setOldSearch(cs.toString());
 				}
 
 			});
@@ -169,7 +170,7 @@ public class PagerFragment extends Fragment {
 				favFrag.deleteChecked();
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			}
-			//	mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 			ma.onPrepareOptionsMenu(mMenu);
 			favFrag.toggleCheckBoxes();
 			break;
@@ -260,7 +261,7 @@ public class PagerFragment extends Fragment {
 		@Override
 		public Object instantiateItem(ViewGroup container, final int position) {
 			Object obj = super.instantiateItem(container, position);
-			mJazzy.setObjectForPosition(obj, position);
+			//mJazzy.setObjectForPosition(obj, position);
 			return obj;
 		}
 
@@ -300,7 +301,7 @@ public class PagerFragment extends Fragment {
 				}
 				mMenu.clear();
 				mMenu.add(0, MainActivity.ID_EDIT_BUTTON, 1, R.string.edit_favs).setIcon(R.drawable.ic_menu_edit).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-				//	mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+				mMenu.add(0, MainActivity.ID_FLASH_BUTTON, 1, R.string.flash_cards).setIcon(R.drawable.stat_notify_more).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
 				ma.onPrepareOptionsMenu(mMenu);
 			}

@@ -12,8 +12,7 @@
         android:layout_weight="1" />
     -->
 
-    <com.jfeinstein.jazzyviewpager.JazzyViewPager
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ViewPager
         android:id="@+id/jazzy_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

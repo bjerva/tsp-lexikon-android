@@ -8,17 +8,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="40sp"
         android:textColor="@android:color/primary_text_dark"
         android:textIsSelectable="false"
-        android:textStyle="bold" />
+        android:textSize="40sp"
+        android:visibility="gone" />
 
-    <com.capricorn.ArcMenu
-        android:id="@+id/arc_menu"
-        android:layout_width="wrap_content"
+    <VideoView
+        android:id="@+id/myFlashVideoView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-50dp" />
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/response_boxes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/myFlashVideoView"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/response_0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:padding="7dip"
+            android:textColor="@color/holo_blue_dark"
+            android:textIsSelectable="false"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/response_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/response_0"
+            android:padding="7dip"
+            android:textColor="@color/holo_blue_dark"
+            android:textIsSelectable="false"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/response_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/response_1"
+            android:padding="7dip"
+            android:textColor="@color/holo_blue_dark"
+            android:textIsSelectable="false"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
 </RelativeLayout>

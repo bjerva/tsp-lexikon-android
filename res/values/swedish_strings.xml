@@ -21,7 +21,9 @@
     <string name="ver">Varianter</string>
     <string name="cat">Kategori</string>
     <string name="unusual">Ovanligt</string>
-    <string name="is_unusual">Tecknet är ovanligt</string>
+    <string name="is_unusual">Tecknet är mindre vanligt</string>
     <string name="no_desc">Tecknet har ingen beskrivning i lexikonet</string>
     
+    <string name="flash">Quiz</string>
+    <string name="flash_cards">Starta quiz</string>
 </resources>

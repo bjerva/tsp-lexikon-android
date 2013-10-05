@@ -93,8 +93,6 @@ public class SignDetailFragment extends Fragment {
 		mGaInstance = GoogleAnalytics.getInstance(ma);
 		mGaTracker = mGaInstance.getTracker("UA-39295928-1");
 
-
-
 		myVideoView = (VideoView) myView.findViewById(R.id.myVideoView);
 		myVideoView.setZOrderOnTop(true);
 		final int width = ma.getScreenWidth();
