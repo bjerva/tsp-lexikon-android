@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
@@ -18,6 +19,7 @@ import android.view.Display;
 import android.view.ViewGroup;
 
 import com.bjerva.tsplex.fragments.FlashFragment;
+import com.bjerva.tsplex.fragments.ResultsFragment;
 import com.bjerva.tsplex.models.GsonSign;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GoogleAnalytics;
@@ -147,5 +149,13 @@ public class FlashActivity extends Activity{
 
 	public void connectionError(){
 		Crouton.makeText(this, getString(R.string.conn_error), Style.ALERT, (ViewGroup) findViewById(R.id.fragment_container)).show();
+	}
+	
+	public void showFailed(ArrayList<String> failedSigns){
+		ResultsFragment mResultsFragment = new ResultsFragment();
+		mResultsFragment.setFailedSigns(failedSigns);
+		
+		getSupportFragmentManager().beginTransaction().replace(
+				R.id.fragment_container, mResultsFragment).commit();
 	}
 }

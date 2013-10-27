@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import javax.xml.transform.ErrorListener;
+
+import org.holoeverywhere.ArrayAdapter;
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.widget.Button;
@@ -22,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.VideoView;
@@ -200,6 +204,15 @@ public class FlashFragment extends Fragment{
 		for(Button mResponse : mResponseButtons){
 			mResponse.setVisibility(View.GONE);
 		}
+		
+		mResponseButtons.get(0).setText("OK");
+		mResponseButtons.get(0).setVisibility(View.VISIBLE);
+		mResponseButtons.get(0).setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				showFailed(errorSigns);
+			}
+		});
 	}
 
 	private String getRandomString(HashSet<String> alreadyUsed){
@@ -312,6 +325,24 @@ public class FlashFragment extends Fragment{
 
 	private void playNormal(){
 		mVideoView.start();
+	}
+	
+	private void showFailed(ArrayList<String> mFailedSigns){
+		String[] failed = new String[mFailedSigns.size()];
+		for(int i=0; i<mFailedSigns.size(); i++){
+			failed[i] = mFailedSigns.get(i);
+		}
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, failed);
+		final ListView listView = (ListView) myView.findViewById(R.id.failedList);
+		listView.setAdapter(adapter);
+		listView.setVisibility(View.VISIBLE);
+		tv.setText("Failed");
+		adapter.notifyDataSetChanged();
+
+		for(Button mResponse : mResponseButtons){
+			mResponse.setVisibility(View.GONE);
+		}
 	}
 
 	/*

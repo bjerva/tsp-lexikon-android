@@ -24,9 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/myFlashVideoView"
-        android:layout_marginTop="7dip"
         android:layout_marginLeft="7dip"
         android:layout_marginRight="7dip"
+        android:layout_marginTop="7dip"
         android:gravity="center" >
 
         <Button
@@ -62,5 +62,15 @@
             android:textSize="22sp"
             android:textStyle="bold" />
     </RelativeLayout>
+
+    <ListView
+        android:id="@+id/failedList"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:cacheColorHint="@android:color/transparent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:visibility="gone" />
 
 </RelativeLayout>
