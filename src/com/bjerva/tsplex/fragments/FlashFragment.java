@@ -176,7 +176,7 @@ public class FlashFragment extends Fragment{
 	}
 	
 	private void showScore(){
-		float percentage = correct+0.0f / (correct+incorrect+0.0f);
+		float percentage = ((float) correct) / ((float) correct+incorrect);
 		String grade;
 		if (percentage >= 0.99f){
 			grade = "A";
