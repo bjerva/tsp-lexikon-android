@@ -40,7 +40,6 @@ public class FlashFragment extends Fragment{
 
 	private FlashActivity fa;
 	private TextView tv;
-	private Button mResponse0, mResponse1, mResponse2;
 
 	private int count = 0;
 	private int currentQuestion = 0;
@@ -61,18 +60,21 @@ public class FlashFragment extends Fragment{
 	private boolean firstErr = true;
 	
 	private Drawable buttonBackground;
+	
+	private final ArrayList<Button> mResponseButtons = new ArrayList<Button>(3);
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		myView = inflater.inflate(R.layout.fragment_flash, container, false);
 		tv = (TextView) myView.findViewById(R.id.flash_text);
-		mResponse0 = (Button) myView.findViewById(R.id.response_0);
-		mResponse1 = (Button) myView.findViewById(R.id.response_1);
-		mResponse2 = (Button) myView.findViewById(R.id.response_2);
+		mResponseButtons.add((Button) myView.findViewById(R.id.response_0));
+		mResponseButtons.add((Button) myView.findViewById(R.id.response_1));
+		mResponseButtons.add((Button) myView.findViewById(R.id.response_2));
+		buttonBackground = mResponseButtons.get(0).getBackground();
+		
 		mVideoView = (VideoView) myView.findViewById(R.id.myFlashVideoView);
 		
-		buttonBackground = mResponse0.getBackground();
 		return myView;
 	}
 
@@ -90,19 +92,19 @@ public class FlashFragment extends Fragment{
 		final int height = (int) (width*0.75);
 		mVideoView.setLayoutParams(new LayoutParams(width, height));
 
-		mResponse0.setOnClickListener(new OnClickListener(){
+		mResponseButtons.get(0).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
 				submitSelectionAnswer(0);
 			}
 		});
-		mResponse1.setOnClickListener(new OnClickListener(){
+		mResponseButtons.get(1).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
 				submitSelectionAnswer(1);
 			}
 		});
-		mResponse2.setOnClickListener(new OnClickListener(){
+		mResponseButtons.get(2).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
 				submitSelectionAnswer(2);
@@ -126,9 +128,9 @@ public class FlashFragment extends Fragment{
 			tv.setVisibility(View.VISIBLE);
 			mVideoView.setVisibility(View.GONE);
 			tv.setText(txt);
-			mResponse0.setVisibility(View.GONE);
-			mResponse1.setVisibility(View.GONE);
-			mResponse2.setVisibility(View.GONE);
+			for(Button mResponse : mResponseButtons){
+				mResponse.setVisibility(View.GONE);
+			}
 		} else if (currentQuestion < fa.getFlashList().length){
 			fa.showLoader();
 			fa.loadSingleJson(fa.getIdList()[viewOrder.get(currentQuestion)]);
@@ -139,8 +141,6 @@ public class FlashFragment extends Fragment{
 			} else {
 				startUpHelper(currSign);
 			}
-
-			//tv.setText((String) fa.getFlashList()[currentQuestion]);
 
 			correctResponse = mR.nextInt(2);
 			String alt0 = "";
@@ -165,19 +165,40 @@ public class FlashFragment extends Fragment{
 				break;
 			}
 
-			mResponse0.setText(alt0);
-			mResponse1.setText(alt1);
-			mResponse2.setText(alt2);
+			mResponseButtons.get(0).setText(alt0);
+			mResponseButtons.get(1).setText(alt1);
+			mResponseButtons.get(2).setText(alt2);
 
 			currentQuestion++;
 		} else {
-			String result = "Quizzet är klart!\nRätta svar: "+correct+"\nFelaktiga svar: "+incorrect;
-			tv.setVisibility(View.VISIBLE);
-			mVideoView.setVisibility(View.GONE);
-			tv.setText(result);
-			mResponse0.setVisibility(View.GONE);
-			mResponse1.setVisibility(View.GONE);
-			mResponse2.setVisibility(View.GONE);
+			showScore();
+		}
+	}
+	
+	private void showScore(){
+		float percentage = correct+0.0f / (correct+incorrect+0.0f);
+		String grade;
+		if (percentage >= 0.99f){
+			grade = "A";
+		} else if (percentage >= 0.9f){
+			grade = "B";
+		} else if (percentage >= 0.8f){
+			grade = "C";
+		} else if (percentage >= 0.7f){
+			grade = "D";
+		} else if (percentage >= 0.6f){
+			grade = "E";
+		} else {
+			grade = "F";
+		}
+
+		String result = "Quizzet är klart!\nRätta svar: "+correct+"\nFelaktiga svar: "+incorrect+"\nDitt betyg är: "+grade;
+		
+		tv.setVisibility(View.VISIBLE);
+		mVideoView.setVisibility(View.GONE);
+		tv.setText(result);
+		for(Button mResponse : mResponseButtons){
+			mResponse.setVisibility(View.GONE);
 		}
 	}
 
@@ -219,23 +240,13 @@ public class FlashFragment extends Fragment{
 	}
 
 	private void highlightButton(int num){
-		switch (num){
-		case 0:
-			mResponse0.setBackgroundResource(R.color.holo_red_dark);
-			break;
-		case 1:
-			mResponse1.setBackgroundResource(R.color.holo_red_dark);
-			break;	
-		case 2:
-			mResponse2.setBackgroundResource(R.color.holo_red_dark);
-			break;
-		}
+		mResponseButtons.get(num).setBackgroundResource(R.color.holo_red_dark);
 	}
 
 	private void resetButtons(){
-		mResponse0.setBackgroundDrawable(buttonBackground);
-		mResponse1.setBackgroundDrawable(buttonBackground);
-		mResponse2.setBackgroundDrawable(buttonBackground);
+		for(Button mResponse : mResponseButtons){
+			mResponse.setBackgroundDrawable(buttonBackground);
+		}
 	}
 
 	void startUpHelper(final GsonSign currSign){
