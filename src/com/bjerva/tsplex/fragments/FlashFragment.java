@@ -12,6 +12,7 @@ import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.TextView;
 
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -48,14 +49,18 @@ public class FlashFragment extends Fragment{
 	private int correctResponse;
 	private VideoView mVideoView;
 	private GsonSign currSign;
-	
+
 	private List<Integer> viewOrder;
+
+	private ArrayList<String> errorSigns = new ArrayList<String>();
 
 	private Random mR = new Random();
 
 	private View myView;
 
 	private boolean firstErr = true;
+	
+	private Drawable buttonBackground;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +71,8 @@ public class FlashFragment extends Fragment{
 		mResponse1 = (Button) myView.findViewById(R.id.response_1);
 		mResponse2 = (Button) myView.findViewById(R.id.response_2);
 		mVideoView = (VideoView) myView.findViewById(R.id.myFlashVideoView);
-
+		
+		buttonBackground = mResponse0.getBackground();
 		return myView;
 	}
 
@@ -102,18 +108,28 @@ public class FlashFragment extends Fragment{
 				submitSelectionAnswer(2);
 			}
 		});
-		
+
 		viewOrder = new ArrayList<Integer>(fa.getFlashList().length);
 		for (int i = 0; i<fa.getFlashList().length; i++){
 			viewOrder.add(i);
 		}
 		Collections.shuffle(viewOrder, mR);
-		
+
 		getNextQuestion();
 	}
 
 	private void getNextQuestion(){
-		if (currentQuestion < fa.getFlashList().length){
+		resetButtons();
+		firstErr = true;
+		if (fa.getFlashList().length < 3){
+			String txt = "Du måste ha minst 3 tecken i din favoritlista för att starta quizet";
+			tv.setVisibility(View.VISIBLE);
+			mVideoView.setVisibility(View.GONE);
+			tv.setText(txt);
+			mResponse0.setVisibility(View.GONE);
+			mResponse1.setVisibility(View.GONE);
+			mResponse2.setVisibility(View.GONE);
+		} else if (currentQuestion < fa.getFlashList().length){
 			fa.showLoader();
 			fa.loadSingleJson(fa.getIdList()[viewOrder.get(currentQuestion)]);
 			currSign = fa.getCurrentSign();
@@ -155,7 +171,7 @@ public class FlashFragment extends Fragment{
 
 			currentQuestion++;
 		} else {
-			String result = "Quizzet är klart.\nRätta svar: "+correct+"\nFelaktiga svar: "+incorrect;
+			String result = "Quizzet är klart!\nRätta svar: "+correct+"\nFelaktiga svar: "+incorrect;
 			tv.setVisibility(View.VISIBLE);
 			mVideoView.setVisibility(View.GONE);
 			tv.setText(result);
@@ -188,11 +204,38 @@ public class FlashFragment extends Fragment{
 
 	private void submitSelectionAnswer(int selection){
 		if(correctResponse == selection){
-			correct++;
+			if(firstErr){
+				correct++;
+			}
+			getNextQuestion();
 		} else {
-			incorrect++;
+			highlightButton(selection);
+			if (firstErr){
+				firstErr = false;
+				incorrect++;
+				errorSigns.add((String) fa.getFlashList()[viewOrder.get(currentQuestion-1)]);
+			}
 		}
-		getNextQuestion();
+	}
+
+	private void highlightButton(int num){
+		switch (num){
+		case 0:
+			mResponse0.setBackgroundResource(R.color.holo_red_dark);
+			break;
+		case 1:
+			mResponse1.setBackgroundResource(R.color.holo_red_dark);
+			break;	
+		case 2:
+			mResponse2.setBackgroundResource(R.color.holo_red_dark);
+			break;
+		}
+	}
+
+	private void resetButtons(){
+		mResponse0.setBackgroundDrawable(buttonBackground);
+		mResponse1.setBackgroundDrawable(buttonBackground);
+		mResponse2.setBackgroundDrawable(buttonBackground);
 	}
 
 	void startUpHelper(final GsonSign currSign){
