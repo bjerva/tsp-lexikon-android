@@ -210,7 +210,11 @@ public class FlashFragment extends Fragment{
 		mResponseButtons.get(0).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				showFailed(errorSigns);
+				if(incorrect > 0){
+					showFailed(errorSigns);
+				}
+				
+				fa.finish();
 			}
 		});
 	}
@@ -328,21 +332,12 @@ public class FlashFragment extends Fragment{
 	}
 	
 	private void showFailed(ArrayList<String> mFailedSigns){
-		String[] failed = new String[mFailedSigns.size()];
-		for(int i=0; i<mFailedSigns.size(); i++){
-			failed[i] = mFailedSigns.get(i);
-		}
+		//String[] failed = new String[mFailedSigns.size()];
+		///for(int i=0; i<mFailedSigns.size(); i++){
+		//	failed[i] = mFailedSigns.get(i);
+		//}
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, failed);
-		final ListView listView = (ListView) myView.findViewById(R.id.failedList);
-		listView.setAdapter(adapter);
-		listView.setVisibility(View.VISIBLE);
-		tv.setText("Failed");
-		adapter.notifyDataSetChanged();
-
-		for(Button mResponse : mResponseButtons){
-			mResponse.setVisibility(View.GONE);
-		}
+		fa.showFailed(mFailedSigns);
 	}
 
 	/*

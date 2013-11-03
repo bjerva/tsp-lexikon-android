@@ -4,7 +4,7 @@
 import json
 
 if __name__ == '__main__':
-	f = open('../assets/signs2.json')
+	f = open('signs_new.json')
 
 	data = json.load(f)
 

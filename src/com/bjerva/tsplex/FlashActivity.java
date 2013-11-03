@@ -12,6 +12,7 @@ import org.holoeverywhere.preference.SharedPreferences;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -152,10 +153,9 @@ public class FlashActivity extends Activity{
 	}
 	
 	public void showFailed(ArrayList<String> failedSigns){
-		ResultsFragment mResultsFragment = new ResultsFragment();
-		mResultsFragment.setFailedSigns(failedSigns);
-		
-		getSupportFragmentManager().beginTransaction().replace(
-				R.id.fragment_container, mResultsFragment).commit();
+		Log.e(TAG, "Starting");
+		Intent intent = new Intent(this, ResultsActivity.class);
+		intent.putStringArrayListExtra("test", failedSigns);
+		this.startActivity(intent);
 	}
 }

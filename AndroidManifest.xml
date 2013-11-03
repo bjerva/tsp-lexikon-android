@@ -59,6 +59,12 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/flash" >
         </activity>
+        
+        <activity
+            android:name="com.bjerva.tsplex.ResultsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/flash" >
+        </activity>
     </application>
 
 </manifest>

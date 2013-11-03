@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/resultsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Du klarade inte av dessa tecknen:"
+        android:textIsSelectable="false"
+        android:textSize="22sp" />
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/resultsText"
+        android:cacheColorHint="@android:color/transparent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" />
+
+</RelativeLayout>

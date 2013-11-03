@@ -4,10 +4,10 @@
 import json
 
 if __name__ == '__main__':
-	f = open('signs.json')
+	f = open('signs_new.json')
 
 	data = json.load(f)
-	outfile = open(u'words2.json', 'w')
+	outfile = open(u'words_new.json', 'w')
 
 	l = []
 	for entry in data:
